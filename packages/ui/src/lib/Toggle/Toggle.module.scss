@@ -1,0 +1,56 @@
+@import "../../styles/tools/toRem.scss";
+@import "../../styles/colors.scss";
+
+.container {
+  display: flex;
+  align-items: center;
+
+  .section:not(:only-child) {
+    padding: 0 toRem(8px) 0 0;
+  }
+}
+
+.toggle {
+  width: toRem(36px);
+  height: toRem(22px);
+
+  border-radius: toRem(12px);
+
+  position: relative;
+
+  cursor: pointer;
+
+  background-color: $_color-grayscale-gray-medium;
+
+  &.toggle--checked {
+    background-color: $_color-primary-green-dark;
+
+    &::after {
+      left: calc(100% - toRem(12px) - toRem(4px))
+    }
+  }
+
+  &::after {
+    display: block;
+    content: "";
+
+    width: toRem(12px);
+    height: toRem(12px);
+
+    background-color: #ffffff;
+    border-radius: 50%;
+
+    position: absolute;
+    top: toRem(5px);
+    left: toRem(5px);
+
+    transition: left .1s;
+  }
+}
+
+.label {
+  color:$_color-grayscale-gray-medium;
+
+  font-weight: 500;
+  font-size: toRem(16px);
+}

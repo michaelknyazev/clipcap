@@ -1,0 +1,41 @@
+@import "../../styles/tools/toRem.scss";
+@import "../../styles/colors.scss";
+
+.container {
+  position: relative;
+}
+.hidden {
+  display: none;
+}
+
+.label {
+  position: relative;
+
+  &.label--active {
+    z-index: 0;
+  }
+
+  &.label--inactive {
+    z-index: 1;
+  }
+}
+
+.dropzone {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+
+  top:5%;
+  left:5%;
+
+  z-index: 1;
+
+  border: toRem(2px) dashed $_color-primary-violet-medium; 
+  border-radius: toRem(5px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: $_color-pastel-violet;
+}

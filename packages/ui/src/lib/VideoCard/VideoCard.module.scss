@@ -1,0 +1,59 @@
+@import "../../styles/tools/toRem.scss";
+@import "../../styles/colors.scss";
+
+.container {
+  display: flex;
+  align-items: center;
+
+  background-color: $_color-grayscale-gray-bg;
+
+  border-radius: toRem(12px);
+
+  padding: toRem(8px) toRem(8px) toRem(8px) toRem(16px);
+
+  .section {
+    &.section-meta {
+      width: calc(100% - toRem(85.5px));
+
+      padding: 0 toRem(16px) 0 0;
+    }
+    &.section-image {
+      width: toRem(85.5px);
+    }
+  }
+}
+
+.title {
+  font-size: toRem(16px);
+  white-space: nowrap;
+
+  padding: 0 0 toRem(4px) 0;
+
+  color: $_color-grayscale-gray-dark;
+}
+
+.description {
+  font-size: toRem(12px);
+  font-weight: 600;
+
+  color:$_color-grayscale-gray-light;
+}
+
+.image {
+  width: toRem(85.5px);
+  height: toRem(48px);
+  
+  border-radius: toRem(8px);
+
+  background-color: $_color-grayscale-gray-white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .image__icon {
+    width: toRem(24px);
+
+    color:$_color-grayscale-gray-clear;
+  }
+}

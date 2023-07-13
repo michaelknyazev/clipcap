@@ -1,0 +1,31 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@clipcap/contexts": ["packages/contexts/src/index.ts"],
+      "@clipcap/events": ["packages/events/src/index.ts"],
+      "@clipcap/helpers": ["packages/helpers/src/index.ts"],
+      "@clipcap/icons": ["packages/icons/src/index.ts"],
+      "@clipcap/instance/*": ["public/instance/*"],
+      "@clipcap/services": ["packages/services/src/index.ts"],
+      "@clipcap/types": ["packages/types/src/index.ts"],
+      "@clipcap/ui": ["packages/ui/src/index.ts"],
+      "@clipcap/ui/*": ["packages/ui/src/*"],
+      "@clipcap/website/*": ["public/website/*"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

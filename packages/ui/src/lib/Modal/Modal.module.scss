@@ -1,0 +1,57 @@
+@import "../../styles/tools/toRem.scss";
+@import "../../styles/colors.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+
+  background-color: #ffffff;
+
+  box-shadow: 0 toRem(4px) toRem(12px) rgba(0, 0, 0, 0.08);
+  border-radius: toRem(24px);
+
+  padding: toRem(24px);
+
+  width: toRem(400px);
+
+  &.container--large {
+    width: toRem(996px);
+
+    padding: toRem(48px);
+  }
+
+  .section {
+    &:not(:last-child) {
+      padding: 0 0 toRem(24px) 0;
+    }
+
+    &.section-title {
+      user-select: none;
+    }
+
+    &.section-cross {
+      position: absolute;
+
+      top: toRem(8px);
+      right: toRem(8px);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: toRem(40px);
+      height: toRem(40px);
+
+      padding: 0;
+
+      cursor: pointer;
+    }
+  }
+}
+
+.close {
+  width: toRem(24px);
+  height: toRem(24px);
+}

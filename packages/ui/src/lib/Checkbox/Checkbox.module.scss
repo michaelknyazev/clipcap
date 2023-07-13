@@ -1,0 +1,50 @@
+@import "../../styles/tools/toRem.scss";
+@import "../../styles/colors.scss";
+
+.container {
+  display: flex;
+  align-items: center;
+
+  position: relative;
+
+  &.container--disabled {
+    .checkbox{
+      border-color:$_color-grayscale-gray-clear;
+    }
+  }
+
+  &.container-checked {
+    .checkbox {
+      background-color: $_color-primary-violet-medium;
+
+      color:$_color-grayscale-gray-white;
+    }
+  }
+
+  .checkbox {
+    width: toRem(20px);
+    height: toRem(20px);
+  
+    border: toRem(2px) solid $_color-primary-violet-medium;
+    border-radius: toRem(4px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    background-color: transparent;
+
+    color: transparent;
+
+    cursor: pointer;
+
+    transition: color .5s, background-color .5s;
+  }
+
+  .label {
+    padding: 0 0 0 toRem(12px);
+
+    font-size: toRem(16px);
+    font-weight: 500;
+  }
+}

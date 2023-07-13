@@ -1,0 +1,8 @@
+@import "../../styles/tools/toRem.scss";
+@import "../../styles/colors.scss";
+
+$_logoFillColor: $_color-primary-violet-medium;
+
+.logo {
+  color: $_logoFillColor;
+}

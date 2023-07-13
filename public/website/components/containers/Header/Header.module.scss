@@ -1,0 +1,108 @@
+@import "@clipcap/ui/styles/tools/toRem.scss";
+@import "@clipcap/ui/styles/colors.scss";
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: $_color-grayscale-gray-white;
+  box-shadow: 0 toRem(2px) toRem(6px) rgba(0, 0, 0, 0.04);
+  border-bottom: toRem(1px) solid $_color-grayscale-gray-clear;
+
+  padding: toRem(16px) toRem(32px);
+
+  position: relative;
+
+  .section {
+    $_logoWidth: toRem(86px + 32px);
+    $_buttonWidth: toRem(232px + 32px);
+    $_actionsWidth: toRem(125px);
+    $_searchWidth: calc(85% - $_logoWidth - $_buttonWidth - $_actionsWidth);
+
+    &.section-logo {
+      width: $_logoWidth;
+
+      padding: 0 toRem(32px) 0 0;
+
+      color:$_color-primary-violet-medium;
+    }
+    &.section-button {
+      width: $_buttonWidth;
+
+      padding: 0 toRem(32px) 0 0;
+    }
+    &.section-search {
+      width: $_searchWidth;
+    }
+    &.section-actions {
+      width: $_actionsWidth;
+  
+      border-right: toRem(1px) solid $_color-grayscale-gray-clear;
+
+      padding: 0 toRem(24px) 0 0;
+    }
+    &.section-profile {
+      max-width: 15%;
+
+      padding: 0 0 0 toRem(24px);
+    }
+  }
+}
+
+
+.actions {
+  display: flex;
+  align-items: center;
+
+  .actions__section {
+    padding: 0 toRem(26px) 0 0;
+  }
+}
+
+.action {
+  color: $_color-primary-violet-medium;
+  
+  width: toRem(24px);
+
+  cursor: pointer;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  
+  cursor: pointer;
+
+  text-align: right;
+
+  .profile__section {
+    &.profile__section-data {
+      padding: 0 toRem(16px) 0 0;
+    }
+  }
+
+  .profile__data {
+    .profile__data__section {
+      color: $_color-grayscale-gray-dark;
+
+      text-align: right;
+
+      & + & {
+        padding: toRem(2px) 0 0 0;
+        
+        color:$_color-grayscale-gray-light;
+      }
+    }
+  }
+
+  .profile__image {
+    display: block;
+
+    width: toRem(40px);
+    height: toRem(40px);
+
+    border-radius: 50%;
+    border: toRem(2px) solid $_color-primary-violet-medium;
+  }
+}

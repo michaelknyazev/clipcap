@@ -1,0 +1,100 @@
+@import "../../styles/tools/toRem.scss";
+@import "../../styles/colors.scss";
+
+.container {
+  background-color: $_color-grayscale-gray-white;
+
+  padding: toRem(8px) 0;
+
+  box-shadow: 0px toRem(4px) toRem(12px) rgba(0, 0, 0, 0.1);
+
+  border-radius: toRem(12px);
+  
+  min-width: toRem(200px);
+
+  box-sizing: border-box;
+
+  .section {
+    &:last-child,
+    &.section-title {
+      border-bottom: none;
+    }
+
+    border-bottom: toRem(1px) solid $_color-grayscale-gray-clear;
+  }
+}
+
+.title {
+  display: block;
+
+  color:$_color-grayscale-gray-light;
+
+  font-size: toRem(12px);
+  font-weight: 600;
+
+  padding: toRem(12px) toRem(24px);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  padding: toRem(14px) toRem(24px);
+
+  transition: background-color .5s;
+
+  color:$_color-grayscale-gray-dark;
+
+  &:hover {
+    background-color: $_color-pastel-violet;
+  }
+
+  &.item-before-after {
+    padding: toRem(14px) toRem(14px);
+
+    .item__section-label {
+      width: calc(100% - (toRem(24px) + toRem(12px) * 2));
+    }
+  }
+
+  &.item-before {
+    padding: toRem(14px) toRem(24px) toRem(14px) toRem(14px);
+
+    .item__section-label {
+      width: calc(100% - (toRem(24px) + toRem(12px)));
+    }
+  } 
+
+  &.item-after {
+    padding: toRem(14px) toRem(14px) toRem(14px) toRem(24px);
+
+    .item__section-label {
+      width: calc(100% - (toRem(24px) + toRem(12px)));
+    }
+  }
+
+  &.item--error {
+    color:$_color-primary-red-dark;
+  }
+
+  .item__section {
+    &.item__section-before {
+      margin: 0 toRem(12px) 0 0;
+      min-width: toRem(20px);
+      line-height: 0;
+    }
+    &.item__section-after {
+      margin: 0 0 0 toRem(12px);
+      min-width: toRem(20px);
+      line-height: 0;
+    }
+  }
+}
+
+.label {
+  font-size: toRem(16px);
+  font-weight: 400;
+
+  white-space: nowrap;
+}

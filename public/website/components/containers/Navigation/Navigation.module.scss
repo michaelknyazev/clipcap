@@ -1,0 +1,26 @@
+@import "@clipcap/ui/styles/tools/toRem.scss";
+@import "@clipcap/ui/styles/colors.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+
+  .section {
+    &.section-burger {
+      padding: 0 0 toRem(44px) 0;
+    }
+  }
+}
+
+.burger {
+  width: toRem(48px);
+
+  padding: toRem(12px);
+
+  display: block;
+  line-height: 0;
+
+  color: $_color-grayscale-gray-white;
+
+  cursor: pointer;
+}

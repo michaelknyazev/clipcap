@@ -1,0 +1,42 @@
+ARG GO_VERSION=1.19
+ARG NODE_VERSION=16
+ARG ALPINE_VERSION=3.13.5
+
+FROM golang:${GO_VERSION}-alpine as backend_builder
+
+WORKDIR /app
+
+COPY go.mod go.sum main.go ./
+COPY pkg ./pkg
+
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o runapp main.go
+
+FROM node:${NODE_VERSION}-alpine as frontend_builder
+
+WORKDIR /app
+
+COPY public ./public
+COPY packages ./packages
+COPY Makefile .
+COPY nx.json .
+COPY package.json package-lock.json ./
+COPY tsconfig.base.json .    
+
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN npm install
+RUN npm run build_instance
+
+FROM alpine:${ALPINE_VERSION}
+
+WORKDIR /app
+
+COPY --from=backend_builder /app/runapp .
+COPY --from=frontend_builder /app/dist/public/instance .
+COPY packaging/docker/start.sh .
+
+RUN apk add --update nodejs npm ca-certificates
+RUN npm install
+
+CMD ["./start.sh"]
+
+EXPOSE 8080

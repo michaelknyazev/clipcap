@@ -1,0 +1,159 @@
+@import "../../styles/tools/toRem.scss";
+@import "../../styles/colors.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+
+  &.container-default {
+    .item {
+      .item__section {
+        &.item__section-label {
+          transition: opacity 1s;
+
+          text-overflow: clip;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+
+  &.container-minimize {
+    .item {
+      padding: toRem(12px);
+
+      .item__section {
+        &.item__section-chevron,
+        &.item__section-after,
+        &.item__section-label {
+          width: 0;
+          height: 0;
+          opacity: 0;
+
+          padding: 0;
+        }
+
+        &.item__section-before {
+          padding:0;
+        }
+      }
+    }
+  }
+
+  .section {
+    padding:0 0 toRem(5px) 0;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+
+  position: relative;
+
+  line-height: 0;
+
+  padding: toRem(12px);
+
+  user-select: none;
+
+  border-radius: toRem(12px);
+
+  transition: background-color .5s;
+
+  cursor: pointer;
+
+  &.item-active,
+  &:hover {
+    background-color: rgba($color: $_color-grayscale-gray-white, $alpha: .16);
+  }
+
+  .item__section {
+    color: $_color-grayscale-gray-white;
+
+    &.item__section-chevron {
+      width: toRem(28px);
+
+      padding: 0 toRem(4px) 0 0;
+
+      line-height: 0;
+    }
+
+    &.item__section-before,
+    &.item__section-after {
+      width: toRem(34px);
+
+      line-height: 0;
+    }
+
+    &.item__section-before {
+      padding: 0 toRem(10px) 0 0;
+    }
+
+    &.item__section-after {
+      padding: 0 0 0 toRem(10px);
+    }
+
+    &.item__section-label {
+      width: calc(100% - toRem(34px));
+    }
+
+    &.item__section-children {
+      width: 100%;
+    }
+  }
+
+  &.item--after-children {
+    flex-wrap: wrap;
+    .item__section {
+      &.item__section-label {
+        width: calc(100% - toRem(34px) - toRem(34px) - toRem(28px));
+      }
+    }
+  }
+
+  &.item--after {
+    .item__section {
+      &.item__section-label {
+        width: calc(100% - toRem(34px) - toRem(34px));
+      }
+    }
+  }
+
+  &.item--children {
+    flex-wrap: wrap;
+    .item__section {
+      &.item__section-label {
+        width: calc(100% - toRem(34px) - toRem(28px));
+      }
+    }
+  }
+}
+
+.before {
+  width: toRem(24px);
+  display: block;
+}
+
+.label {
+  font-weight: 500;
+  font-size: toRem(16px);
+}
+
+.chevron {
+  display: block;
+
+  &.chevron-rotated {
+    transform: rotate(90deg);
+  }
+}
+
+.divider {
+  width: 100%;
+
+  height: toRem(1px);
+
+  margin: toRem(24px) 0;
+
+  background-color: rgba($color: $_color-grayscale-gray-white, $alpha: .16);
+}

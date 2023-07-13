@@ -1,0 +1,16 @@
+@import "@clipcap/ui/styles/tools/toRem.scss";
+@import "@clipcap/ui/styles/colors.scss";
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+
+  .section {
+    &.section-default {
+      width: toRem(500px);
+    }
+  }
+}

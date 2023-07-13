@@ -1,0 +1,88 @@
+@import "../../styles/tools/toRem.scss";
+
+.container {
+  position: fixed;
+
+  bottom: toRem(20px);
+  left: toRem(20px);
+
+  display: flex;
+  flex-direction: column;
+
+  width: toRem(378px);
+}
+
+.section {
+  position: relative;
+
+  transition: ease-in-out .5s;
+  animation: fadein .5s;
+
+  &:not(:last-child) {
+    padding: 0 0 toRem(20px) 0;
+  }
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+
+  user-select: none;
+
+  cursor: pointer;
+
+  padding: toRem(12px);
+
+  font-size: toRem(14px);
+
+  border-radius: 2px;
+
+  &.toast--default {
+    background-color: #F1F3F5;
+
+    color:#777777;
+  }
+
+  &.toast--success {
+    background-color: #1EC28C;
+
+    color:#ffffff;
+  }
+
+  &.toast--danger {
+    background-color: #f73859;
+
+    color:#ffffff;
+  }
+
+  &.toast--warning {
+    background-color: #ffda53;
+
+    color:#ffffff;
+  }
+
+  &.toast--primary {
+    background-color: #4D92DC;
+
+    color:#ffffff;
+  }
+
+  .toast__section {
+    &.toast__section-icon {
+      width: toRem(20px);
+
+      padding: 0 toRem(12px) 0 0;
+    }
+  }
+}
+
+@keyframes fadein {
+  0% {
+    bottom: -100px;
+    opacity: 0;
+  }
+  100% {
+    bottom: none;
+    opacity: 1;
+  }
+}

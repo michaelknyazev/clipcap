@@ -1,0 +1,78 @@
+@import "@clipcap/ui/styles/tools/toRem.scss";
+@import "@clipcap/ui/styles/colors.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+
+  .section {
+    position: relative;
+    padding: 0 0 toRem(24px) 0;
+
+    &.section-hint {
+      padding: 0 0 toRem(16px) 0;
+    }
+    &.section-social {
+      padding: 0 0 toRem(8px) 0;
+    }
+
+    &.section-input {
+      padding: 0;
+    }
+
+    &.section-link {
+      padding: toRem(16px) 0 0 0;
+    }
+
+    &.section-checkbox {
+      padding: toRem(12px) 0 0 0;
+    }
+
+    &.section-button {
+      padding: toRem(24px) 0;
+    }
+
+    &.section--divider {
+      text-align: center;
+    }
+
+    &.section-previous {
+      opacity: 0;
+      z-index: -1;
+
+      &.section-show {
+        opacity: 1;
+        z-index: 1;
+      }
+    }
+  }
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+
+  color: $_color-primary-violet-dark;
+
+  cursor: pointer;
+
+  transition: transform .5s;
+
+  margin: 0 toRem(5px);
+
+  &.link--block {
+    margin:0;
+  }
+
+  .link__icon {
+    display: block;
+    width: toRem(24px);
+
+    margin: 0 toRem(8px) 0 0;
+  }
+
+  .link__text {
+    font-size: toRem(16px);
+    font-weight: 500;
+  }
+}

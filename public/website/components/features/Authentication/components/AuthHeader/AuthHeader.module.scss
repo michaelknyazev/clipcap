@@ -1,0 +1,26 @@
+@import "@clipcap/ui/styles/tools/toRem.scss";
+@import "@clipcap/ui/styles/colors.scss";
+
+$_logoFillColor: $_color-primary-violet-medium;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .section {
+    width: 50%;
+
+    &.section-logo {
+      width: toRem(130px);
+
+      color: $_logoFillColor;
+    }
+
+    &.section-button {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+}

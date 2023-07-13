@@ -1,0 +1,71 @@
+@import "@clipcap/ui/styles/tools/toRem.scss";
+@import "@clipcap/ui/styles/colors.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+
+  .section {
+    &.section--default {
+      display: block;
+    }
+
+    &.section-aside {
+      position: fixed;
+      z-index: 1;
+      height: 100vh;
+      transition: width .1s;
+
+      padding: toRem(12px);
+
+      background-color: $_color-primary-violet-medium;
+
+      &.section-aside-opened {
+        width: toRem(248px);
+
+        & + .section-main {
+          width: calc(100% - toRem(248px));
+          left: toRem(248px);
+        }
+      }
+
+      &.section-aside-closed {
+        width: toRem(72px);
+
+        & + .section-main {
+          width: calc(100% - toRem(72px));
+          left: toRem(72px);
+        }
+      }
+    }
+    &.section-main {
+      position: relative;
+    }
+
+    &.section-header {
+      position: fixed;
+      top:0;
+
+      &.section-header-opened {
+        width: calc(100% - toRem(248px));
+        left: toRem(248px);
+      }
+      &.section-header-closed {
+        width: calc(100% - toRem(72px));
+        left: toRem(72px);
+      }
+
+      transition: left .5s width .5s;
+
+      z-index: 11;
+    }
+
+    &.section-content {
+      padding: toRem(72px) 0 toRem(32px) 0;
+
+      position: relative;
+
+      z-index: 0;
+    }
+  }
+}

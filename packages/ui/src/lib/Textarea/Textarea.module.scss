@@ -1,0 +1,37 @@
+@import "../../styles/tools/toRem.scss";
+@import "../../styles/colors.scss";
+
+.container {
+  display: block;
+
+  background-color: $_color-grayscale-gray-bg;
+  border: toRem(1px) solid $_color-grayscale-gray-clear;
+
+  padding: toRem(16px);
+
+  font-size: toRem(16px);
+  font-family: inherit;
+
+  min-height: toRem(172px);
+  max-height: toRem(172px);
+  max-width: 100%;
+  min-width: 100%;
+
+  width: 100%;
+
+  transition: background-color .3s;
+
+  &:focus {
+    background-color: $_color-grayscale-gray-white;
+  }
+
+  &[placeholder]:empty::before {
+    content: attr(placeholder);
+    color: #555; 
+  }
+  
+  &[placeholder]:empty:focus::before {
+    content: "";
+  }
+}
+

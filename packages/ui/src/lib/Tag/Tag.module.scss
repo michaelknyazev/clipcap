@@ -1,0 +1,105 @@
+@import "../../styles/tools/toRem.scss";
+@import "../../styles/colors.scss";
+
+.container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: toRem(16px);
+  font-weight: 600;
+
+  cursor: pointer;
+
+  &.container-small {
+    font-size: toRem(12px);
+    padding: toRem(4px);
+
+    border-radius: toRem(16px);
+  }
+
+  &.container-medium {
+    font-size: toRem(16px);
+    font-weight: 500;
+
+    padding: toRem(8px);
+    border-radius: toRem(24px);
+
+    .before,
+    .after {
+      width: toRem(12px);
+    }
+  }
+
+  &.container-large {
+    font-size: toRem(40px);
+    font-weight: 400;
+  }
+
+  &.container--plain {
+    color:rgba($color: $_color-grayscale-gray-dark, $alpha: .16)
+  }
+
+  &.container--default {
+    background-color: rgba($color: $_color-grayscale-gray-white, $alpha: .16);
+
+    border-radius: 50%;
+  }
+
+  &.container--success {
+    background-color: $_color-primary-green-dark;
+    color: $_color-grayscale-gray-white;
+  }
+
+  &.container--purple {
+    background-color: $_color-pastel-violet;
+    color: $_color-primary-violet-medium;
+  }
+
+  &.container--outlined {
+    border: toRem(1.5px) solid $_color-primary-violet-medium;
+
+    color:$_color-primary-violet-medium;
+  }
+
+  &.container--fill {
+    border: toRem(1.5px) solid $_color-primary-violet-medium;
+    background-color: $_color-primary-violet-medium;
+
+    color:$_color-grayscale-gray-white;
+  }
+
+  .before,
+  .after {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: toRem(12px);
+  }
+
+  .content {
+    white-space: nowrap;
+
+    &:not(:only-child) {
+      margin: 0 0 0 toRem(6px);
+    }
+  }
+
+  .before + .content {
+    margin: 0 0 0 toRem(6px);
+  }
+
+  .after {
+    margin: 0 0 0 toRem(4px);
+  }
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+
+  .options__section {
+    padding:0 toRem(8px) toRem(8px) 0;
+  }
+}

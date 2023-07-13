@@ -1,0 +1,244 @@
+@import "../../styles/tools/toRem.scss";
+@import "../../styles/colors.scss";
+
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  position: relative;
+
+  overflow: hidden;
+
+  &.button-tag {
+    padding: toRem(4px) toRem(10px);
+
+    border-radius: toRem(12px);
+    border: toRem(1px) solid transparent;
+
+    font-size: toRem(12px);
+    font-weight: 500;
+
+    .before,
+    .after {
+      width: toRem(12px);
+    }
+
+    .before + .text {
+      margin: 0 0 0 toRem(5.8px);
+    }
+  
+    .text + .after {
+      margin: 0 0 0 toRem(5.8px);
+    }
+
+    &.button-nochildren {
+      padding: toRem(8px);
+    }
+  }
+
+  &.button-xsmall {
+    padding: toRem(8px) toRem(12px);
+
+    border-radius: toRem(20px);
+    border: toRem(1.5px) solid transparent;
+
+    font-size: toRem(12px);
+    font-weight: 600;
+
+    &.button-nochildren {
+      padding: toRem(8px);
+      border-radius: 50%;
+    }
+  }
+  &.button-small {
+    padding: toRem(10px) toRem(12px);
+
+    border-radius: toRem(20px);
+    border: toRem(1.5px) solid transparent;
+
+    font-size: toRem(16px);
+    font-weight: 600;
+
+    &.button-nochildren {
+      padding: toRem(8px);
+      border-radius: 50%;
+    }
+  }
+  &.button-medium {
+    padding: toRem(18px) toRem(24px);
+
+    border-radius: toRem(28px);
+    border: toRem(2px) solid transparent;
+
+    font-size: toRem(16px);
+    font-weight: 600;
+
+    &.button-nochildren {
+      padding: toRem(18px);
+      border-radius: 50%;
+    }
+  }
+  &.button-large {
+    padding: toRem(24px) toRem(32px);
+
+    border-radius: toRem(36px);
+    border: toRem(2px) solid transparent;
+
+    font-size: toRem(20px);
+    font-weight: 500;
+
+    &.button-nochildren {
+      padding: toRem(24px);
+      border-radius: 50%;
+    }
+  }
+
+  &.button-fill {
+    width: 100%;
+  }
+
+  &.button--primary {
+    &.button-regular {
+      background-color: $_color-primary-violet-medium;
+
+      border-color: $_color-primary-violet-medium;
+  
+      color: $_color-grayscale-gray-white;
+    }
+
+    &.button-outlined {
+      background-color: $_color-grayscale-gray-white;
+  
+      border-color: $_color-primary-violet-medium;
+      
+      color: $_color-primary-violet-medium;
+    }
+
+    &.button-minimal {
+      background-color: $_color-grayscale-gray-bg;
+
+      border-color: $_color-grayscale-gray-bg;
+
+      color: $_color-primary-violet-medium;
+    }
+  }
+
+  &.button--secondary {
+    &.button-regular {
+      background: $_color-primary-violet-gradient;
+
+      border: none;
+  
+      color: $_color-grayscale-gray-white;
+    }
+
+    &.button-outlined {
+      background-color: $_color-pastel-violet;
+
+      border-color: $_color-primary-violet-medium;
+
+      color: $_color-primary-violet-medium;
+    }
+
+    &.button-minimal {
+      background: none;
+      background-color: $_color-pastel-violet;
+
+      border-color: $_color-pastel-violet;
+
+      color: $_color-primary-violet-medium;
+    }
+  }
+
+  &.button--service {
+    &.button-regular {
+      background: $_color-grayscale-gray-medium;
+
+      border: none;
+  
+      color: $_color-grayscale-gray-white;
+    }
+
+    &.button-outlined {
+      background-color: $_color-grayscale-gray-white;
+
+      border-color: $_color-grayscale-gray-medium;
+
+      color: $_color-grayscale-gray-medium;
+    }
+
+    &.button-minimal {
+      background: none;
+      background-color: transparent;
+
+      border-color: transparent;
+
+      color: $_color-grayscale-gray-medium;
+    }
+  }
+
+  &.button-disabled {
+    background-color: $_color-grayscale-gray-bg;
+
+    border-color: $_color-grayscale-gray-bg;
+
+    color: $_color-grayscale-gray-light;
+  }
+
+  .loading {
+    background-color: inherit;
+
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    top:0;
+    left:0;
+
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .loading__icon {
+      width: toRem(24px);
+      height: toRem(24px);
+    }
+  }
+
+  .text,
+  .before,
+  .after {
+    font-size: inherit;
+    font-weight: inherit;
+    color:inherit;
+  }
+
+  .before,
+  .after {
+    display: block;
+
+    width: toRem(24px);
+
+    position: relative;
+
+    line-height: 0;
+  }
+
+  .before + .text {
+    margin: 0 0 0 toRem(8px);
+  }
+
+  .text + .after {
+    margin: 0 0 0 toRem(8px);
+  }
+}

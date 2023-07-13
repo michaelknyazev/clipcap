@@ -1,0 +1,56 @@
+@import "../../styles/tools/toRem.scss";
+@import "../../styles/colors.scss";
+
+.container {
+  display: flex;
+  align-items: center;
+
+  .section {
+    &.section-user {
+      padding: 0 0 0 toRem(12px);
+    }
+  }
+}
+
+.current {
+  font-size: toRem(16px);
+  font-weight: 400;
+
+  color:$_color-grayscale-gray-light;
+}
+
+.name {
+  font-weight: 500;
+  font-size: toRem(16px);
+ 
+  color:$_color-grayscale-gray-dark;
+}
+
+.description {
+  display: block;
+
+  font-size: toRem(12px);
+  
+  color:$_color-grayscale-gray-light;
+}
+
+.image {
+  width: toRem(32px);
+  height: toRem(32px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: toRem(12px);
+  
+  color:$_color-primary-violet-dark;
+  background-color: $_color-pastel-violet;
+
+  text-transform: uppercase;
+  text-align: center;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+}
