@@ -21,3 +21,5 @@ integrations:
     client_id: 526868484881-9sluer8qpls6dc2b9cvvnm1b2hnsk66n.apps.googleusercontent.com
     client_secret: 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
     redirect_uri: http://localhost:8080/api/v1/auth/google/callback
+  chatgpt:
+    api_key: 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

@@ -11,7 +11,6 @@ import (
 	"clipcap/web/pkg/controllers/CPassword"
 	"clipcap/web/pkg/controllers/CUser"
 	"clipcap/web/pkg/services/SGoogle"
-	"clipcap/web/pkg/services/SGoogleOAuth"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/oauth2"
@@ -25,7 +24,7 @@ func Callback(c *gin.Context) {
 		return
 	}
 
-	token, err := SGoogleOAuth.Configuration.Exchange(oauth2.NoContext, code)
+	token, err := SGoogle.OAuthConfiguration.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		c.JSON(422, responses.SystemForbidden())
 		c.Abort()

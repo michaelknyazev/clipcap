@@ -1,7 +1,6 @@
 package SGoogle
 
 import (
-	"clipcap/web/pkg/services/SGoogleOAuth"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -23,7 +22,7 @@ func GetUser(token *oauth2.Token) (TGoogleUser, error) {
 		return User, err
 	}
 
-	client := SGoogleOAuth.Configuration.Client(oauth2.NoContext, token)
+	client := OAuthConfiguration.Client(oauth2.NoContext, token)
 	res, err := client.Do(req)
 	if err != nil {
 		return User, err

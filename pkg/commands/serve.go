@@ -3,8 +3,9 @@ package commands
 import (
 	"clipcap/web/pkg/api"
 	"clipcap/web/pkg/database"
+	"clipcap/web/pkg/services/SChatGPT"
 	"clipcap/web/pkg/services/SConfiguration"
-	"clipcap/web/pkg/services/SGoogleOAuth"
+	"clipcap/web/pkg/services/SGoogle"
 	"clipcap/web/pkg/setup"
 
 	"github.com/spf13/cobra"
@@ -41,7 +42,11 @@ var serveCmd = &cobra.Command{
 			}
 		}()
 
-		if err := SGoogleOAuth.Init(); err != nil {
+		if err := SGoogle.Init(); err != nil {
+			panic(err)
+		}
+
+		if err := SChatGPT.Init(); err != nil {
 			panic(err)
 		}
 

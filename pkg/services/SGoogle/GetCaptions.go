@@ -1,7 +1,6 @@
 package SGoogle
 
 import (
-	"clipcap/web/pkg/services/SGoogleOAuth"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
@@ -23,7 +22,7 @@ type TYoutubeCaptionList struct {
 }
 
 func GetCaptions(token *oauth2.Token, videoId string) ([]byte, error) {
-	client := SGoogleOAuth.Configuration.Client(oauth2.NoContext, token)
+	client := OAuthConfiguration.Client(oauth2.NoContext, token)
 
 	URL, err := url.Parse("https://www.googleapis.com/youtube/v3/captions?videoId=" + videoId)
 	if err != nil {

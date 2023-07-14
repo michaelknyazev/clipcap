@@ -1,8 +1,8 @@
 package SGoogle
 
 import (
-	"clipcap/web/pkg/services/SGoogleOAuth"
 	"encoding/xml"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -20,41 +20,41 @@ type TCaptionTranscriptTextEntry struct {
 	Content  string  `xml:",chardata"`
 }
 
-func GetCaptionsFromVideoInfo(token *oauth2.Token, VideoData TVideoData) (TCaptionTranscript, error) {
-	var captionsUrl string
+func GetCaptionsFromVideoInfo(token *oauth2.Token, VideoData TVideoData) (TCaptionTranscript, string, error) {
 	var Transcript TCaptionTranscript
 
-	for _, captionTrack := range VideoData.Captions.PlayerCaptionsTracklistRenderer.CaptionTracks {
-		if captionTrack.LanguageCode == "en" {
-			captionsUrl = captionTrack.BaseUrl
-			break
-		}
+	if len(VideoData.Captions.PlayerCaptionsTracklistRenderer.CaptionTracks) == 0 {
+		return Transcript, "", errors.New("no captions to work with")
 	}
+
+	captionTrack := VideoData.Captions.PlayerCaptionsTracklistRenderer.CaptionTracks[0]
+	captionsUrl := captionTrack.BaseUrl
+	language := captionTrack.LanguageCode
 
 	URL, err := url.Parse(captionsUrl)
 	if err != nil {
-		return Transcript, err
+		return Transcript, "", err
 	}
 
 	req, err := http.NewRequest("GET", URL.String(), nil)
 	if err != nil {
-		return Transcript, err
+		return Transcript, "", err
 	}
 
-	client := SGoogleOAuth.Configuration.Client(oauth2.NoContext, token)
+	client := OAuthConfiguration.Client(oauth2.NoContext, token)
 	res, err := client.Do(req)
 	if err != nil {
-		return Transcript, err
+		return Transcript, "", err
 	}
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return Transcript, err
+		return Transcript, "", err
 	}
 
 	if err := xml.Unmarshal(body, &Transcript); err != nil {
-		return Transcript, err
+		return Transcript, "", err
 	}
 
-	return Transcript, nil
+	return Transcript, language, nil
 }

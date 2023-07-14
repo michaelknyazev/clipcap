@@ -2,9 +2,7 @@ package SGoogle
 
 import (
 	"bytes"
-	"clipcap/web/pkg/services/SGoogleOAuth"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -58,9 +56,7 @@ func GetVideoInfo(token *oauth2.Token, videoId string) (TVideoData, error) {
 		return VideoData, err
 	}
 
-	fmt.Println(token)
-
-	client := SGoogleOAuth.Configuration.Client(oauth2.NoContext, token)
+	client := OAuthConfiguration.Client(oauth2.NoContext, token)
 	res, err := client.Do(req)
 	if err != nil {
 		return VideoData, err

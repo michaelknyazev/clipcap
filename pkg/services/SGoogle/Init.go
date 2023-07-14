@@ -1,4 +1,4 @@
-package SGoogleOAuth
+package SGoogle
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
-var Configuration = &oauth2.Config{
+var OAuthConfiguration = &oauth2.Config{
 	ClientID:     "",
 	ClientSecret: "",
 	RedirectURL:  "",
@@ -25,10 +25,10 @@ func Init() error {
 		return errors.New("empty configuration")
 	}
 
-	Configuration.ClientID = googleClientId
-	Configuration.ClientSecret = googleClientSecret
-	Configuration.RedirectURL = googleRedirectUri
-	Configuration.Scopes = []string{
+	OAuthConfiguration.ClientID = googleClientId
+	OAuthConfiguration.ClientSecret = googleClientSecret
+	OAuthConfiguration.RedirectURL = googleRedirectUri
+	OAuthConfiguration.Scopes = []string{
 		"https://www.googleapis.com/auth/userinfo.email",
 		"https://www.googleapis.com/auth/userinfo.profile",
 		"https://www.googleapis.com/auth/youtube.readonly",

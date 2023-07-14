@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func CreateMany(sourceId string, texts []SGoogle.TCaptionTranscriptTextEntry) ([]Text, error) {
+func CreateMany(sourceId string, texts []SGoogle.TCaptionTranscriptTextEntry, language string) ([]Text, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -18,13 +18,14 @@ func CreateMany(sourceId string, texts []SGoogle.TCaptionTranscriptTextEntry) ([
 	for _, text := range texts {
 		ts := time.Now()
 		Data = append(Data, Text{
-			ID:       primitive.NewObjectID(),
-			SourceID: sourceId,
-			Content:  text.Content,
-			Start:    text.Start,
-			Duration: text.Duration,
-			Created:  ts.Unix(),
-			Updated:  ts.Unix(),
+			ID:           primitive.NewObjectID(),
+			SourceID:     sourceId,
+			Content:      text.Content,
+			Start:        text.Start,
+			Duration:     text.Duration,
+			LanguageCode: language,
+			Created:      ts.Unix(),
+			Updated:      ts.Unix(),
 		})
 	}
 
