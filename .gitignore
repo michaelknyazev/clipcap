@@ -41,3 +41,9 @@ docs
 
 # Counter
 .VSCodeCounter
+
+# NX
+dist
+
+# project
+__required

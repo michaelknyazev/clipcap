@@ -1,0 +1,36 @@
+{
+  "name": "ClipCap - AI Generated Summaries",
+  "description": "Chrome Extension",
+  "version": "{%version%}",
+  "manifest_version": 3,
+  "homepage_url": "https://clipcap.app",
+  "content_scripts": [
+    {
+      "all_frames": false,
+      "js": [{%js%}],
+      "css": [{%css%}],
+      "matches": [
+        "https://youtube.com/*",
+        "https://www.youtube.com/*"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": {%bg_js%}
+  },
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "tabs",
+    "storage", 
+    "identity"
+  ],
+  "host_permissions": [
+    "https://youtube.com/*",
+    "https://www.youtube.com/*",
+    "http://localhost:8080/*"
+  ],
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkfTcwacXIY37Rsznh/NMUBtxkFtslF9OEMdWVHerHNL8NrAFlGhfW1c2UvIYYKu3ezu0iBSU3hkKwfxhFz1VOzahjeyOEDXm5lMe3Ws+CxR8x6YqElmcMugrpHwo0YmBNSvAZ8C37WCZsr6TACfb6TIac72eD5buWb0wfnkI3dSDlFtr99ohx7FsMejxBvAwEWtEhIWd8NiATVnDXA7HuQ+mhSwcyTWGA2hDY3IGtwhgTywYtogkKUqnCZ+udraj3QZd+PVwfX5MdHVVWJ34zriVB4fE6CtKFOUHd9/NRAJr/mUSri+XmPXFyqEY+xU5l4xp2Rr4qvgiW0OSsFXF8QIDAQAB"
+}

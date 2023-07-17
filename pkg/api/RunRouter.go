@@ -8,12 +8,24 @@ import (
 	"clipcap/web/pkg/api/handlers/Tools"
 	"clipcap/web/pkg/api/handlers/User"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func RunRouter() {
 	router := gin.Default()
-	router.MaxMultipartMemory = 128 << 20 // 128 * (2^20) = 128MB
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{
+			"*",
+		},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Refresh", "Content-Length", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: false,
+		AllowWebSockets:  false,
+		MaxAge:           0,
+	}))
 
 	router.POST("/api/v1/auth/email", Authentication.CheckEmail)
 	router.POST("/api/v1/auth/login", Authentication.LogIn)

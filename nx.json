@@ -10,19 +10,27 @@
   },
   "defaultBase": "master",
   "generators": {
-    "@nrwl/react": {
-      "application": {
-        "babel": true
-      },
-      "library": {
-        "unitTestRunner": "none"
-      }
-    },
-    "@nrwl/next": {
+    "@nx/next": {
       "application": {
         "style": "scss",
         "linter": "eslint",
         "swc": true
+      }
+    },
+    "@nx/react": {
+      "application": {
+        "style": "scss",
+        "linter": "eslint",
+        "bundler": "webpack",
+        "babel": true
+      },
+      "component": {
+        "style": "scss"
+      },
+      "library": {
+        "style": "scss",
+        "linter": "eslint",
+        "unitTestRunner": "none"
       }
     }
   },

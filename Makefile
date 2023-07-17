@@ -18,6 +18,9 @@ backend:
 	go run main.go serve --config scripts/default.config.yaml
 frontend: 
 	npx nx run-many --target=serve
+extension:
+	npx nx build chrome-extension
+	./packaging/chrome-extension/bundle.sh
 
 # Build Commands
 build_frontend: clear install

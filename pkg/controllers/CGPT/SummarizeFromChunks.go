@@ -2,7 +2,9 @@ package CGPT
 
 import (
 	"clipcap/web/pkg/services/SChatGPT"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
 	"sync"
 )
@@ -34,6 +36,11 @@ func SummarizeFromChunks(chunks []TChunk) ([]TSummary, error) {
 
 			chatForTitle, err := SChatGPT.CreateChat("Create a short title for this text, no conversation, just write a title. Title must be in English.", strings.Join(item.Content, ""))
 			if err != nil || len(chatForTitle.Choices) == 0 {
+				fmt.Println(err)
+
+				d, _ := json.Marshal(chatForTitle)
+				fmt.Println(string(d))
+
 				errs = append(errs, TSummaryError{
 					Chunk:   item,
 					Message: "Can't create chat for title",
@@ -43,6 +50,10 @@ func SummarizeFromChunks(chunks []TChunk) ([]TSummary, error) {
 
 			chatForEmoji, err := SChatGPT.CreateChat("Give an emoji describing this text, no conversation, just respond with an emoji.", strings.Join(item.Content, ""))
 			if err != nil || len(chatForEmoji.Choices) == 0 {
+				fmt.Println(err)
+
+				d, _ := json.Marshal(chatForTitle)
+				fmt.Println(string(d))
 				errs = append(errs, TSummaryError{
 					Chunk:   item,
 					Message: "Can't create chat for emoji",
@@ -52,6 +63,10 @@ func SummarizeFromChunks(chunks []TChunk) ([]TSummary, error) {
 
 			chatForDescription, err := SChatGPT.CreateChat("Create a short summary for this text. No conversation, just respond with summary.", strings.Join(item.Content, ""))
 			if err != nil || len(chatForDescription.Choices) == 0 {
+				fmt.Println(err)
+
+				d, _ := json.Marshal(chatForTitle)
+				fmt.Println(string(d))
 				errs = append(errs, TSummaryError{
 					Chunk:   item,
 					Message: "Can't create chat for description",

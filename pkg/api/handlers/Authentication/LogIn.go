@@ -74,10 +74,17 @@ func LogIn(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("refresh_token", RefreshToken, 60*60*24*7, "", "", false, true)
-	c.SetCookie("access_token", AccessToken, 60*60, "", "", false, true)
+	/*
+		c.SetCookie("refresh_token", RefreshToken, 60*60*24*7, "", "", false, true)
+		c.SetCookie("access_token", AccessToken, 60*60, "", "", false, true)
+	*/
 
-	c.JSON(200, responses.SystemServerSuccess())
+	result := map[string]interface{}{}
+
+	result["access_token"] = AccessToken
+	result["refresh_token"] = RefreshToken
+
+	c.JSON(200, responses.SystemServerSuccessWithData(result))
 	c.Abort()
 
 	CActivity.Create([]interface{}{User.ID}, User.ID, "Logged in", `New Log In from 192.168.0.1 with Safari, Mac OS.`)

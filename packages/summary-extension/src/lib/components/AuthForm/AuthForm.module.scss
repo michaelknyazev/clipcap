@@ -1,0 +1,12 @@
+.container {
+  .section {
+    padding: 5px 0;
+
+    &.section-title {
+      padding: 0 0 15px 0;
+    }
+    &.section-button {
+      padding: 15px 0 0 0;
+    }
+  }
+}

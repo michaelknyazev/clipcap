@@ -4,9 +4,9 @@ import (
 	"clipcap/web/pkg/api/controllers/CAccessToken"
 	"clipcap/web/pkg/api/responses"
 	"clipcap/web/pkg/controllers/CGPT"
-	"clipcap/web/pkg/controllers/CIntegration"
 	"clipcap/web/pkg/controllers/CLog"
 	"clipcap/web/pkg/controllers/CSource"
+	"clipcap/web/pkg/controllers/CSummary"
 	"clipcap/web/pkg/controllers/CText"
 	"clipcap/web/pkg/services/SGoogle"
 	"fmt"
@@ -25,14 +25,7 @@ func Youtube(c *gin.Context) {
 
 	CLog.Log(videoId, "Received videoId summary request")
 
-	access_token, err := c.Cookie("access_token")
-	if err != nil {
-		CLog.Log(videoId, "No access token to make a summary")
-		c.JSON(401, responses.AuthenticationUnauthorized())
-		c.Abort()
-		return
-	}
-
+	access_token := c.Request.Header.Get("Authorization")
 	CLog.Log(videoId, "Received access token, verifying the authorization")
 
 	AccessToken, err := CAccessToken.Verify(access_token)
@@ -45,26 +38,37 @@ func Youtube(c *gin.Context) {
 
 	CLog.Log(videoId, AccessToken.UserID, "Received Valid access token.")
 
-	Integration, err := CIntegration.FindByUserIdAndType(AccessToken.UserID, "google_oauth")
-	if err != nil {
-		CLog.Log(videoId, AccessToken.UserID, "No Google Integration found!")
-		c.JSON(401, responses.AuthenticationUnauthorized())
+	/*
+		Integration, err := CIntegration.FindByUserIdAndType(AccessToken.UserID, "google_oauth")
+		if err != nil {
+			CLog.Log(videoId, AccessToken.UserID, "No Google Integration found!")
+			c.JSON(401, responses.AuthenticationUnauthorized())
+			c.Abort()
+			return
+		}
+
+		CLog.Log(videoId, AccessToken.UserID, "Google integration is found")
+		OAuthToken, err := CIntegration.OAuthToken(Integration)
+		if err != nil {
+			CLog.Log(videoId, AccessToken.UserID, "Can't Generate OAuthToken!", err)
+			c.JSON(401, responses.AuthenticationUnauthorized())
+			c.Abort()
+			return
+		}
+
+		CLog.Log(videoId, AccessToken.UserID, "OAuth Token generated.")
+	*/
+	ExistingSummary, err := CSummary.FindBySourceId(videoId)
+	if err == nil && len(ExistingSummary) > 0 {
+		CLog.Log(videoId, AccessToken.UserID, "Summary already exists in DB")
+		c.JSON(200, responses.SystemServerSuccessWithData(ExistingSummary))
 		c.Abort()
 		return
 	}
 
-	CLog.Log(videoId, AccessToken.UserID, "Google integration is found")
-	OAuthToken, err := CIntegration.OAuthToken(Integration)
-	if err != nil {
-		CLog.Log(videoId, AccessToken.UserID, "Can't Generate OAuthToken!", err)
-		c.JSON(401, responses.AuthenticationUnauthorized())
-		c.Abort()
-		return
-	}
+	CLog.Log(videoId, AccessToken.UserID, "It's a new summary, processing")
 
-	CLog.Log(videoId, AccessToken.UserID, "OAuth Token generated.")
-
-	VideoData, err := SGoogle.GetVideoInfo(OAuthToken, videoId)
+	VideoData, err := SGoogle.GetVideoInfo(videoId)
 	if err != nil {
 		CLog.Log(videoId, AccessToken.UserID, "Can't Get video data from youtube!")
 		c.JSON(401, responses.AuthenticationUnauthorized())
@@ -93,7 +97,7 @@ func Youtube(c *gin.Context) {
 	if err != nil || len(SourceContent) == 0 {
 		CLog.Log(videoId, AccessToken.UserID, "There is no source content stored in DB, fetching from youtube.")
 
-		Captions, language, err := SGoogle.GetCaptionsFromVideoInfo(OAuthToken, VideoData)
+		Captions, language, err := SGoogle.GetCaptionsFromVideoInfo(VideoData)
 		if err != nil {
 			CLog.Log(videoId, AccessToken.UserID, "Can't get captions from youtube.", err.Error())
 
@@ -121,18 +125,26 @@ func Youtube(c *gin.Context) {
 	CLog.Log(videoId, AccessToken.UserID, "Splitted text into chunks", fmt.Sprintf("Chunks count: %d", len(Chunks)))
 
 	CLog.Log(videoId, AccessToken.UserID, "Summarizing the text")
-
-	Summary, err := CGPT.SummarizeFromChunks(Chunks)
+	GPTSummary, err := CGPT.SummarizeFromChunks(Chunks)
 	if err != nil {
 		CLog.Log(videoId, AccessToken.UserID, "Can't summarize chunks", err.Error())
 		c.JSON(500, responses.SystemServerError())
 		c.Abort()
 		return
 	}
+	CLog.Log(videoId, AccessToken.UserID, "Summary successfully generated.", fmt.Sprintf("Generated summaries len: %d", len(GPTSummary)))
 
-	CLog.Log(videoId, AccessToken.UserID, "Summary successfully generated.")
+	Summary, err := CSummary.CreateMany(videoId, GPTSummary)
+	if err != nil {
+		CLog.Log(videoId, AccessToken.UserID, "Can't save summary in DB", err.Error())
+		c.JSON(500, responses.SystemServerError())
+		c.Abort()
+		return
+	}
 
-	c.JSON(200, Summary)
+	CLog.Log(videoId, AccessToken.UserID, "Summary saved.", fmt.Sprintf("Saved items len: %d", len(Summary)))
+
+	c.JSON(200, responses.SystemServerSuccessWithData(Summary))
 	c.Abort()
 	return
 }

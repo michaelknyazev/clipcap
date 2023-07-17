@@ -6,8 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-
-	"golang.org/x/oauth2"
 )
 
 type TCaptionTranscript struct {
@@ -20,7 +18,7 @@ type TCaptionTranscriptTextEntry struct {
 	Content  string  `xml:",chardata"`
 }
 
-func GetCaptionsFromVideoInfo(token *oauth2.Token, VideoData TVideoData) (TCaptionTranscript, string, error) {
+func GetCaptionsFromVideoInfo(VideoData TVideoData) (TCaptionTranscript, string, error) {
 	var Transcript TCaptionTranscript
 
 	if len(VideoData.Captions.PlayerCaptionsTracklistRenderer.CaptionTracks) == 0 {
@@ -41,7 +39,7 @@ func GetCaptionsFromVideoInfo(token *oauth2.Token, VideoData TVideoData) (TCapti
 		return Transcript, "", err
 	}
 
-	client := OAuthConfiguration.Client(oauth2.NoContext, token)
+	client := http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
 		return Transcript, "", err

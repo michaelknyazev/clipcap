@@ -17,13 +17,7 @@ import (
 )
 
 func Refresh(c *gin.Context) {
-	refresh_token, err := c.Cookie("refresh_token")
-	if err != nil {
-		c.JSON(401, responses.AuthenticationNoAuthorization())
-		c.Abort()
-		return
-	}
-
+	refresh_token := c.Request.Header.Get("Refresh")
 	RefreshTokenOld, err := CRefreshToken.Verify(refresh_token)
 	if err != nil {
 		c.JSON(401, responses.AuthenticationWrongAuthorization())
@@ -63,10 +57,17 @@ func Refresh(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("refresh_token", RefreshToken, 60*60*24*7, "", "", true, true)
-	c.SetCookie("access_token", AccessToken, 60*60, "", "", true, true)
+	/*
+		c.SetCookie("refresh_token", RefreshToken, 60*60*24*7, "", "", false, true)
+		c.SetCookie("access_token", AccessToken, 60*60, "", "", false, true)
+	*/
 
-	c.JSON(200, responses.SystemServerSuccess())
+	result := map[string]interface{}{}
+
+	result["access_token"] = AccessToken
+	result["refresh_token"] = RefreshToken
+
+	c.JSON(200, responses.SystemServerSuccessWithData(result))
 	c.Abort()
 
 	CActivity.Create([]interface{}{User.ID}, User.ID, "renewed authorization", "")
