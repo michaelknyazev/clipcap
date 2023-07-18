@@ -26,7 +26,7 @@ extension:
 build_frontend: clear install
 	npx nx run-many --target=build
 build_backend:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o runapp main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o clipcap main.go
 
 # Build Docker Images For local Test
 # TODO
