@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-func GenerateLink() (string, error) {
-	oauthStateString := ""
+func GenerateLink(seed string) (string, error) {
+	oauthStateString := seed
 
 	URL, err := url.Parse(SGoogle.OAuthConfiguration.Endpoint.AuthURL)
 	if err != nil {

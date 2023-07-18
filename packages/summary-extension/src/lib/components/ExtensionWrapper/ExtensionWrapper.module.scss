@@ -6,4 +6,8 @@
   border-radius: 10px;
 
   background-color: $_color-grayscale-gray-white;
+
+  &.container-hide {
+    display: none;
+  }
 }

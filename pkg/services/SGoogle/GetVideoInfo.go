@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+
+	"golang.org/x/oauth2"
 )
 
 /*
@@ -24,7 +26,7 @@ import (
 }
 */
 
-func GetVideoInfo(videoId string) (TVideoData, error) {
+func GetVideoInfo(token *oauth2.Token, videoId string) (TVideoData, error) {
 	var VideoData TVideoData
 
 	URL, err := url.Parse("https://youtubei.googleapis.com/youtubei/v1/player")
@@ -54,7 +56,7 @@ func GetVideoInfo(videoId string) (TVideoData, error) {
 		return VideoData, err
 	}
 
-	client := http.Client{}
+	client := OAuthConfiguration.Client(oauth2.NoContext, token)
 	res, err := client.Do(req)
 	if err != nil {
 		return VideoData, err

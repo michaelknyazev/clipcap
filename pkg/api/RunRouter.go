@@ -6,6 +6,7 @@ import (
 	"clipcap/web/pkg/api/handlers/Password"
 	"clipcap/web/pkg/api/handlers/Summarize"
 	"clipcap/web/pkg/api/handlers/Tools"
+	"clipcap/web/pkg/api/handlers/Transaction"
 	"clipcap/web/pkg/api/handlers/User"
 
 	"github.com/gin-contrib/cors"
@@ -42,6 +43,8 @@ func RunRouter() {
 	router.GET("/api/v1/summarize/youtube", Summarize.Youtube)
 
 	router.GET("/api/v1/user", User.Identify)
+
+	router.GET("/api/v1/transaction/:transactionId", Transaction.Get)
 
 	router.GET("/api/v1/healthcheck", Tools.HealthCheck)
 

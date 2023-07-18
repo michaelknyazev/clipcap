@@ -9,8 +9,10 @@ import (
 	"clipcap/web/pkg/controllers/CAuthorization"
 	"clipcap/web/pkg/controllers/CIntegration"
 	"clipcap/web/pkg/controllers/CPassword"
+	"clipcap/web/pkg/controllers/CTransaction"
 	"clipcap/web/pkg/controllers/CUser"
 	"clipcap/web/pkg/services/SGoogle"
+	"encoding/json"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/oauth2"
@@ -19,6 +21,13 @@ import (
 func Callback(c *gin.Context) {
 	code := c.Query("code")
 	if code == "" {
+		c.JSON(422, responses.SystemForbidden())
+		c.Abort()
+		return
+	}
+
+	state := c.Query("state")
+	if state == "" {
 		c.JSON(422, responses.SystemForbidden())
 		c.Abort()
 		return
@@ -115,11 +124,41 @@ func Callback(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("refresh_token", RefreshToken, 60*60*24*7, "", "", false, true)
-	c.SetCookie("access_token", AccessToken, 60*60, "", "", false, true)
+	/*
+		c.SetCookie("refresh_token", RefreshToken, 60*60*24*7, "", "", false, true)
+		c.SetCookie("access_token", AccessToken, 60*60, "", "", false, true)
+	*/
 
-	CActivity.Create([]interface{}{User.ID}, User.ID, "Logged in", `New Log In from 192.168.0.1 with Safari, Mac OS.`)
+	transactionId := state
 
-	c.Redirect(302, "/")
+	type Tokens struct {
+		AccessToken  string `json:"access_token" bson:"access_token"`
+		RefreshToken string `json:"refresh_token" bson:"refresh_token"`
+	}
+
+	TransactionCompleteData, err := json.Marshal(Tokens{
+		AccessToken:  AccessToken,
+		RefreshToken: RefreshToken,
+	})
+	if err != nil {
+		c.JSON(500, responses.SystemServerError())
+		c.Abort()
+
+		CActivity.Create([]interface{}{User.ID}, User.ID, "is failed to Log In", `Failed to form a response`)
+		return
+	}
+
+	if _, err := CTransaction.CompleteBySeed(transactionId, string(TransactionCompleteData)); err != nil {
+		c.JSON(500, responses.SystemServerError())
+		c.Abort()
+
+		CActivity.Create([]interface{}{User.ID}, User.ID, "is failed to Log In", `Failed to match transactionId in db.`)
+		return
+	}
+
+	CActivity.Create([]interface{}{User.ID}, User.ID, "Logged in with Google", `New Log In`)
+
+	c.Header("Content-Type", "text/html")
+	c.String(200, `<html><head><script type="text/javascript">window.onload = window.close()</script></head><body>Success! You may close the window</body></html>`)
 	return
 }

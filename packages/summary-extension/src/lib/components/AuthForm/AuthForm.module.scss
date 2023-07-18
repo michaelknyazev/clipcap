@@ -1,12 +1,46 @@
+@import "@clipcap/ui/styles/colors.scss";
+
 .container {
   .section {
     padding: 5px 0;
 
+    &.section-logo {
+      padding: 0 0 25px 0;
+    }
     &.section-title {
-      padding: 0 0 15px 0;
+      padding: 0 0 5px 0;
     }
     &.section-button {
-      padding: 15px 0 0 0;
+      padding: 5px 0;
+    }
+    &.section-divider {
+      text-align: center;
+
+      padding: 0;
+    }
+    &.section-google {
+      padding: 0;
+    }
+    &.section-text{
+      width: 100%;
+      text-align: center;
+
+      padding: 5px 0 0 0;
+
+      font-size: 12px;
     }
   }
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 16px;
+
+  text-transform: uppercase;
+}
+
+.highlight {
+  color:$_color-primary-violet-dark;
+
+  font-size: inherit;
 }

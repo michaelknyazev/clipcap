@@ -13,7 +13,7 @@
         "https://youtube.com/*",
         "https://www.youtube.com/*"
       ],
-      "run_at": "document_idle"
+      "run_at": "document_end"
     }
   ],
   "background": {

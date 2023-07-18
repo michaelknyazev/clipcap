@@ -4,6 +4,7 @@ import (
 	"clipcap/web/pkg/api/controllers/CAccessToken"
 	"clipcap/web/pkg/api/responses"
 	"clipcap/web/pkg/controllers/CGPT"
+	"clipcap/web/pkg/controllers/CIntegration"
 	"clipcap/web/pkg/controllers/CLog"
 	"clipcap/web/pkg/controllers/CSource"
 	"clipcap/web/pkg/controllers/CSummary"
@@ -38,26 +39,25 @@ func Youtube(c *gin.Context) {
 
 	CLog.Log(videoId, AccessToken.UserID, "Received Valid access token.")
 
-	/*
-		Integration, err := CIntegration.FindByUserIdAndType(AccessToken.UserID, "google_oauth")
-		if err != nil {
-			CLog.Log(videoId, AccessToken.UserID, "No Google Integration found!")
-			c.JSON(401, responses.AuthenticationUnauthorized())
-			c.Abort()
-			return
-		}
+	Integration, err := CIntegration.FindByUserIdAndType(AccessToken.UserID, "google_oauth")
+	if err != nil {
+		CLog.Log(videoId, AccessToken.UserID, "No Google Integration found!")
+		c.JSON(401, responses.AuthenticationUnauthorized())
+		c.Abort()
+		return
+	}
 
-		CLog.Log(videoId, AccessToken.UserID, "Google integration is found")
-		OAuthToken, err := CIntegration.OAuthToken(Integration)
-		if err != nil {
-			CLog.Log(videoId, AccessToken.UserID, "Can't Generate OAuthToken!", err)
-			c.JSON(401, responses.AuthenticationUnauthorized())
-			c.Abort()
-			return
-		}
+	CLog.Log(videoId, AccessToken.UserID, "Google integration is found")
+	OAuthToken, err := CIntegration.OAuthToken(Integration)
+	if err != nil {
+		CLog.Log(videoId, AccessToken.UserID, "Can't Generate OAuthToken!", err)
+		c.JSON(401, responses.AuthenticationUnauthorized())
+		c.Abort()
+		return
+	}
 
-		CLog.Log(videoId, AccessToken.UserID, "OAuth Token generated.")
-	*/
+	CLog.Log(videoId, AccessToken.UserID, "OAuth Token generated.")
+
 	ExistingSummary, err := CSummary.FindBySourceId(videoId)
 	if err == nil && len(ExistingSummary) > 0 {
 		CLog.Log(videoId, AccessToken.UserID, "Summary already exists in DB")
@@ -68,7 +68,7 @@ func Youtube(c *gin.Context) {
 
 	CLog.Log(videoId, AccessToken.UserID, "It's a new summary, processing")
 
-	VideoData, err := SGoogle.GetVideoInfo(videoId)
+	VideoData, err := SGoogle.GetVideoInfo(OAuthToken, videoId)
 	if err != nil {
 		CLog.Log(videoId, AccessToken.UserID, "Can't Get video data from youtube!")
 		c.JSON(401, responses.AuthenticationUnauthorized())
@@ -97,7 +97,7 @@ func Youtube(c *gin.Context) {
 	if err != nil || len(SourceContent) == 0 {
 		CLog.Log(videoId, AccessToken.UserID, "There is no source content stored in DB, fetching from youtube.")
 
-		Captions, language, err := SGoogle.GetCaptionsFromVideoInfo(VideoData)
+		Captions, language, err := SGoogle.GetCaptionsFromVideoInfo(OAuthToken, VideoData)
 		if err != nil {
 			CLog.Log(videoId, AccessToken.UserID, "Can't get captions from youtube.", err.Error())
 
