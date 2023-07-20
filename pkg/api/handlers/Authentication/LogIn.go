@@ -75,11 +75,11 @@ func LogIn(c *gin.Context) {
 	}
 
 	/*
-		c.SetCookie("refresh_token", RefreshToken, 60*60*24*7, "", "", false, true)
-		c.SetCookie("access_token", AccessToken, 60*60, "", "", false, true)
+		c.SetCookie("refresh_token", RefreshToken, 60*60*24*7, "", SConfiguration.Configuration.Host, SConfiguration.Configuration.IsProduction, true)
+		c.SetCookie("access_token", AccessToken, 60*60, "", SConfiguration.Configuration.Host, SConfiguration.Configuration.IsProduction, true)
 	*/
 
-	result := map[string]interface{}{}
+	var result map[string]interface{}
 
 	result["access_token"] = AccessToken
 	result["refresh_token"] = RefreshToken

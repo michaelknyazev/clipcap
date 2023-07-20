@@ -58,16 +58,15 @@ func Refresh(c *gin.Context) {
 	}
 
 	/*
-		c.SetCookie("refresh_token", RefreshToken, 60*60*24*7, "", "", false, true)
-		c.SetCookie("access_token", AccessToken, 60*60, "", "", false, true)
+		c.SetCookie("refresh_token", RefreshToken, 60*60*24*7, "/", "*", SConfiguration.Configuration.IsProduction, true)
+		c.SetCookie("access_token", AccessToken, 60*60, "/", "*", SConfiguration.Configuration.IsProduction, true)
 	*/
+	TokensData := struct {
+		AccessToken  string `json:"access_token"`
+		RefreshToken string `json:"refresh_token"`
+	}{AccessToken, RefreshToken}
 
-	result := map[string]interface{}{}
-
-	result["access_token"] = AccessToken
-	result["refresh_token"] = RefreshToken
-
-	c.JSON(200, responses.SystemServerSuccessWithData(result))
+	c.JSON(200, responses.SystemServerSuccessWithData(TokensData))
 	c.Abort()
 
 	CActivity.Create([]interface{}{User.ID}, User.ID, "renewed authorization", "")

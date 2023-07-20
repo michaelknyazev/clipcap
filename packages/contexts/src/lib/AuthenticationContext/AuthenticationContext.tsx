@@ -1,92 +1,140 @@
 import { createContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 
-import { AuthenticationService } from '@clipcap/services';
-import { Splash } from '@clipcap/ui';
+import { AuthenticationService, TransactionService } from '@clipcap/services';
+import { NonIdealState } from '@clipcap/ui';
 import Icon from '@clipcap/icons';
 
-import type { TResponse } from '@clipcap/types';
 import type { TAuthenticationContextProvider, TAuthenticationContext, TQueryWithRedirectUri } from './types';
+import { debug, getLocalStorageProperty, setLocalStorageProperty, waitUntilWindowIsClosed } from '@clipcap/helpers';
+import { useRouter } from 'next/router';
+import type { TAuthorization } from '@clipcap/types';
 
 const AuthenticationContext = createContext<TAuthenticationContext>({
-  Refresh: () => new Promise(resolve => resolve("")),
-  LogOut: () => new Promise(resolve => resolve(""))
+  GetAccessToken: () => "",
+  Google: () => new Promise(r => r([{ access_token: "", refresh_token: "" }, ""]))
 });
 const AuthenticationContextProvider = ({ children }: TAuthenticationContextProvider) => {
   const router = useRouter();
-  const { pathname, asPath } = router;
-  const isAuthPage = pathname.includes('/auth');
+  const isAuthPage = router.asPath.includes("auth");
+  const [RefreshToken, setRefreshToken] = useState<string>("");
+  const [AccessToken, setAccessToken] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const [authorization, setAuthorization] = useState({
-    loading: true,
-    data: null
-  });
+  const handleRefresh = async (old_refresh_token: string): Promise<[TAuthorization, string]> => {
+    const { redirect_uri = "" } = router.query;
+    const _buff = Buffer.from(redirect_uri as string, 'base64');
+    const _decodedRedirectLocation = _buff.toString('ascii');
+    const redirectLocation = _decodedRedirectLocation;
 
-  const Methods = {
-    Refresh: () => {
-      setAuthorization({ ...authorization, loading: true });
+    try {
+      const { success, event, result } = await AuthenticationService.Refresh(old_refresh_token);
+      if (!success) throw new Error(event);
 
-      return AuthenticationService.Refresh().then(({ success, event }: TResponse) => {
-        if (!success) {
-          let { redirect_uri = null } = router.query
+      const { access_token, refresh_token } = result;
+      setAccessToken(access_token);
+      setRefreshToken(refresh_token);
 
-          if (!isAuthPage) {
-            const { asPath } = router;
+      setLocalStorageProperty("refresh_token", refresh_token);
 
-            const _buff = Buffer.from(asPath);
-            redirect_uri = _buff.toString('base64');
-          }
+      return [{ access_token, refresh_token }, redirectLocation]
+    } catch (err) {
+      console.log(err);
+    }
 
-          setAuthorization({ loading: false, data: null });
+    return [{
+      access_token: "",
+      refresh_token: ""
+    }, redirectLocation]
+  }
 
-          return `/auth${redirect_uri ? `?redirect_uri=${redirect_uri}` : ''}`;
-        }
-
-        let redirectLocation = window.location.pathname;
-        const query = router.query as TQueryWithRedirectUri;
-        const { redirect_uri } = query;
-
-        if (redirect_uri) {
-          const _buff = Buffer.from(redirect_uri, 'base64');
-          const _decodedRedirectLocation = _buff.toString('ascii');
-
-          redirectLocation = _decodedRedirectLocation;
-        }
-
-        setAuthorization({ ...authorization, loading: false });
-
-        return redirectLocation;
-      })
-    },
-    LogOut: () => {
-      setAuthorization({ ...authorization, loading: true });
-
-      return AuthenticationService.Logout().then(({ success }: TResponse) => {
-        if (!success) return setAuthorization({ ...authorization, loading: false });
-
-        const _buff = Buffer.from(router.asPath);
-        const redirect_uri = _buff.toString('base64');
-
-        const redirectLocation = `/auth?redirect_uri=${redirect_uri}`;
-
-        setAuthorization({ ...authorization, data: null });
-
-        return redirectLocation;
-      })
+  const handleGoogleLogIn = async (): Promise<[TAuthorization, string]> => {
+    try {
+      const GenerateLinkResponse = await AuthenticationService.GetGoogleLink();
+      if (!GenerateLinkResponse.success) throw new Error(GenerateLinkResponse.event);
+  
+      debug('GenerateLink', GenerateLinkResponse)
+  
+      const { url, transactionId } = GenerateLinkResponse.result;
+      if (!url || !transactionId) throw new Error(GenerateLinkResponse.event);
+  
+      let _newPopUp = window.open(url, "_blank", "closed=false,popup=yes,width=450,height=550");
+  
+      await waitUntilWindowIsClosed(_newPopUp);
+  
+      const TransactionResponse = await TransactionService.Get(transactionId);
+      if (!TransactionResponse.success) throw new Error(TransactionResponse.event);
+  
+      debug('Transaction', TransactionResponse)
+  
+      const Transaction = TransactionResponse.result;
+      if(Transaction.status !== 2) throw new Error(Transaction.data);
+  
+      let authorization: TAuthorization = JSON.parse(Transaction.data)
+  
+      return handleRefresh(authorization.refresh_token);
+    } catch (err) {
+      return [{
+        access_token: "",
+        refresh_token: ""
+      }, ""]
     }
   }
 
   useEffect(() => {
-    Methods.Refresh().then((redirect_uri: string) => {
-      router.push(redirect_uri);
-    });
+    const storedRefreshToken = getLocalStorageProperty("refresh_token");
+    const { asPath } = router;
+    const _buff = Buffer.from(asPath);
+    const redirect_uri = _buff.toString('base64');
+
+    if (storedRefreshToken) {
+      handleRefresh(storedRefreshToken).then(([authorization, _]) => {
+        const { access_token } = authorization;
+        setLoading(false);
+
+        if (access_token != "") return;
+        if (isAuthPage) return;
+
+        router.push(`/auth?redirect_uri=${redirect_uri}`);
+      });
+    } else {
+      setLoading(false);
+      if (isAuthPage) return
+      
+      router.push(`/auth?redirect_uri=${redirect_uri}`);
+    }
   }, []);
+
+  const Methods = {
+    GetAccessToken: () => AccessToken,
+    Google: () => handleGoogleLogIn()
+  }
 
   return (
     <AuthenticationContext.Provider value={Methods}>
-      <Splash hide={!authorization.loading} content={<Icon name="loading" />} />
       {(() => {
-        if (!authorization.loading) return children;
+        if (loading) {
+          return (
+            <NonIdealState
+              icon={<Icon name="loading" />}
+              title="Loading"
+              description="Loading your authorization data"
+            />
+          );
+        }
+
+        if (isAuthPage) return children;
+
+        if (AccessToken == "" || RefreshToken == "") {
+          return (
+            <NonIdealState
+              icon={<Icon name="loading" />}
+              title="Still loading"
+              description="If you keep seeing this message longer then 10 seconds, please reload the page."
+            />
+          )
+        }
+
+        return children
       })()}
     </AuthenticationContext.Provider>
   );

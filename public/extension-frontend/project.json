@@ -1,0 +1,51 @@
+{
+  "name": "extension-frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "public/extension-frontend",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/next:build",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "root": "public/extension-frontend",
+        "outputPath": "dist/public/extension-frontend"
+      },
+      "configurations": {
+        "development": {
+          "outputPath": "public/extension-frontend"
+        },
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/next:server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "extension-frontend:build",
+        "dev": true,
+        "port": 3001
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "extension-frontend:build:development",
+          "dev": true
+        },
+        "production": {
+          "buildTarget": "extension-frontend:build:production",
+          "dev": false
+        }
+      }
+    },
+    "export": {
+      "executor": "@nrwl/next:export",
+      "options": {
+        "buildTarget": "extension-frontend:build:production"
+      }
+    }
+  },
+  "tags": []
+}

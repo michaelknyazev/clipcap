@@ -13,6 +13,7 @@ func Create(seed string) (MTransaction.Transaction, error) {
 		ID:        primitive.NewObjectID(),
 		Seed:      seed,
 		Processed: false,
+		Status:    1,
 		Created:   ts.Unix(),
 		Updated:   ts.Unix(),
 	}

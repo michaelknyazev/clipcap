@@ -1,5 +1,6 @@
 # Database Connection
 # Supports MongoDB only
+host: localhost
 database:
   uri: mongodb://test:test@localhost:27017/test
   name: test

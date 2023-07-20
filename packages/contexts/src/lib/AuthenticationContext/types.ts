@@ -1,10 +1,12 @@
+import type { TAuthorization } from "@clipcap/types"
+
 export type TAuthenticationContextProvider = {
   children?: React.ReactNode
 }
 
 export type TAuthenticationContext = {
-  Refresh: () => Promise<string | void>,
-  LogOut: () => Promise<string | void>
+  GetAccessToken: () => string,
+  Google: () => Promise<[TAuthorization, string]>
 }
 
 export type TQueryWithRedirectUri = {

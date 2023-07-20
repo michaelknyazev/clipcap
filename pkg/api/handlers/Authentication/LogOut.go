@@ -10,6 +10,8 @@ import (
 	"clipcap/web/pkg/api/responses"
 	"clipcap/web/pkg/controllers/CActivity"
 	"clipcap/web/pkg/controllers/CAuthorization"
+	"clipcap/web/pkg/services/SConfiguration"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -62,8 +64,9 @@ func LogOut(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("refresh_token", "", 0, "", "", true, true)
-	c.SetCookie("access_token", "", 0, "", "", true, true)
+	c.SetSameSite(http.SameSiteNoneMode)
+	c.SetCookie("refresh_token", "", 0, "", SConfiguration.Configuration.Host, SConfiguration.Configuration.IsProduction, true)
+	c.SetCookie("access_token", "", 0, "", SConfiguration.Configuration.Host, SConfiguration.Configuration.IsProduction, true)
 
 	c.JSON(200, responses.SystemServerSuccess())
 	c.Abort()

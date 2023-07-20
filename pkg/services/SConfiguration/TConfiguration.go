@@ -13,6 +13,8 @@ type TIntegrations struct {
 }
 
 type TConfiguration struct {
+	Host           string
+	IsProduction   bool
 	Database       TDatabase
 	Authentication TAuthentication
 	Security       TSecurity

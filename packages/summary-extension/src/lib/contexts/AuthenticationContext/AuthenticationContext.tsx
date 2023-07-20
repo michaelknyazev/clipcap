@@ -10,66 +10,52 @@ import { Loader } from '../../components/Loader';
 const AuthenticationContextDefaultValue = {
   GetAccessToken: (): Promise<string> => new Promise(r => r("")),
   GetRefreshToken: (): Promise<string> => new Promise(r => r("")),
-  Refresh: (_: TAuthorization): Promise<TAuthorization> => new Promise(r => r({
-    access_token: "",
-    refresh_token: ""
-  })),
+  Refresh: (_: string): Promise<TAuthorization> => new Promise(r => r({ access_token: "", refresh_token: "" })),
 }
  
 const AuthenticationContext = createContext<TAuthorizationContextMethods>(AuthenticationContextDefaultValue);
 const AuthenticationContextProvider = ({ 
   children,
-  access_token,
-  refresh_token, 
-  onAuthorizationRefresh
+  onAuthorizationRefresh = () => new Promise(r => r({ access_token: "", refresh_token: "" })),
+  onAuthorizationRequest = () => new Promise(r => r({ access_token: "", refresh_token: "" }))
 }: TAuthenticationContextProviderProps) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [AccessToken, setAccessToken] = useState<string>(access_token)
-  const [RefreshToken, setRefreshToken] = useState<string>(refresh_token)
+  const [AccessToken, setAccessToken] = useState<string>("")
+  const [RefreshToken, setRefreshToken] = useState<string>("")
 
-  const handleRefreshAuthorization = (newAuthorization: TAuthorization): Promise<TAuthorization> => new Promise((resolve, reject) => {
-    setAccessToken(newAuthorization.access_token);
-    setRefreshToken(newAuthorization.refresh_token);
+  const handleGetStoredAuthorization = () => {
+    return onAuthorizationRequest();
+  }
 
-    if (onAuthorizationRefresh) {
-      onAuthorizationRefresh(newAuthorization).then((authorization) => {
-        resolve(authorization);
-      }).catch(err => {
-        setAccessToken("");
-        setRefreshToken("");
+  const handleRefreshAuthorization = async (stored_refresh_token: string): Promise<TAuthorization> => {
+    try {
+      const { success, event, result } = await AuthenticationService.Refresh(stored_refresh_token);
+      if (!success) throw new Error(event);
 
-        return onAuthorizationRefresh({ access_token: "", refresh_token: "" }).then(() => {
-          reject(err);
-        });
-      })
-      return;
-    }
+      const { access_token, refresh_token } = result;
+      if (!access_token || !refresh_token) throw new Error(event);
 
-    setAccessToken("");
-    setRefreshToken("");
-    reject(new Error("no authorization refresh handler"));
-    return;
-  });
+      await onAuthorizationRefresh(result);
 
-  useEffect(() => {
-    AuthenticationService.Refresh(RefreshToken).then(({ success, event, result }) => {
-      if (!success) {
-        throw new Error(event);
-      }
+      setAccessToken(access_token);
+      setRefreshToken(refresh_token);
 
-      return handleRefreshAuthorization(result).then(() => {
-        setLoading(false);
-      }).catch(err => {
-        console.log(err);
-        setAccessToken("");
-        setRefreshToken("");
-        setLoading(false);
-      })
-    }).catch(err => {
-      console.log(err);
+      return result
+    } catch (err) {
       setAccessToken("");
       setRefreshToken("");
-      setLoading(false);
+
+      return { access_token: "", refresh_token: "" }
+    }
+  }
+
+  useEffect(() => {
+    handleGetStoredAuthorization().then(({ access_token, refresh_token }) => {
+      if (access_token === "" || refresh_token === "") return setLoading(false);
+
+      return handleRefreshAuthorization(refresh_token).then(() => {
+        setLoading(false);
+      });
     })
   }, []);
 
@@ -86,7 +72,7 @@ const AuthenticationContextProvider = ({
           return <Loader />
         }
 
-        if (RefreshToken === "") {
+        if (RefreshToken === "" || AccessToken === "") {
           return <AuthForm />
         }
 

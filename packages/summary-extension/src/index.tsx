@@ -5,25 +5,12 @@ import { TAuthorization } from '@clipcap/types'
 import { ExtensionWrapper } from './lib/components/ExtensionWrapper'
 
 type TSummaryExtension = {
-  access_token: string,
-  refresh_token: string,
+  onAuthorizationRequest: () => Promise<TAuthorization>
   onAuthorizationRefresh: (data: TAuthorization) => Promise<TAuthorization>
 }
 
-export const SummaryExtension = ({
-  access_token,
-  refresh_token,
-  onAuthorizationRefresh
-}: TSummaryExtension) => {
+export const SummaryExtension = () => {
   return (
-    <ExtensionWrapper>
-      <AuthenticationContextProvider 
-        access_token={access_token} 
-        refresh_token={refresh_token} 
-        onAuthorizationRefresh={onAuthorizationRefresh}
-      >
-        <ExtensionContainer />
-      </AuthenticationContextProvider>
-    </ExtensionWrapper>
+    <ExtensionContainer />
   )
 }

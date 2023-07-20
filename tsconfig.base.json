@@ -25,7 +25,7 @@
       "@clipcap/types": ["packages/types/src/index.ts"],
       "@clipcap/ui": ["packages/ui/src/index.ts"],
       "@clipcap/ui/*": ["packages/ui/src/*"],
-      "@clipcap/website/*": ["public/website/*"]
+      "@clipcap/extension-frontend/*": ["public/extension-frontend/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

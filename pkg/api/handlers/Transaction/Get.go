@@ -36,6 +36,7 @@ func Get(c *gin.Context) {
 		"updated":       Transaction.Updated,
 		"data":          Transaction.Data,
 		"processed":     Transaction.Processed,
+		"status":        Transaction.Status,
 	}))
 	c.Abort()
 	return

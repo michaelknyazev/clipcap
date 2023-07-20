@@ -3,5 +3,6 @@ export type TTransaction = {
   processed: boolean,
   created: number,
   updated: number,
-  data: string
+  data: string,
+  status: number
 }

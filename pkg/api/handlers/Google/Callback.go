@@ -26,8 +26,8 @@ func Callback(c *gin.Context) {
 		return
 	}
 
-	state := c.Query("state")
-	if state == "" {
+	transactionId := c.Query("state")
+	if transactionId == "" {
 		c.JSON(422, responses.SystemForbidden())
 		c.Abort()
 		return
@@ -35,6 +35,12 @@ func Callback(c *gin.Context) {
 
 	token, err := SGoogle.OAuthConfiguration.Exchange(oauth2.NoContext, code)
 	if err != nil {
+		if _, err := CTransaction.FailBySeed(transactionId, "Failed to exchange tokens with Google"); err != nil {
+			c.JSON(500, responses.SystemServerError())
+			c.Abort()
+			return
+		}
+
 		c.JSON(422, responses.SystemForbidden())
 		c.Abort()
 		return
@@ -42,6 +48,12 @@ func Callback(c *gin.Context) {
 
 	GoogleUser, err := SGoogle.GetUser(token)
 	if err != nil {
+		if _, err := CTransaction.FailBySeed(transactionId, "Failed to get user data from Google"); err != nil {
+			c.JSON(500, responses.SystemServerError())
+			c.Abort()
+			return
+		}
+
 		c.JSON(422, responses.SystemForbidden())
 		c.Abort()
 		return
@@ -51,6 +63,11 @@ func Callback(c *gin.Context) {
 	if err != nil {
 		randomPassword, err := CPassword.Generate()
 		if err != nil {
+			if _, err := CTransaction.FailBySeed(transactionId, "Failed to generate password for user"); err != nil {
+				c.JSON(500, responses.SystemServerError())
+				c.Abort()
+				return
+			}
 			c.JSON(500, responses.SystemServerError())
 			c.Abort()
 			return
@@ -58,6 +75,11 @@ func Callback(c *gin.Context) {
 
 		hashedPassword, err := CPassword.Hash(randomPassword)
 		if err != nil {
+			if _, err := CTransaction.FailBySeed(transactionId, "Failed to hash password for user"); err != nil {
+				c.JSON(500, responses.SystemServerError())
+				c.Abort()
+				return
+			}
 			c.JSON(500, responses.SystemServerError())
 			c.Abort()
 			return
@@ -65,28 +87,43 @@ func Callback(c *gin.Context) {
 
 		User, err = CUser.Create(GoogleUser.Email, hashedPassword, GoogleUser.Name, true)
 		if err != nil {
+			if _, err := CTransaction.FailBySeed(transactionId, "Failed to create user based on google data"); err != nil {
+				c.JSON(500, responses.SystemServerError())
+				c.Abort()
+				return
+			}
 			c.JSON(500, responses.SystemServerError())
 			c.Abort()
 			return
 		}
 	}
 
-	CurrentIntegration, err := CIntegration.FindByUserIdAndType(User.ID, "google_oauth")
+	GoogleIntegration, err := CIntegration.FindByUserIdAndType(User.ID, "google_oauth")
 	if err != nil {
-		if _, err := CIntegration.Create("google_oauth", token.RefreshToken, token.AccessToken, token.Expiry.Unix(), User.ID); err != nil {
+		if GoogleIntegration, err = CIntegration.Create("google_oauth", token.RefreshToken, token.AccessToken, token.Expiry.Unix(), User.ID); err != nil {
+			if _, err := CTransaction.FailBySeed(transactionId, "Failed to create Google integration for user"); err != nil {
+				c.JSON(500, responses.SystemServerError())
+				c.Abort()
+				return
+			}
+
 			c.JSON(500, responses.SystemServerError())
 			c.Abort()
 			return
 		}
-
-		c.Redirect(302, "/")
-		return
 	} else {
-		CurrentIntegration.RefreshToken = token.RefreshToken
-		CurrentIntegration.AccessToken = token.AccessToken
-		CurrentIntegration.Expiry = token.Expiry.Unix()
+		GoogleIntegration.RefreshToken = token.RefreshToken
+		GoogleIntegration.AccessToken = token.AccessToken
+		GoogleIntegration.Expiry = token.Expiry.Unix()
 
-		if _, err := CIntegration.UpdateIntegrationById(CurrentIntegration.ID, CurrentIntegration); err != nil {
+		if _, err := CIntegration.UpdateIntegrationById(GoogleIntegration.ID, GoogleIntegration); err != nil {
+
+			if _, err := CTransaction.FailBySeed(transactionId, "Failed to update Google integration for user"); err != nil {
+				c.JSON(500, responses.SystemServerError())
+				c.Abort()
+				return
+			}
+
 			c.JSON(500, responses.SystemServerError())
 			c.Abort()
 			return
@@ -95,6 +132,13 @@ func Callback(c *gin.Context) {
 
 	Authorization, err := CAuthorization.Create(User.ID)
 	if err != nil {
+
+		if _, err := CTransaction.FailBySeed(transactionId, "Failed to create authorization for user"); err != nil {
+			c.JSON(500, responses.SystemServerError())
+			c.Abort()
+			return
+		}
+
 		c.JSON(500, responses.AuthenticationFailedToCreateAuthorization())
 		c.Abort()
 
@@ -102,10 +146,15 @@ func Callback(c *gin.Context) {
 		return
 	}
 
-	RefreshToken, err := CRefreshToken.Generate(User.Email, &types.RefreshToken{
-		AuthorizationId: Authorization.ID,
-	})
+	RefreshToken, err := CRefreshToken.Generate(User.Email, &types.RefreshToken{AuthorizationId: Authorization.ID})
 	if err != nil {
+
+		if _, err := CTransaction.FailBySeed(transactionId, "Failed to generate refresh_token for user"); err != nil {
+			c.JSON(500, responses.SystemServerError())
+			c.Abort()
+			return
+		}
+
 		c.JSON(500, responses.AuthenticationGenerateRefreshTokenFailed(err.Error()))
 		c.Abort()
 
@@ -113,10 +162,15 @@ func Callback(c *gin.Context) {
 		return
 	}
 
-	AccessToken, err := CAccessToken.Generate(User.Email, &types.AccessToken{
-		UserID: User.ID,
-	})
+	AccessToken, err := CAccessToken.Generate(User.Email, &types.AccessToken{UserID: User.ID})
 	if err != nil {
+
+		if _, err := CTransaction.FailBySeed(transactionId, "Failed to generate access_token for user"); err != nil {
+			c.JSON(500, responses.SystemServerError())
+			c.Abort()
+			return
+		}
+
 		c.JSON(500, responses.AuthenticationGenerateAccessTokenFailed(err.Error()))
 		c.Abort()
 
@@ -124,31 +178,27 @@ func Callback(c *gin.Context) {
 		return
 	}
 
-	/*
-		c.SetCookie("refresh_token", RefreshToken, 60*60*24*7, "", "", false, true)
-		c.SetCookie("access_token", AccessToken, 60*60, "", "", false, true)
-	*/
+	TokensData := struct {
+		AccessToken  string `json:"access_token"`
+		RefreshToken string `json:"refresh_token"`
+	}{AccessToken, RefreshToken}
 
-	transactionId := state
-
-	type Tokens struct {
-		AccessToken  string `json:"access_token" bson:"access_token"`
-		RefreshToken string `json:"refresh_token" bson:"refresh_token"`
-	}
-
-	TransactionCompleteData, err := json.Marshal(Tokens{
-		AccessToken:  AccessToken,
-		RefreshToken: RefreshToken,
-	})
+	result, err := json.Marshal(TokensData)
 	if err != nil {
-		c.JSON(500, responses.SystemServerError())
+		if _, err := CTransaction.FailBySeed(transactionId, "Failed to tokens data to store in transaction"); err != nil {
+			c.JSON(500, responses.SystemServerError())
+			c.Abort()
+			return
+		}
+
+		c.JSON(500, responses.AuthenticationGenerateAccessTokenFailed(err.Error()))
 		c.Abort()
 
-		CActivity.Create([]interface{}{User.ID}, User.ID, "is failed to Log In", `Failed to form a response`)
+		CActivity.Create([]interface{}{User.ID}, User.ID, "is failed to Log In", `Failed to generate tokens data in transaction.`)
 		return
 	}
 
-	if _, err := CTransaction.CompleteBySeed(transactionId, string(TransactionCompleteData)); err != nil {
+	if _, err := CTransaction.CompleteBySeed(transactionId, string(result)); err != nil {
 		c.JSON(500, responses.SystemServerError())
 		c.Abort()
 
@@ -157,6 +207,11 @@ func Callback(c *gin.Context) {
 	}
 
 	CActivity.Create([]interface{}{User.ID}, User.ID, "Logged in with Google", `New Log In`)
+
+	/*
+		c.SetCookie("refresh_token", RefreshToken, 60*60*24*7, "", "*", SConfiguration.Configuration.IsProduction, true)
+		c.SetCookie("access_token", AccessToken, 60*60, "", "*", SConfiguration.Configuration.IsProduction, true)
+	*/
 
 	c.Header("Content-Type", "text/html")
 	c.String(200, `<html><head><script type="text/javascript">window.onload = window.close()</script></head><body>Success! You may close the window</body></html>`)

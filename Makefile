@@ -15,11 +15,12 @@ db:
 prepare: clear install
 	npx nx export instance
 backend:
-	go run main.go serve --config scripts/default.config.yaml
+	MODE=development go run main.go serve --config scripts/default.config.yaml
 frontend: 
-	npx nx run-many --target=serve
+	npx nx serve extension-frontend & \
+	npx local-ssl-proxy --key ./scripts/localhost-key.pem --cert ./scripts/localhost.pem --source 3000 --target 3001
 extension:
-	npx nx build chrome-extension
+	npx nx build chrome-extension-wrapper
 	./packaging/chrome-extension/bundle.sh
 
 # Build Commands
@@ -30,3 +31,8 @@ build_backend:
 
 # Build Docker Images For local Test
 # TODO
+
+deploy_backend_to_cloud_run: build_backend
+	docker build -t clipcap_api -f ./packaging/docker/Dockerfile.api .
+	docker tag clipcap_api:latest europe-west2-docker.pkg.dev/clipcap/clipcap/api
+	docker push europe-west2-docker.pkg.dev/clipcap/clipcap/api

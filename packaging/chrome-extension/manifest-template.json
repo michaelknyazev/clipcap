@@ -10,8 +10,7 @@
       "js": [{%js%}],
       "css": [{%css%}],
       "matches": [
-        "https://youtube.com/*",
-        "https://www.youtube.com/*"
+        "<all_urls>"
       ],
       "run_at": "document_end"
     }
@@ -22,15 +21,6 @@
   "action": {
     "default_popup": "index.html"
   },
-  "permissions": [
-    "tabs",
-    "storage", 
-    "identity"
-  ],
-  "host_permissions": [
-    "https://youtube.com/*",
-    "https://www.youtube.com/*",
-    "http://localhost:8080/*"
-  ],
+  "permissions": [],
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkfTcwacXIY37Rsznh/NMUBtxkFtslF9OEMdWVHerHNL8NrAFlGhfW1c2UvIYYKu3ezu0iBSU3hkKwfxhFz1VOzahjeyOEDXm5lMe3Ws+CxR8x6YqElmcMugrpHwo0YmBNSvAZ8C37WCZsr6TACfb6TIac72eD5buWb0wfnkI3dSDlFtr99ohx7FsMejxBvAwEWtEhIWd8NiATVnDXA7HuQ+mhSwcyTWGA2hDY3IGtwhgTywYtogkKUqnCZ+udraj3QZd+PVwfX5MdHVVWJ34zriVB4fE6CtKFOUHd9/NRAJr/mUSri+XmPXFyqEY+xU5l4xp2Rr4qvgiW0OSsFXF8QIDAQAB"
 }

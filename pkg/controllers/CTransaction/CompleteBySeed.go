@@ -16,6 +16,7 @@ func CompleteBySeed(seed string, data string) (MTransaction.Transaction, error) 
 	Transaction.Data = data
 	Transaction.Updated = ts.Unix()
 	Transaction.Processed = true
+	Transaction.Status = 2
 
 	Updated, err := MTransaction.ReplaceById(Transaction.ID, Transaction)
 	if err != nil {

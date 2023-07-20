@@ -1,0 +1,6 @@
+@import "@clipcap/ui/styles/tools/toRem.scss";
+@import "@clipcap/ui/styles/colors.scss";
+
+.container {
+  padding: toRem(20px);
+}

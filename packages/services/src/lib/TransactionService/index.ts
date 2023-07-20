@@ -3,7 +3,7 @@ import { http } from "../HttpService"
 import { delay } from "@clipcap/helpers";
 
 export function Get(transactionId: string): Promise<TResponse<TTransaction>> {
-  return http.get(`https://api.clipcap.app/api/v1/transaction/${transactionId}`).then(res => {
+  return http.get(`/api/v1/transaction/${transactionId}`).then(res => {
     return res.data
   }).catch(({ response }) => {
     return response;

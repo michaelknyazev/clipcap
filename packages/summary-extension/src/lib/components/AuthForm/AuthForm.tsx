@@ -28,7 +28,7 @@ export const AuthForm = () => {
       const { success, event, result } = await AuthenticationService.Login({ email, password });
       if (!success) throw new Error(event);
 
-      await Refresh(result);
+      await Refresh(result.refresh_token);
 
     } catch(err) {
       console.log(err);
@@ -53,7 +53,7 @@ export const AuthForm = () => {
           if (_transactionResult) {
             const data: TAuthorization = JSON.parse(_transactionResult.data);
 
-            await Refresh(data);
+            await Refresh(data.refresh_token);
           }
         }
       }
