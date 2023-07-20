@@ -8,6 +8,8 @@ import (
 	"clipcap/web/pkg/api/handlers/Tools"
 	"clipcap/web/pkg/api/handlers/Transaction"
 	"clipcap/web/pkg/api/handlers/User"
+	"clipcap/web/pkg/services/SStatic"
+	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -49,6 +51,7 @@ func RunRouter() {
 	router.GET("/api/v1/healthcheck", Tools.HealthCheck)
 
 	//router.NoRoute(Tools.ProxyNextFrontend)
+	router.NoRoute(gin.WrapH(http.FileServer(http.FS(SStatic.Frontend))))
 
 	router.Run(":8080")
 }

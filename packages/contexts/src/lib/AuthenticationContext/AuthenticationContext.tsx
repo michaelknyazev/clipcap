@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 
 import { AuthenticationService, TransactionService } from '@clipcap/services';
-import { NonIdealState, Spinner } from '@blueprintjs/core';
+import { NonIdealState, Spinner, setRef } from '@blueprintjs/core';
 
 import type { TAuthenticationContextProvider, TAuthenticationContext, TQueryWithRedirectUri } from './types';
 import { debug, getLocalStorageProperty, setLocalStorageProperty, waitUntilWindowIsClosed } from '@clipcap/helpers';
@@ -10,7 +10,8 @@ import type { TAuthorization } from '@clipcap/types';
 
 const AuthenticationContext = createContext<TAuthenticationContext>({
   GetAccessToken: () => "",
-  Google: () => new Promise(r => r([{ access_token: "", refresh_token: "" }, ""]))
+  Google: () => new Promise(r => r([{ access_token: "", refresh_token: "" }, ""])),
+  LogOut: () => new Promise(r => r())
 });
 const AuthenticationContextProvider = ({ children }: TAuthenticationContextProvider) => {
   const router = useRouter();
@@ -79,6 +80,25 @@ const AuthenticationContextProvider = ({ children }: TAuthenticationContextProvi
     }
   }
 
+  const handleLogOut = async () => {
+    setLoading(true);
+
+    try {
+      const { success, event } = await AuthenticationService.Logout(RefreshToken, AccessToken);
+      if (!success) throw new Error(event);
+
+      setAccessToken("");
+      setRefreshToken("");
+
+      setLocalStorageProperty("refresh_token", null)
+
+    } catch(err){
+      console.log(err);
+    }
+
+    setLoading(false);
+  }
+
   useEffect(() => {
     const storedRefreshToken = getLocalStorageProperty("refresh_token");
     const { asPath } = router;
@@ -105,7 +125,8 @@ const AuthenticationContextProvider = ({ children }: TAuthenticationContextProvi
 
   const Methods = {
     GetAccessToken: () => AccessToken,
-    Google: () => handleGoogleLogIn()
+    Google: () => handleGoogleLogIn(),
+    LogOut: () => handleLogOut()
   }
 
   return (

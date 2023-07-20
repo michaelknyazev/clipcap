@@ -6,7 +6,8 @@ export type TAuthenticationContextProvider = {
 
 export type TAuthenticationContext = {
   GetAccessToken: () => string,
-  Google: () => Promise<[TAuthorization, string]>
+  Google: () => Promise<[TAuthorization, string]>,
+  LogOut: () => Promise<void>
 }
 
 export type TQueryWithRedirectUri = {

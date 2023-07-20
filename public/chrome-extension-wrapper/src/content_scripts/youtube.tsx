@@ -45,8 +45,9 @@ const RenderExtension = () => {
         iframe.width = '100%';
         iframe.height = `100%`;
         iframe.style.borderRadius = '5px';
-        iframe.src = `https://localhost:3000?videoId=${currentVideoId}`;
-
+        //iframe.src = `https://api.clipcap.app/?videoId=${currentVideoId}`;
+        iframe.src = `https://localhost:3000/?videoId=${currentVideoId}`;
+        
         app.appendChild(iframe);
         container.insertBefore(app, container.firstChild);
         debug('Created new container');

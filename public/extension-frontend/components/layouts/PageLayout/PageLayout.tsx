@@ -1,6 +1,6 @@
 import styles from './PageLayout.module.scss';
 
-import type { TLayout } from '../../ui/Layout'
+import type { TLayout } from '@clipcap/types'
 
 const PageLayout = ({ children }: TLayout) => {
   return (
@@ -10,9 +10,14 @@ const PageLayout = ({ children }: TLayout) => {
   );
 }
 
-PageLayout.Section = ({ children }) => {
+PageLayout.Section = ({ children, empty = false }) => {
+  const className = [
+    styles.section
+  ];
+  if (empty) className.push(styles['section-empty']);
+  
   return (
-    <div className={styles.section}>
+    <div className={className.join(' ')}>
       {children}
     </div>
   )

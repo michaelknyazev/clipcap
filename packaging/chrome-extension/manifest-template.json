@@ -1,6 +1,6 @@
 {
   "name": "ClipCap - AI Generated Summaries",
-  "description": "Chrome Extension",
+  "description": "ClipCap - Your GPT-Powered Web Content Summarizer.",
   "version": "{%version%}",
   "manifest_version": 3,
   "homepage_url": "https://clipcap.app",
@@ -10,7 +10,8 @@
       "js": [{%js%}],
       "css": [{%css%}],
       "matches": [
-        "<all_urls>"
+        "https://youtube.com/*",
+        "https://www.youtube.com/*"
       ],
       "run_at": "document_end"
     }
@@ -21,6 +22,5 @@
   "action": {
     "default_popup": "index.html"
   },
-  "permissions": [],
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkfTcwacXIY37Rsznh/NMUBtxkFtslF9OEMdWVHerHNL8NrAFlGhfW1c2UvIYYKu3ezu0iBSU3hkKwfxhFz1VOzahjeyOEDXm5lMe3Ws+CxR8x6YqElmcMugrpHwo0YmBNSvAZ8C37WCZsr6TACfb6TIac72eD5buWb0wfnkI3dSDlFtr99ohx7FsMejxBvAwEWtEhIWd8NiATVnDXA7HuQ+mhSwcyTWGA2hDY3IGtwhgTywYtogkKUqnCZ+udraj3QZd+PVwfX5MdHVVWJ34zriVB4fE6CtKFOUHd9/NRAJr/mUSri+XmPXFyqEY+xU5l4xp2Rr4qvgiW0OSsFXF8QIDAQAB"
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlq/ulcG9vDVtap/j/Z96r6xJRPm4kYI3+0AeTK1kKbX+x9F1OF4QoYL64gNuueRQ0M4dd9B4r9dYHMsx7As2t4YDm38LA1Ux/VetIAMuk3GUj8GAe5mIGxfvG1LksizVgMgZVqLCrXHQogVPLziiQFPsTh6qTSrsWHOj5Sqxpef9Cc+jLAf+qAKrNRZ41kTtTKmOxbvVEhJcd6ou7Flbiij2OCxFjGM8KpYDX09TpkFCw64+S4WUKHEi7LpuTTZSJwZ6e2bYnecudbVYjePuZ+kGdoTc2d8CQTn3Y+F1yWpkoV/RmtGZPeUxkWBOH5cf58JJj3cORXSJS3WPsFcu1wIDAQAB"
 }

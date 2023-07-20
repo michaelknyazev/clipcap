@@ -1,12 +1,12 @@
 import '@clipcap/extension-frontend/styles/globals.scss';
+import { useEffect, useRef } from 'react';
 
 import { GlobalLayout as DefaultGlobalLayout } from '../components/layouts/GlobalLayout';
 
 import { AuthenticationContextProvider } from '@clipcap/contexts';
 
 import type { TApplication } from '@clipcap/types';
-import { useEffect, useRef } from 'react';
-import { debug } from '@clipcap/helpers';
+
 
 const App = ({ Component, pageProps }: TApplication) => {
   const appRootRef = useRef<HTMLDivElement>()

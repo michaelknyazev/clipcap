@@ -22,6 +22,8 @@ frontend:
 extension:
 	npx nx build chrome-extension-wrapper
 	./packaging/chrome-extension/bundle.sh
+test_launch:
+	npx local-ssl-proxy --key ./scripts/localhost-key.pem --cert ./scripts/localhost.pem --source 3000 --target 8080
 
 # Build Commands
 build_frontend: clear install

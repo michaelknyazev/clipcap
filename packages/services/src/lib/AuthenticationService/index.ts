@@ -22,8 +22,13 @@ export function Refresh(refresh_token: string): Promise<TResponse<TAuthorization
   });
 }
 
-export function Logout(): Promise<TResponse> {
-  return http.post('/api/v1/auth/logout').then(res => {
+export function Logout(refresh_token: string, access_token: string): Promise<TResponse> {
+  return http.post('/api/v1/auth/logout', null, {
+    headers: {
+      Refresh: refresh_token,
+      Authorization: access_token
+    }
+  }).then(res => {
     return res.data
   }).catch(({ response }) => {
     return response;

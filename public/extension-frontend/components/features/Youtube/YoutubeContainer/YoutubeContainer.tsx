@@ -1,6 +1,6 @@
 import styles from './YoutubeContainer.module.scss';
 
-import { Button, Icon, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Button, ButtonGroup, Icon, Intent, NonIdealState, Spinner, Tab, Tabs } from '@blueprintjs/core';
 
 import type { TYoutubeContainer } from './types';
 import { Summary } from '@clipcap/extension-frontend/components/containers/Summary';
@@ -53,6 +53,12 @@ export const YoutubeContainer = ({
 
         return (
           <>
+            <div className={`${styles.section} ${styles['section-setting']}`}>
+              <ButtonGroup fill>
+                <Button icon="predictive-analysis" intent={Intent.SUCCESS}>Insights</Button>
+                <Button disabled minimal icon="manually-entered-data">Summary</Button>
+              </ButtonGroup>
+            </div>
             <div className={`${styles.section} ${styles['section-summary']}`}>
               <div className={styles.summary}>
                 {summary.map((item: TSummary) => {
@@ -66,11 +72,6 @@ export const YoutubeContainer = ({
                   );
                 })}
               </div>
-            </div>
-            <div className={`${styles['section']} ${styles['section-button']}`}>
-              <Button large icon="lightning" fill>
-                Regenerate
-              </Button>
             </div>
           </>
         );
