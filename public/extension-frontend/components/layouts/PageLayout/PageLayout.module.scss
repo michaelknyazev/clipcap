@@ -1,2 +1,10 @@
 .container {
+  display: flex;
+  flex-direction: column;
+}
+
+.section {
+  &:not(:last-child) {
+    padding-bottom: 10px;
+  }
 }

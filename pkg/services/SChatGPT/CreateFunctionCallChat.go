@@ -7,22 +7,29 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"time"
 )
 
-type TChatGPTMessage struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
-	Name    string `json:"name,omitempty"`
+type TChatGPTFunctionParametersProperty struct {
+	Type        string   `json:"type"`
+	Description string   `json:"description"`
+	Enum        []string `json:"enum,omitempty"`
 }
 
-type TChatGPTCreateChatReqBody struct {
-	Model     string             `json:"model"`
-	Messages  []TChatGPTMessage  `json:"messages"`
-	Functions []TChatGPTFunction `json:"functions,omitempty"`
+type TChatGPTFunctionParametersProperties map[string]TChatGPTFunctionParametersProperty
+
+type TChatGPTFunctionParameters struct {
+	Type       string                               `json:"type"`
+	Properties TChatGPTFunctionParametersProperties `json:"properties"`
+	Required   []string                             `json:"required"`
 }
 
-func CreateChat(header string, message string) (TGPTResponse, error) {
+type TChatGPTFunction struct {
+	Name        string                     `json:"name"`
+	Description string                     `json:"description"`
+	Parameters  TChatGPTFunctionParameters `json:"parameters"`
+}
+
+func CreateFunctionCallChat(prompt string, language string, function TChatGPTFunction) (TGPTResponse, error) {
 	var Response TGPTResponse
 
 	URL, err := url.Parse("https://api.openai.com/v1/chat/completions")
@@ -31,23 +38,22 @@ func CreateChat(header string, message string) (TGPTResponse, error) {
 	}
 
 	NewMessage, err := json.Marshal(TChatGPTCreateChatReqBody{
-		Model: "gpt-3.5-turbo-16k",
+		Model:     "gpt-3.5-turbo-16k",
+		Functions: []TChatGPTFunction{function},
 		Messages: []TChatGPTMessage{
 			{
 				Role:    "system",
-				Content: header,
+				Content: language,
 			},
 			{
 				Role:    "user",
-				Content: message,
+				Content: prompt,
 			},
 		},
 	})
 	if err != nil {
 		return Response, err
 	}
-
-	ioutil.WriteFile(fmt.Sprintf("./__required/api-calls/create-chat-%s.json", time.Now()), NewMessage, 0644)
 
 	req, err := http.NewRequest("POST", URL.String(), bytes.NewBuffer(NewMessage))
 	if err != nil {
@@ -65,10 +71,12 @@ func CreateChat(header string, message string) (TGPTResponse, error) {
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
+		fmt.Println(err)
 		return Response, err
 	}
 
 	if err := json.Unmarshal(body, &Response); err != nil {
+		fmt.Println(err)
 		return Response, err
 	}
 

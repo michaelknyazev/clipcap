@@ -1,16 +1,17 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type { TIdentityContext, TIdentityContextProvider, TIdentityContextUserState } from "./types";
 
 import { UserService } from '@clipcap/services';
 
-import { Splash } from "@clipcap/ui";
-import Icon from '@clipcap/icons';
+import { AuthenticationContext } from "../AuthenticationContext";
+import { Spinner } from "@blueprintjs/core";
 
 const IdentityContext = createContext<TIdentityContext>({
   User: () => undefined,
   Authorized: () => false,
 });
 const IdentityContextProvider = ({ children }: TIdentityContextProvider) => {
+  const { GetAccessToken } = useContext(AuthenticationContext);
   const [user, setUser] = useState<TIdentityContextUserState>({
     loading: true,
     data: undefined
@@ -24,7 +25,8 @@ const IdentityContextProvider = ({ children }: TIdentityContextProvider) => {
     Identify: async () => {
       let data;
       try {
-        const { success, result, event } = await UserService.Identify();
+        const access_token = GetAccessToken()
+        const { success, result, event } = await UserService.Identify(access_token);
 
         if (!success) throw new Error(event);
 
@@ -45,7 +47,7 @@ const IdentityContextProvider = ({ children }: TIdentityContextProvider) => {
 
   return (
     <IdentityContext.Provider value={Methods}>
-      <Splash hide={!user.loading} content={<Icon name="loading" />} />
+      <Spinner />
       {(() => {
         if (!user.loading) return children;
       })()}

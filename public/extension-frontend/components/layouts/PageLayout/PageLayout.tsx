@@ -1,6 +1,6 @@
 import styles from './PageLayout.module.scss';
 
-import type { TLayout } from '@clipcap/ui'
+import type { TLayout } from '../../ui/Layout'
 
 const PageLayout = ({ children }: TLayout) => {
   return (

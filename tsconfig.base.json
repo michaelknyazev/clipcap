@@ -18,13 +18,9 @@
       "@clipcap/contexts": ["packages/contexts/src/index.ts"],
       "@clipcap/events": ["packages/events/src/index.ts"],
       "@clipcap/helpers": ["packages/helpers/src/index.ts"],
-      "@clipcap/icons": ["packages/icons/src/index.ts"],
       "@clipcap/instance/*": ["public/instance/*"],
       "@clipcap/services": ["packages/services/src/index.ts"],
-      "@clipcap/summary-extension": ["packages/summary-extension/src/index.tsx"],
       "@clipcap/types": ["packages/types/src/index.ts"],
-      "@clipcap/ui": ["packages/ui/src/index.ts"],
-      "@clipcap/ui/*": ["packages/ui/src/*"],
       "@clipcap/extension-frontend/*": ["public/extension-frontend/*"]
     }
   },

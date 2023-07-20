@@ -22,7 +22,7 @@ const RenderExtension = () => {
       debug('New video id detected, rerendering.');
 
       currentVideoId = videoId;
-      const container = document.querySelector('#related');
+      const container = document.querySelector('#secondary-inner');
 
       if (container) {
         debug('Found a place to render the iframe');
@@ -62,9 +62,21 @@ const RenderExtension = () => {
 debug('Extension loaded.');
 
 RenderExtension();
+
 window.addEventListener('transitionend', RenderExtension);
 window.addEventListener('message', (e) => {
-  const { height } = e.data;
+  const { action, height, stamp } = e.data;
+
+  if (action === "navigate") {
+    debug(`Navigating to ${stamp}`)
+    const playerContainer = document.querySelector("video.html5-main-video") as HTMLVideoElement;
+
+    if (playerContainer) {
+      playerContainer.currentTime = stamp;
+    }
+
+    return;
+  }
 
   const app = document.querySelector("#summary-extension-root") as HTMLDivElement;
 

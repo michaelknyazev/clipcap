@@ -1,6 +1,13 @@
-@import "@clipcap/ui/styles/tools/toRem.scss";
-@import "@clipcap/ui/styles/colors.scss";
-
 .container {
-  padding: toRem(20px);
+  padding: 10px;
+}
+
+.section {
+  &:not(:last-child) {
+    padding: 0 0 20px 0;
+  }
+
+  &.section-header {
+    padding: 0 0 20px 0;
+  }
 }

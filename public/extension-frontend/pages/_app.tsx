@@ -15,7 +15,6 @@ const App = ({ Component, pageProps }: TApplication) => {
   useEffect(() => {
     const _heightInterval = setInterval(() => {
       const _Rect = document.body.getBoundingClientRect()
-      debug(`Setting height ${_Rect.height}`);
       window.parent.postMessage(
         {
           height: _Rect.height

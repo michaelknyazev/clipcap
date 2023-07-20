@@ -1,9 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 
 import { getLocalStorageProperty, setLocalStorageProperty } from '@clipcap/helpers';
-import { Splash } from "@clipcap/ui";
-import Icon from '@clipcap/icons';
-
 import type { TSettingsContextParam, TSettingsContext, TSettingsContextProvider, TSettingsContextState } from "./types";
 
 const SettingsContext = createContext<TSettingsContext>({
@@ -66,7 +63,6 @@ const SettingsContextProvider = ({ children }: TSettingsContextProvider) => {
 
   return (
     <SettingsContext.Provider value={Methods}>
-      <Splash hide={!settings.loading} content={<Icon name="loading" />} />
       {(() => {
         if (!settings.loading) return children;
       })()}

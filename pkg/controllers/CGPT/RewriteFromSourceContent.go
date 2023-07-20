@@ -22,8 +22,8 @@ func RewriteFromSourceContent(videoId string, sourceContent []MText.Text) (strin
 
 	if tokenLength < maxTokens {
 		systemHeaderPrompt := `Imagine that you are a content writer. Here is a task for you:
-		Rewrite this text to a Markdown article.
-		Do not include the template for any author info, do not mention that this is a Markdown formatted article.
+		Rewrite this video transcription to a Markdown article.
+		Do not include the template for any author info, do not mention that this is an article.
 		Provide just the Article, no conversation.
 		`
 
@@ -36,7 +36,7 @@ func RewriteFromSourceContent(videoId string, sourceContent []MText.Text) (strin
 	}
 
 	systemHeaderPrompt := `
-Rewrite this text to a Markdown article.
+Rewrite this video transcription to a Markdown article.
 Do not include the template for any author info, do not mention that this is a Markdown formatted article.
 Provide just the Article, no conversation.
 `

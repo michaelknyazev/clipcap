@@ -22,11 +22,66 @@ type TSummaryError struct {
 	Message string
 }
 
+type TInsightsResponse struct {
+	Emoji   string `json:"emoji"`
+	Title   string `json:"title"`
+	Insight string `json:"insight"`
+}
+
+const language = "English"
+
 func SummarizeFromChunks(chunks []TChunk) ([]TSummary, error) {
 	var wg sync.WaitGroup
 	var errs []TSummaryError
 
 	result := make([]TSummary, len(chunks))
+
+	var langPrompt string
+	var titlePrompt string
+	var insightPrompt string
+	var funcDescription string
+
+	switch language {
+	case "Russian":
+		funcDescription = "Сформировать ключевой инсайт из предоставленного транскрипта видео"
+		langPrompt = "Представь что ты пишешь для социальной сети. Будь креативным! Пожалуйста, ответь на Русском языке, без общения, только результат функции."
+		titlePrompt = "Короткий заголовок для предоставленного текста. Пример: Уникальная Технология"
+		insightPrompt = "Короткий ключевой инсайт из предоставленного текста."
+		break
+	case "English":
+		funcDescription = "Get key insight from the provided video transcription."
+		langPrompt = "Imagine that you are a content writer. Be creative! Please, answer in English, no conversation. just provide the result of a function call"
+		titlePrompt = "The title for given text, eg. Unique Feature"
+		insightPrompt = "The short key insight from given text"
+		break
+	}
+
+	props := SChatGPT.TChatGPTFunctionParametersProperties{}
+
+	props["emoji"] = SChatGPT.TChatGPTFunctionParametersProperty{
+		Type:        "string",
+		Description: "An emoji of your choice that describes given text. eg. 💡",
+	}
+
+	props["title"] = SChatGPT.TChatGPTFunctionParametersProperty{
+		Type:        "string",
+		Description: titlePrompt,
+	}
+
+	props["insight"] = SChatGPT.TChatGPTFunctionParametersProperty{
+		Type:        "string",
+		Description: insightPrompt,
+	}
+
+	function := SChatGPT.TChatGPTFunction{
+		Name:        "get_insight",
+		Description: funcDescription,
+		Parameters: SChatGPT.TChatGPTFunctionParameters{
+			Type:       "object",
+			Properties: props,
+			Required:   []string{"emoji", "title", "insight"},
+		},
+	}
 
 	for i, chunk := range chunks {
 		wg.Add(1)
@@ -34,42 +89,41 @@ func SummarizeFromChunks(chunks []TChunk) ([]TSummary, error) {
 		go func(i int, item TChunk) {
 			defer wg.Done()
 
-			chatForTitle, err := SChatGPT.CreateChat("Create a short title for this text, no conversation, just write a title. Title must be in English.", strings.Join(item.Content, ""))
-			if err != nil || len(chatForTitle.Choices) == 0 {
+			chat, err := SChatGPT.CreateFunctionCallChat(strings.Join(item.Content, ""), langPrompt, function)
+			if err != nil || len(chat.Choices) == 0 {
 				fmt.Println(err)
 
-				d, _ := json.Marshal(chatForTitle)
+				d, _ := json.Marshal(chat)
 				fmt.Println(string(d))
-
 				errs = append(errs, TSummaryError{
 					Chunk:   item,
-					Message: "Can't create chat for title",
+					Message: "Can't create chat with function call",
 				})
 				return
 			}
 
-			chatForEmoji, err := SChatGPT.CreateChat("Give an emoji describing this text, no conversation, just respond with an emoji.", strings.Join(item.Content, ""))
-			if err != nil || len(chatForEmoji.Choices) == 0 {
-				fmt.Println(err)
+			if len(chat.Choices[0].Message.FunctionCall.Arguments) == 0 {
+				fmt.Println("no function response from gpt")
 
-				d, _ := json.Marshal(chatForTitle)
+				d, _ := json.Marshal(chat)
 				fmt.Println(string(d))
 				errs = append(errs, TSummaryError{
 					Chunk:   item,
-					Message: "Can't create chat for emoji",
+					Message: "Can't parse response from function call",
 				})
 				return
 			}
 
-			chatForDescription, err := SChatGPT.CreateChat("Create a short summary for this text. No conversation, just respond with summary.", strings.Join(item.Content, ""))
-			if err != nil || len(chatForDescription.Choices) == 0 {
-				fmt.Println(err)
+			var fcResult TInsightsResponse
 
-				d, _ := json.Marshal(chatForTitle)
+			if err := json.Unmarshal([]byte(chat.Choices[0].Message.FunctionCall.Arguments), &fcResult); err != nil {
+				fmt.Println("Can't parse the response from chatgpt")
+
+				d, _ := json.Marshal(chat)
 				fmt.Println(string(d))
 				errs = append(errs, TSummaryError{
 					Chunk:   item,
-					Message: "Can't create chat for description",
+					Message: "Can't parse response from function call",
 				})
 				return
 			}
@@ -77,9 +131,9 @@ func SummarizeFromChunks(chunks []TChunk) ([]TSummary, error) {
 			result[i] = TSummary{
 				Start:   item.Start,
 				End:     item.End,
-				Title:   chatForTitle.Choices[0].Message.Content,
-				Emoji:   chatForEmoji.Choices[0].Message.Content,
-				Content: chatForDescription.Choices[0].Message.Content,
+				Title:   fcResult.Title,
+				Emoji:   fcResult.Emoji,
+				Content: fcResult.Insight,
 			}
 		}(i, chunk)
 	}

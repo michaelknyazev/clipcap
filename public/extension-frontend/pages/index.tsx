@@ -5,7 +5,7 @@ import { AuthenticationContext } from "@clipcap/contexts";
 import { SummarizeService } from "@clipcap/services";
 
 import { PageLayout } from "../components/layouts/PageLayout";
-import { YoutubeSummary } from "../components/features/YoutubeSummary/YoutubeSummary";
+import { YoutubeContainer } from "../components/features/Youtube/YoutubeContainer";
 
 import type { TSummary } from "@clipcap/types";
 
@@ -48,7 +48,7 @@ const HomePage = () => {
 
   return (
     <PageLayout>
-      <YoutubeSummary 
+      <YoutubeContainer 
         loading={loading}
         summary={summary}
         onSummarizeButtonClick={handleClickSummaryButton}

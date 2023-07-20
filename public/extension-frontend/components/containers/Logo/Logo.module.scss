@@ -1,0 +1,25 @@
+@import "@blueprintjs/core/lib/scss/variables";
+
+.logo {
+  color: $dark-gray1;
+
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.highlight {
+  background-color: $forest1;
+  
+  color:$white;
+  
+  display: inline-block;
+  
+  padding: 2.5px 5px;
+  margin:0 2.5px;
+
+  border-radius: 5px;
+
+  font-size: inherit;
+  line-height: inherit;
+}

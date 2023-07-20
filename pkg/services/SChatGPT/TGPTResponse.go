@@ -8,6 +8,12 @@ type TGPTResponse struct {
 	Usage   Usage     `json:"usage"`
 }
 
+type TChatGPTResponseFunctionCall struct {
+	Name      string `json:"name"`
+	Content   string `json:"content"`
+	Arguments string `json:"arguments"`
+}
+
 type Choices struct {
 	Index        int     `json:"index"`
 	Message      Message `json:"message"`
@@ -15,8 +21,10 @@ type Choices struct {
 }
 
 type Message struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
+	Role         string                       `json:"role"`
+	Content      string                       `json:"content"`
+	FunctionCall TChatGPTResponseFunctionCall `json:"function_call"`
+	FinishReason string                       `json:"finish_reason"`
 }
 
 type Usage struct {

@@ -1,13 +1,13 @@
 import { PageLayout } from '@clipcap/extension-frontend/components/layouts/PageLayout';
-import Icon from '@clipcap/icons';
-import { Button, NonIdealState } from '@clipcap/ui';
-import { useContext, useState } from "react";
+import { Button, Icon, NonIdealState } from '@blueprintjs/core';
+import { useContext, useState } from 'react';
 import { AuthenticationContext } from '@clipcap/contexts';
 import { useRouter } from 'next/router';
 
 const AuthPage = () => {
-  const router = useRouter()
-  const [isGoogleButtonLoading, setIsGoogleButtonLoading] = useState<boolean>(false);
+  const router = useRouter();
+  const [isGoogleButtonLoading, setIsGoogleButtonLoading] =
+    useState<boolean>(false);
   const Authentication = useContext(AuthenticationContext);
 
   const handleGoogleButtonClick = async () => {
@@ -20,20 +20,28 @@ const AuthPage = () => {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   return (
     <PageLayout>
-      <NonIdealState
-        icon={<Icon name="solid-user" />}
-        title="Sign In"
-        description="Sign in with Google to get video summary"
-        action={(
-          <Button onClick={handleGoogleButtonClick} loading={isGoogleButtonLoading} before={<Icon name="google" />}>
-            Sign in
-          </Button>
-        )}
-      />
+      <PageLayout.Section>
+        <NonIdealState
+          icon={<Icon size={45} icon="user" />}
+          title="Sign In"
+          description="Sign in with Google to start generating AI video summaries"
+        />
+      </PageLayout.Section>
+      <PageLayout.Section>
+        <Button
+          fill
+          large
+          onClick={handleGoogleButtonClick}
+          loading={isGoogleButtonLoading}
+          icon="user"
+        >
+          Sign in
+        </Button>
+      </PageLayout.Section>
     </PageLayout>
   );
 };

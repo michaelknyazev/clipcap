@@ -1,8 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 
 import { AuthenticationService, TransactionService } from '@clipcap/services';
-import { NonIdealState } from '@clipcap/ui';
-import Icon from '@clipcap/icons';
+import { NonIdealState, Spinner } from '@blueprintjs/core';
 
 import type { TAuthenticationContextProvider, TAuthenticationContext, TQueryWithRedirectUri } from './types';
 import { debug, getLocalStorageProperty, setLocalStorageProperty, waitUntilWindowIsClosed } from '@clipcap/helpers';
@@ -115,7 +114,7 @@ const AuthenticationContextProvider = ({ children }: TAuthenticationContextProvi
         if (loading) {
           return (
             <NonIdealState
-              icon={<Icon name="loading" />}
+              icon={<Spinner />}
               title="Loading"
               description="Loading your authorization data"
             />
@@ -127,7 +126,7 @@ const AuthenticationContextProvider = ({ children }: TAuthenticationContextProvi
         if (AccessToken == "" || RefreshToken == "") {
           return (
             <NonIdealState
-              icon={<Icon name="loading" />}
+              icon={<Spinner />}
               title="Still loading"
               description="If you keep seeing this message longer then 10 seconds, please reload the page."
             />

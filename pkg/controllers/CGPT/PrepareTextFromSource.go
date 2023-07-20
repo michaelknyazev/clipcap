@@ -11,10 +11,14 @@ type TChunk struct {
 	Content []string
 }
 
+const SplitTimeFrameInSeconds = 6 * 60
+const ChunksCount = 6
+
 func PrepareTextFromSource(SourceContent []MText.Text) []TChunk {
 	var Content []string
 
 	var totalLengthInSeconds float64
+	var chunkLengthInSeconds float64
 	var totalSize int
 	var currentSize int
 	var currentText []string
@@ -28,16 +32,19 @@ func PrepareTextFromSource(SourceContent []MText.Text) []TChunk {
 		Content = append(Content, item.Content)
 	}
 
-	if totalLengthInSeconds <= 6*60 {
-		return []TChunk{
-			{
-				Size:    totalSize,
-				Start:   0,
-				End:     totalLengthInSeconds,
-				Content: Content,
-			},
-		}
-	}
+	chunkLengthInSeconds = totalLengthInSeconds / ChunksCount
+
+	/*
+		if totalLengthInSeconds <= SplitTimeFrameInSeconds {
+			return []TChunk{
+				{
+					Size:    totalSize,
+					Start:   0,
+					End:     totalLengthInSeconds,
+					Content: Content,
+				},
+			}
+		}*/
 
 	var chunks []TChunk
 
@@ -46,7 +53,7 @@ func PrepareTextFromSource(SourceContent []MText.Text) []TChunk {
 		currentTimeStamp += text.Duration
 		currentText = append(currentText, text.Content)
 
-		if currentTimeStamp >= 6*60 {
+		if currentTimeStamp >= chunkLengthInSeconds {
 			chunks = append(chunks, TChunk{
 				Size:    currentSize,
 				Start:   startStamp,

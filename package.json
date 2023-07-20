@@ -19,6 +19,7 @@
     "packages/**"
   ],
   "dependencies": {
+    "@blueprintjs/core": "^5.1.4",
     "@nx/next": "16.5.2",
     "@swc/helpers": "0.5.1",
     "core-js": "^3.6.5",
@@ -49,6 +50,7 @@
     "@types/node": "18.14.2",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
+    "@types/youtube-player": "^5.5.7",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
     "@vitejs/plugin-react": "4.0.3",
