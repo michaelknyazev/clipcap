@@ -27,14 +27,14 @@ test_launch:
 
 # Build Commands
 build_frontend: clear install
-	npx nx run-many --target=build
+	npx nx export extension-frontend
 build_backend:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o clipcap main.go
 
 # Build Docker Images For local Test
 # TODO
 
-deploy_backend_to_cloud_run: build_backend
+deploy_backend_to_cloud_run: build_frontend build_backend
 	docker build -t clipcap_api -f ./packaging/docker/Dockerfile.api .
 	docker tag clipcap_api:latest europe-west2-docker.pkg.dev/clipcap/clipcap/api
 	docker push europe-west2-docker.pkg.dev/clipcap/clipcap/api
