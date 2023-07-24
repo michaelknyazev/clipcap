@@ -1,4 +1,4 @@
-module clipcap/web
+module clipcap
 
 go 1.20
 

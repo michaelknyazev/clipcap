@@ -1,0 +1,26 @@
+# Database Connection
+# Supports MongoDB only
+host: localhost
+database:
+  uri: mongodb://test:test@localhost:27017/test
+  name: test
+
+# Default User
+authentication:
+  defaultUser:
+    email: test@test.com
+    password: Test1234
+
+# Security Keys
+security:
+  keys:
+    refresh: testsecurityrefreshkey
+    access: testsecurityaccesskey
+
+integrations:
+  google:
+    client_id: client_id
+    client_secret: client_secret
+    redirect_uri: redirect_uri
+  chatgpt:
+    api_key: gpt_api_key

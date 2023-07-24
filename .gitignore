@@ -49,4 +49,5 @@ dist
 __required
 runapp
 clipcap
+clipcap-extension
 production.config.yaml
