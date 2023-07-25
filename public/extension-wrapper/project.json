@@ -1,7 +1,7 @@
 {
-  "name": "chrome-extension-wrapper",
+  "name": "extension-wrapper",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "public/chrome-extension-wrapper/src",
+  "sourceRoot": "public/extension-wrapper/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -10,16 +10,16 @@
       "defaultConfiguration": "production",
       "options": {
         "compiler": "babel",
-        "outputPath": "dist/public/chrome-extension-wrapper",
-        "index": "public/chrome-extension-wrapper/src/index.html",
+        "outputPath": "dist/public/extension-wrapper",
+        "index": "public/extension-wrapper/src/index.html",
         "baseHref": "/",
-        "main": "public/chrome-extension-wrapper/src/main.tsx",
-        "tsConfig": "public/chrome-extension-wrapper/tsconfig.app.json",
+        "main": "public/extension-wrapper/src/main.tsx",
+        "tsConfig": "public/extension-wrapper/tsconfig.app.json",
         "assets": [],
-        "styles": ["public/chrome-extension-wrapper/src/styles.scss"],
+        "styles": ["public/extension-wrapper/src/styles.scss"],
         "scripts": [],
         "isolatedConfig": true,
-        "webpackConfig": "public/chrome-extension-wrapper/webpack.config.js"
+        "webpackConfig": "public/extension-wrapper/webpack.config.js"
       },
       "configurations": {
         "development": {
@@ -42,15 +42,15 @@
       "executor": "@nx/webpack:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "chrome-extension-wrapper:build",
+        "buildTarget": "extension-wrapper:build",
         "hmr": true
       },
       "configurations": {
         "development": {
-          "buildTarget": "chrome-extension-wrapper:build:development"
+          "buildTarget": "extension-wrapper:build:development"
         },
         "production": {
-          "buildTarget": "chrome-extension-wrapper:build:production",
+          "buildTarget": "extension-wrapper:build:production",
           "hmr": false
         }
       }
@@ -59,7 +59,7 @@
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["public/chrome-extension-wrapper/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["public/extension-wrapper/**/*.{ts,tsx,js,jsx}"]
       }
     }
   },

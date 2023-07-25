@@ -50,4 +50,4 @@ __required
 runapp
 clipcap
 clipcap-extension
-production.config.yaml
+config/*.yaml

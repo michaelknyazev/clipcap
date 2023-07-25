@@ -1,0 +1,27 @@
+{
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "hello@clipcap.app"
+    }
+  },  
+  "name": "ClipCap - AI Generated Summaries",
+  "short_name": "ClipCap",
+  "description": "ClipCap - Your GPT-Powered Web Content Summarizer.",
+  "version": "{%version%}",
+  "manifest_version": 3,
+  "homepage_url": "https://clipcap.app",
+  "content_scripts": [
+    {
+      "all_frames": false,
+      "js": [{%js%}],
+      "css": [{%css%}],
+      "matches": [
+        "*://*.youtube.com/*"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "index.html"
+  }
+}

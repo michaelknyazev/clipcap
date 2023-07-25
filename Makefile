@@ -15,13 +15,20 @@ db:
 prepare: clear install
 	npx nx export instance
 backend:
-	MODE=development go run main.go serve --config scripts/default.config.yaml
+	MODE=development go run bin/summary-extension/main.go serve --config config/development.config.yaml
 frontend: 
 	npx nx serve extension-frontend & \
 	npx local-ssl-proxy --key ./scripts/localhost-key.pem --cert ./scripts/localhost.pem --source 3000 --target 3001
+firefox_extension:
+	rm -rf ./dist/public/firefox-extension
+	npx nx build extension-wrapper
+	./packaging/firefox-extension/bundle.sh
 extension:
-	npx nx build chrome-extension-wrapper
+	rm -rf ./dist/public/chrome-extension
+	rm -rf ./dist/public/firefox-extension
+	npx nx build extension-wrapper
 	./packaging/chrome-extension/bundle.sh
+	./packaging/firefox-extension/bundle.sh
 test_launch:
 	npx local-ssl-proxy --key ./scripts/localhost-key.pem --cert ./scripts/localhost.pem --source 3000 --target 8080
 
