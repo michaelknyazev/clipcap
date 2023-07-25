@@ -41,7 +41,12 @@ build_extension_backend: build_extension_frontend
 # Build Docker Images For local Test
 # TODO
 
-deploy_to_cloud_run: build_frontend build_backend
+deploy_extension: build_frontend build_backend
 	docker build -t clipcap_extension -f ./packaging/docker/Dockerfile.extension .
 	docker tag clipcap_extension:latest europe-west2-docker.pkg.dev/clipcap/clipcap/extension
 	docker push europe-west2-docker.pkg.dev/clipcap/clipcap/extension
+
+deploy_static:
+	docker build -t clipcap_static -f ./packaging/docker/Dockerfile.static .
+	docker tag clipcap_static:latest europe-west2-docker.pkg.dev/clipcap/clipcap/static
+	docker push europe-west2-docker.pkg.dev/clipcap/clipcap/static

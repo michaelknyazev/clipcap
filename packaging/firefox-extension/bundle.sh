@@ -29,4 +29,7 @@ sed -i "s/{%css%}/$css_files/g" ./dist/public/firefox-extension/manifest.json
 sed -i "s/{%version%}/$new_version/g" ./dist/public/firefox-extension/manifest.json
 sed -i "s/{%bg_js%}/$bg_js_file/g" ./dist/public/firefox-extension/manifest.json
 
-zip -r ./dist/public/firefox-extension/bundle-$new_version.zip ./dist/public/firefox-extension/*
+cd ./dist/public/firefox-extension
+zip -r ./bundle-$new_version.zip ./*
+cd ../../../
+mv ./dist/public/firefox-extension/bundle-$new_version.zip ./dist/public/firefox-extension/bundle-$new_version.xpi
