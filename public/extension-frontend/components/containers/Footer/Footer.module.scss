@@ -1,0 +1,29 @@
+@import "@blueprintjs/core/lib/scss/variables";
+.banner {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.brain svg path {
+  stroke: $forest1 !important;
+  stroke-width: .7px !important;
+}
+
+.container {
+  display: flex;
+
+  &.container-close {
+    align-items: center;
+  }
+}
+
+.section {
+  width: calc(100% - 45px);
+  &.section-close {
+    width: 45px;
+  }
+}
+
+.offer {
+  cursor: pointer;
+}

@@ -1,8 +1,10 @@
 import styles from './GlobalLayout.module.scss';
 
 import { Header } from '@clipcap/extension-frontend/components/containers/Header'
+import { Footer } from '@clipcap/extension-frontend/components/containers/Footer';
 
 import type { TGlobalLayout, TGlobalLayoutSection } from './types';
+
 
 const GlobalLayout = ({ children }: TGlobalLayout) => {
   return (
@@ -13,17 +15,18 @@ const GlobalLayout = ({ children }: TGlobalLayout) => {
       <GlobalLayout.Section content>
         {children}
       </GlobalLayout.Section>
+      <GlobalLayout.Section footer>
+        <Footer />
+      </GlobalLayout.Section>
     </div>
   );
 }
 
 GlobalLayout.Section = ({
   children,
-  aside = false,
   header = false,
-  main = false,
+  footer = false,
   content = false,
-  isOpen = false
 }: TGlobalLayoutSection) => {
   const className = [
     styles.section
@@ -33,6 +36,8 @@ GlobalLayout.Section = ({
     className.push(styles['section-content'])
   } else if (header) {
     className.push(styles['section-header'])
+  } else if (footer) {
+    className.push(styles['section-footer']);
   }
 
   return (
