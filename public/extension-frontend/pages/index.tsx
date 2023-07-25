@@ -31,11 +31,19 @@ const HomePage = () => {
         access_token,
         targetVideoId
       );
-      if (!success) throw new Error(event);
+      if (!success) {
+        switch(event) {
+          case "LIMIT_REACHED":
+            router.push('/paywall');
+            return;
+          default:
+          throw new Error(event);
+        }
+      }
 
       summary = result;
     } catch (err) {
-      console.log(err);
+      console.log({err});
     }
 
     setLoading(false);

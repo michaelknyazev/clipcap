@@ -38,10 +38,9 @@ build_extension_frontend: clear install
 build_extension_backend: build_extension_frontend
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o clipcap-extension bin/summary-extension/main.go
 
-# Build Docker Images For local Test
-# TODO
+# Cloud Run deploy
 
-deploy_extension: build_frontend build_backend
+deploy_extension: build_extension_frontend build_extension_backend
 	docker build -t clipcap_extension -f ./packaging/docker/Dockerfile.extension .
 	docker tag clipcap_extension:latest europe-west2-docker.pkg.dev/clipcap/clipcap/extension
 	docker push europe-west2-docker.pkg.dev/clipcap/clipcap/extension

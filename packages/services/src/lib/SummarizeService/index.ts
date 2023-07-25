@@ -9,6 +9,6 @@ export function Youtube(access_token: string, videoId: string): Promise<TRespons
   }).then(res => {
     return res.data
   }).catch(({ response }) => {
-    return response;
+    return response.data;
   });
 }

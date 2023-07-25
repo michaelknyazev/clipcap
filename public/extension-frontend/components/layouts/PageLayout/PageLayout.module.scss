@@ -4,6 +4,9 @@
 }
 
 .section {
+  &:not(:last-child) {
+    padding-bottom: 10px;
+  }
   &.section-empty {
     padding-bottom: 20px;
   }

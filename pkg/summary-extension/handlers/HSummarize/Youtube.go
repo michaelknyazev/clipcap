@@ -5,6 +5,7 @@ import (
 	"clipcap/pkg/shared/controllers/CLog"
 	"clipcap/pkg/shared/services/SGoogle"
 	"clipcap/pkg/shared/types"
+	"clipcap/pkg/summary-extension/controllers/CFact"
 	"clipcap/pkg/summary-extension/controllers/CGPT"
 	"clipcap/pkg/summary-extension/controllers/CSource"
 	"clipcap/pkg/summary-extension/controllers/CSummary"
@@ -36,6 +37,23 @@ func Youtube(c *gin.Context) {
 		return
 	}
 	CLog.Log(videoId, AccessToken.UserID, "Received Valid access token.")
+
+	UserFacts, err := CFact.GetUserFactsForCurrentMonth(AccessToken.UserID)
+	if err != nil {
+		CLog.Log(videoId, AccessToken.UserID, "Can't get Facts for User", err.Error())
+		c.JSON(500, types.TResponse{false, "SERVER_ERROR", nil})
+		c.Abort()
+		return
+	}
+
+	CLog.Log(videoId, AccessToken.UserID, fmt.Sprintf("Found %d Facts for user in current month", len(UserFacts)))
+
+	if len(UserFacts) > 10 {
+		CLog.Log(videoId, AccessToken.UserID, "There is more then 10 facts for this user in current month")
+		c.JSON(422, types.TResponse{false, "LIMIT_REACHED", nil})
+		c.Abort()
+		return
+	}
 
 	ExistingSummary, err := CSummary.FindBySourceId(videoId)
 	if err == nil && len(ExistingSummary) > 0 {
@@ -122,6 +140,14 @@ func Youtube(c *gin.Context) {
 	}
 
 	CLog.Log(videoId, AccessToken.UserID, "Summary saved.", fmt.Sprintf("Saved items len: %d", len(Summary)))
+
+	CLog.Log(videoId, AccessToken.UserID, "Creating a fact for user")
+	if _, err := CFact.Create(AccessToken.UserID, Source.ID); err != nil {
+		CLog.Log(videoId, AccessToken.UserID, "Can't create a fact for user", err.Error())
+		c.JSON(500, types.TResponse{false, "SUMMARY_CREATE_FAILED", nil})
+		c.Abort()
+		return
+	}
 
 	c.JSON(200, types.TResponse{true, "SUCCESS", Summary})
 	c.Abort()

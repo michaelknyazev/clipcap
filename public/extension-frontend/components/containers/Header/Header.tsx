@@ -2,13 +2,25 @@ import styles from './Header.module.scss';
 
 import { Button, ControlGroup, Intent, Menu, MenuDivider, MenuItem, Popover, Position, Tooltip } from '@blueprintjs/core';
 import { Logo } from '../Logo';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthenticationContext } from '@clipcap/contexts';
 import { useRouter } from 'next/router';
+import { FactsService } from '@clipcap/services';
+import { debug } from '@clipcap/helpers';
+
+import type { THeaderFactsState } from './types';
+import { TFacts } from '@clipcap/types';
 
 export const Header = () => {
   const router = useRouter();
-  const { LogOut } = useContext(AuthenticationContext);
+  const { GetAccessToken, LogOut } = useContext(AuthenticationContext);
+  const [facts, setFacts] = useState<THeaderFactsState>({
+    loading: true,
+    data: {
+      current_month: 0,
+      available: 0
+    }
+  });
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   const handleLogOut = () => {
@@ -25,7 +37,34 @@ export const Header = () => {
     setIsMenuOpen(false);
   }
 
-  const left = 1;
+  const handleLoadFacts = async (): Promise<TFacts> => {
+    try {
+      const { success, result, event } = await FactsService.GetCurrent(GetAccessToken());
+      if (!success) throw new Error(event);
+
+      return result;
+
+    } catch (err) {
+      debug(err);
+
+      return {
+        current_month: 0,
+        available: 0
+      }
+    }
+  }
+
+  useEffect(() => {
+    handleLoadFacts().then(data => {
+      setFacts({ loading: false, data });
+    }).catch(() => {
+      setFacts({ ...facts, loading: false });
+    })
+  }, []);
+
+  const { available, current_month } = facts.data;
+  const summariesLeft = available - current_month;
+  const left = summariesLeft < 0 ? 0 : summariesLeft;
 
   return (
     <div className={styles.container}>
@@ -37,7 +76,7 @@ export const Header = () => {
           <Tooltip
             content={`${left} free summaries left`}
           >
-            <Button small minimal rightIcon="predictive-analysis">
+            <Button loading={facts.loading} small minimal rightIcon="predictive-analysis">
               {left}
             </Button>
           </Tooltip>

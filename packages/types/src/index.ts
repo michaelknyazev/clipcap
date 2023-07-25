@@ -2,6 +2,7 @@ export * from './lib/TActivity'
 export * from './lib/TApplication'
 export * from './lib/TAuthorization';
 export * from './lib/TCredentials';
+export * from './lib/TFacts';
 export * from './lib/TLayout';
 export * from './lib/TResponse';
 export * from './lib/TSummary';

@@ -7,6 +7,7 @@ import (
 	"clipcap/pkg/shared/handlers/HTools"
 	"clipcap/pkg/shared/handlers/HTransaction"
 	"clipcap/pkg/shared/handlers/HUser"
+	"clipcap/pkg/summary-extension/handlers/HFacts"
 	"clipcap/pkg/summary-extension/handlers/HSummarize"
 	"clipcap/pkg/summary-extension/services/SStatic"
 	"net/http"
@@ -45,6 +46,7 @@ func Run() {
 	router.GET("/api/v1/summarize/youtube", HSummarize.Youtube)
 
 	router.GET("/api/v1/user", HUser.Identify)
+	router.GET("/api/v1/facts", HFacts.GetCurrent)
 
 	router.GET("/api/v1/transaction/:transactionId", HTransaction.Get)
 
