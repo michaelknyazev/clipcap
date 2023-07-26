@@ -23,6 +23,7 @@ Requirements:
 To start developing stuff reproduce this steps:
 
 - Generate local self signed certificates with mkcert - `cd scripts && mkcert localhost && cd ..`
+- Run `make prepare` to install deps and all stuff
 - Run local MongoDB `make db`.
 - Now copy the [./config/summary-extension.config.example](./config/summary-extension.config.example) to ./config/development.config.yaml and fill in the keys for google and openai
 - In a separate terminal window run `make backend`. The backend will be available at http://localhost:8080.
