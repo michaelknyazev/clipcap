@@ -24,6 +24,7 @@ To start developing stuff reproduce this steps:
 
 - Generate local self signed certificates with mkcert - `cd scripts && mkcert localhost && cd ..`
 - Run local MongoDB `make db`.
+- Now copy the [./config/summary-extension.config.example](./config/summary-extension.config.example) to ./config/development.config.yaml and fill in the keys for google and openai
 - In a separate terminal window run `make backend`. The backend will be available at http://localhost:8080.
 - Now add the MODE=development to `./public/extension-frontend/.env` so NextJS can proxy all /api/v1 requests to localhost:8080.
 - In a separate terminal window run `make frontend`. The frontend will be available at https://localhost:3000
