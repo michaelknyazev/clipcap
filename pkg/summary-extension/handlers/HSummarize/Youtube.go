@@ -8,9 +8,12 @@ import (
 	"clipcap/pkg/summary-extension/controllers/CFact"
 	"clipcap/pkg/summary-extension/controllers/CGPT"
 	"clipcap/pkg/summary-extension/controllers/CSource"
+	"clipcap/pkg/summary-extension/controllers/CSubscription"
 	"clipcap/pkg/summary-extension/controllers/CSummary"
 	"clipcap/pkg/summary-extension/controllers/CText"
+	"clipcap/pkg/summary-extension/services/SConfiguration"
 	"fmt"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,7 +22,7 @@ func Youtube(c *gin.Context) {
 	videoId := c.Query("videoId")
 	if videoId == "" {
 		CLog.Log("No Video ID received")
-		c.JSON(404, types.TResponse{false, "QUERY_PARAM_EMPTY", nil})
+		c.JSON(404, types.TResponse{false, "VIDEOID_MISSING", nil})
 		c.Abort()
 		return
 	}
@@ -48,9 +51,60 @@ func Youtube(c *gin.Context) {
 
 	CLog.Log(videoId, AccessToken.UserID, fmt.Sprintf("Found %d Facts for user in current month", len(UserFacts)))
 
-	if len(UserFacts) > 10 {
-		CLog.Log(videoId, AccessToken.UserID, "There is more then 10 facts for this user in current month")
+	CanCreateSummary := false
+
+	MAX_FREE_SUMMARIES := int(SConfiguration.Configuration.Miscellaneous.MaxFreeSummaries)
+
+	ts := time.Now()
+	Subscription, err := CSubscription.FindActiveByUserId(AccessToken.UserID)
+	if err != nil && len(UserFacts) >= MAX_FREE_SUMMARIES {
+		fmt.Println(err)
+		// If there is no subscription and there were MAX_FREE_SUMMARIES user facts in this month already
+		CLog.Log(videoId, AccessToken.UserID, fmt.Sprintf("There isn't any subscription for user %s in database", AccessToken.UserID))
+		CanCreateSummary = false
+	} else if Subscription.Expires <= ts.Unix() && len(UserFacts) >= MAX_FREE_SUMMARIES {
+		// If there is a subscription, but it's expired and there wer MAX_FREE_SUMMARIES user facts in this month already
+		CLog.Log(videoId, AccessToken.UserID, fmt.Sprintf("There isn't any active subscription for user %s", AccessToken.UserID))
+
+		CanCreateSummary = false
+	} else if len(UserFacts) < MAX_FREE_SUMMARIES {
+		// If there were less then MAX_FREE_SUMMARIES user facts in this month
+		CLog.Log(videoId, AccessToken.UserID, fmt.Sprintf("User %s created less then %d summaries in current month", AccessToken.UserID, MAX_FREE_SUMMARIES))
+
+		CanCreateSummary = true
+	} else {
+		// If There is an active subscription
+		CLog.Log(videoId, AccessToken.UserID, fmt.Sprintf("There is an active subscription for user %s in database", AccessToken.UserID))
+
+		CanCreateSummary = true
+	}
+
+	if !CanCreateSummary {
+		CLog.Log(videoId, AccessToken.UserID, fmt.Sprintf("There no active subscription found for user and there is more then %d facts for this user in current month", MAX_FREE_SUMMARIES))
 		c.JSON(422, types.TResponse{false, "LIMIT_REACHED", nil})
+		c.Abort()
+		return
+	}
+
+	Source, err := CSource.FindOneBySourceId(videoId)
+	if err != nil {
+		CLog.Log(videoId, AccessToken.UserID, "It's a new video, creating a source in DB.")
+		Source, err = CSource.Create("youtube", videoId, fmt.Sprintf("https://www.youtube.com/watch?v=%s", videoId))
+		if err != nil {
+			CLog.Log(videoId, AccessToken.UserID, "Can't create a source in DB", err.Error())
+
+			c.JSON(500, types.TResponse{false, "DATABASE_CREATE_FAILED", nil})
+			c.Abort()
+			return
+		}
+	} else {
+		CLog.Log(videoId, AccessToken.UserID, "It's an old video, skipping creating the source in DB.")
+	}
+
+	CLog.Log(videoId, AccessToken.UserID, "Creating a fact for user")
+	if _, err := CFact.Create(AccessToken.UserID, Source.ID); err != nil {
+		CLog.Log(videoId, AccessToken.UserID, "Can't create a fact for user", err.Error())
+		c.JSON(500, types.TResponse{false, "FACT_CREATE_FAILED", nil})
 		c.Abort()
 		return
 	}
@@ -58,7 +112,7 @@ func Youtube(c *gin.Context) {
 	ExistingSummary, err := CSummary.FindBySourceId(videoId)
 	if err == nil && len(ExistingSummary) > 0 {
 		CLog.Log(videoId, AccessToken.UserID, "Summary already exists in DB")
-		c.JSON(200, types.TResponse{true, "SUCCESS", ExistingSummary})
+		c.JSON(200, types.TResponse{true, "SUMMARY_FOUND", ExistingSummary})
 		c.Abort()
 		return
 	}
@@ -68,27 +122,12 @@ func Youtube(c *gin.Context) {
 	VideoData, err := SGoogle.GetVideoInfo(videoId)
 	if err != nil {
 		CLog.Log(videoId, AccessToken.UserID, "Can't Get video data from youtube!")
-		c.JSON(401, types.TResponse{false, "YOUTUBE_GETVIDEOINFO_FAILED", nil})
+		c.JSON(401, types.TResponse{false, "YOUTUBE_UNAUTHORIZED", nil})
 		c.Abort()
 		return
 	}
 
 	CLog.Log(videoId, AccessToken.UserID, "Received video data from youtube.")
-
-	Source, err := CSource.FindOneBySourceId(videoId)
-	if err != nil {
-		CLog.Log(videoId, AccessToken.UserID, "It's a new video, creating a source in DB.")
-		Source, err = CSource.Create("youtube", videoId, fmt.Sprintf("https://www.youtube.com/watch?v=%s", videoId))
-		if err != nil {
-			CLog.Log(videoId, AccessToken.UserID, "Can't create a source in DB", err.Error())
-
-			c.JSON(500, types.TResponse{false, "SOURCE_CREATE_FAILED", nil})
-			c.Abort()
-			return
-		}
-	} else {
-		CLog.Log(videoId, AccessToken.UserID, "It's an old video, skipping creating the source in DB.")
-	}
 
 	SourceContent, err := CText.FindBySourceId(videoId)
 	if err != nil || len(SourceContent) == 0 {
@@ -98,7 +137,7 @@ func Youtube(c *gin.Context) {
 		if err != nil {
 			CLog.Log(videoId, AccessToken.UserID, "Can't get captions from youtube.", err.Error())
 
-			c.JSON(500, types.TResponse{false, "YOUTUBE_GETCAPTIONS_FAILED", nil})
+			c.JSON(500, types.TResponse{false, "YOUTUBE_READ_FAILED", nil})
 			c.Abort()
 			return
 		}
@@ -109,7 +148,7 @@ func Youtube(c *gin.Context) {
 		if err != nil {
 			CLog.Log(videoId, AccessToken.UserID, "Can't save captions in DB!", err.Error())
 
-			c.JSON(500, types.TResponse{false, "TEXT_CREATE_FAILED", nil})
+			c.JSON(500, types.TResponse{false, "DATABASE_CREATE_FAILED", nil})
 			c.Abort()
 			return
 		}
@@ -125,7 +164,7 @@ func Youtube(c *gin.Context) {
 	GPTSummary, err := CGPT.SummarizeFromChunks(Chunks)
 	if err != nil {
 		CLog.Log(videoId, AccessToken.UserID, "Can't summarize chunks", err.Error())
-		c.JSON(500, types.TResponse{false, "GPT_SUMMARY_FAILED", nil})
+		c.JSON(500, types.TResponse{false, "GPT_SUMMARIZE_FAILED", nil})
 		c.Abort()
 		return
 	}
@@ -134,22 +173,14 @@ func Youtube(c *gin.Context) {
 	Summary, err := CSummary.CreateMany(videoId, GPTSummary)
 	if err != nil {
 		CLog.Log(videoId, AccessToken.UserID, "Can't save summary in DB", err.Error())
-		c.JSON(500, types.TResponse{false, "SUMMARY_CREATE_FAILED", nil})
+		c.JSON(500, types.TResponse{false, "DATABASE_CREATE_FAILED", nil})
 		c.Abort()
 		return
 	}
 
 	CLog.Log(videoId, AccessToken.UserID, "Summary saved.", fmt.Sprintf("Saved items len: %d", len(Summary)))
 
-	CLog.Log(videoId, AccessToken.UserID, "Creating a fact for user")
-	if _, err := CFact.Create(AccessToken.UserID, Source.ID); err != nil {
-		CLog.Log(videoId, AccessToken.UserID, "Can't create a fact for user", err.Error())
-		c.JSON(500, types.TResponse{false, "SUMMARY_CREATE_FAILED", nil})
-		c.Abort()
-		return
-	}
-
-	c.JSON(200, types.TResponse{true, "SUCCESS", Summary})
+	c.JSON(200, types.TResponse{true, "SUMMARY_SUCCESS", Summary})
 	c.Abort()
 	return
 }

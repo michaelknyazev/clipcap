@@ -6,6 +6,7 @@ export type TSummary = {
   emoji: string,
   title: string,
   content: string,
+  moment?: boolean,
   created: number,
   updated: number
 }

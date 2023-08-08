@@ -1,22 +1,13 @@
 package SConfiguration
 
-type TAuthentication struct {
-	DefaultUser TDefaultUser
-}
-
-type TSecurity struct {
-	Keys TKeys
-}
-
-type TIntegrations struct {
-	Google TGoogleOAuthConfig
-}
+import "clipcap/pkg/shared/services/SConfiguration"
 
 type TConfiguration struct {
-	Host           string
 	IsProduction   bool
-	Database       TDatabase
-	Authentication TAuthentication
-	Security       TSecurity
-	Integrations   TIntegrations
+	Host           string                         `mapstructure:"host"`
+	Database       SConfiguration.TDatabase       `mapstructure:"database"`
+	Authentication SConfiguration.TAuthentication `mapstructure:"authentication"`
+	Security       SConfiguration.TSecurity       `mapstructure:"security"`
+	Integrations   TIntegrations                  `mapstructure:"integrations"`
+	Miscellaneous  TMiscellaneous                 `mapstructure:"miscellaneous"`
 }

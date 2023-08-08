@@ -12,7 +12,7 @@
       "defaultConfiguration": "production",
       "options": {
         "root": "public/extension-frontend",
-        "outputPath": "bin/summary-extension/dist"
+        "outputPath": "pkg/bin/summary-extension/dist"
       },
       "configurations": {
         "development": {

@@ -8,6 +8,8 @@ import { PageLayout } from "../components/layouts/PageLayout";
 import { YoutubeContainer } from "../components/features/Youtube/YoutubeContainer";
 
 import type { TSummary } from "@clipcap/types";
+import { parseDate } from "@clipcap/helpers";
+import { Button, Intent } from "@blueprintjs/core";
 
 const HomePage = () => {
   const router = useRouter();
@@ -15,6 +17,7 @@ const HomePage = () => {
   const { videoId } = router.query
   const [loading, setLoading] = useState<boolean>(false);
   const [summary, setSummary] = useState<TSummary[]>([]);
+  const [showCopyIcon, setShowCopyIcon] = useState<boolean>(false);
 
   const handleSummarize = async (targetVideoId: string) => {
     console.log(`Summarizing ${targetVideoId}`);
@@ -54,13 +57,68 @@ const HomePage = () => {
     return handleSummarize(videoId as string);
   }
 
+  const fallbackCopyTextToClipboard = (text: string) => {
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      document.execCommand('copy');
+    } catch (err) {
+      console.error('Fallback: Oops, unable to copy', err);
+    }
+
+    document.body.removeChild(textArea);
+  }
+
+  const handleCopySummary = () => {
+    setShowCopyIcon(true)
+    const text = summary.map(({ emoji, start, title, content }) => {
+      let formattedEmoji = emoji;
+
+      if (formattedEmoji.length > 2) {
+        formattedEmoji = emoji.split('')[0];
+      }
+    
+      const _startTs = parseDate(start * 1000);
+    
+      let readable = _startTs.utc_readable_time;
+    
+      if (start / 60 / 60 >= 1) readable = _startTs.utc_readable_time_hh;
+
+      return `${emoji} \`${readable}\` **${title}**\n${content}\n`;
+    }).join("\n");
+
+    if (!navigator.clipboard) {
+      fallbackCopyTextToClipboard(text);
+      return;
+    }
+
+    navigator.clipboard.writeText(text);
+
+    setTimeout(() => {
+      setShowCopyIcon(false)
+    }, 1000);
+  }
+
   return (
     <PageLayout>
-      <YoutubeContainer 
-        loading={loading}
-        summary={summary}
-        onSummarizeButtonClick={handleClickSummaryButton}
-      />
+      <PageLayout.Section>
+        <YoutubeContainer 
+          loading={loading}
+          summary={summary}
+          onSummarizeButtonClick={handleClickSummaryButton}
+        />
+      </PageLayout.Section>
+      <PageLayout.Section>
+        {summary.length ? (
+          <Button onClick={handleCopySummary} fill minimal={showCopyIcon} intent={Intent.SUCCESS} icon={showCopyIcon ? "tick" : "duplicate"}>
+            {showCopyIcon ? "Скопировано" : "Копировать"}
+          </Button>
+        ) : ""}
+      </PageLayout.Section>
     </PageLayout>
   )
 }

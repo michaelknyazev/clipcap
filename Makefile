@@ -13,9 +13,9 @@ db:
 
 # Dev Backend 
 prepare: clear install
-	npx nx export instance
+	npx nx export extension-frontend
 backend:
-	MODE=development go run bin/summary-extension/main.go serve --config config/development.config.yaml
+	MODE=development go run pkg/bin/summary-extension/main.go serve --config config/development.config.yaml
 frontend: 
 	npx nx serve extension-frontend & \
 	npx local-ssl-proxy --key ./scripts/localhost-key.pem --cert ./scripts/localhost.pem --source 3000 --target 3001
@@ -36,7 +36,7 @@ test_launch:
 build_extension_frontend: clear install
 	npx nx export extension-frontend
 build_extension_backend: build_extension_frontend
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o clipcap-extension bin/summary-extension/main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o clipcap-extension pkg/bin/summary-extension/main.go
 
 # Cloud Run deploy
 

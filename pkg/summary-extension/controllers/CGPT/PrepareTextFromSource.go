@@ -11,8 +11,6 @@ type TChunk struct {
 	Content []string
 }
 
-const SplitTimeFrameInSeconds = 6 * 60
-
 func PrepareTextFromSource(SourceContent []MText.Text) []TChunk {
 	var Content []string
 
@@ -22,12 +20,17 @@ func PrepareTextFromSource(SourceContent []MText.Text) []TChunk {
 	var currentSize int
 	var currentText []string
 	var currentTimeStamp float64
+	var currentChunkDurationInSeconds float64
+	var currentChunkIndex int = 0
 	var startStamp float64
 	var ChunksCount float64 = 6
 
 	for _, item := range SourceContent {
+		// fmt.Printf("Current length: %f, Added duration: %f, Source Content: %s\n", totalLengthInSeconds, item.Duration, item.Content)
+
 		totalSize += len(item.Content)
-		totalLengthInSeconds += item.Duration
+		itemDuration := item.Duration / 2
+		totalLengthInSeconds += itemDuration
 
 		Content = append(Content, item.Content)
 	}
@@ -35,43 +38,66 @@ func PrepareTextFromSource(SourceContent []MText.Text) []TChunk {
 	chunkLengthInSeconds = totalLengthInSeconds / ChunksCount
 
 	if totalLengthInSeconds >= 3600 {
-		chunkLengthInSeconds = 900 // 15 mins
+		chunkLengthInSeconds = 600 // 10 mins
 		ChunksCount = totalLengthInSeconds / chunkLengthInSeconds
 	}
 
-	/*
-		if totalLengthInSeconds <= SplitTimeFrameInSeconds {
-			return []TChunk{
-				{
-					Size:    totalSize,
-					Start:   0,
-					End:     totalLengthInSeconds,
-					Content: Content,
-				},
-			}
-		}*/
+	if totalLengthInSeconds >= 5400 {
+		chunkLengthInSeconds = 900 // 15mins
+		ChunksCount = totalLengthInSeconds / chunkLengthInSeconds
+	}
+
+	if totalLengthInSeconds >= 7200 {
+		chunkLengthInSeconds = 1200 // 20mins
+		ChunksCount = totalLengthInSeconds / chunkLengthInSeconds
+	}
 
 	var chunks []TChunk
 
-	for _, text := range SourceContent {
+	// fmt.Println("Chunk length:", chunkLengthInSeconds)
+	// fmt.Println("Chunk count:", ChunksCount)
+	// fmt.Println("Total length in seconds", totalLengthInSeconds)
+
+	// fmt.Printf("---- 0 CHUNK STARTED ----\n")
+
+	totalSourceTextCount := len(SourceContent) - 1
+
+	for i, text := range SourceContent {
+		textDuration := text.Duration / 2
+
+		// fmt.Printf("#%d Current size: %d, Current Timestamp: %f, Added Duration: %f\n", i, currentSize, currentTimeStamp, textDuration)
+
 		currentSize += len(text.Content)
-		currentTimeStamp += text.Duration
+		currentChunkDurationInSeconds += textDuration
+		currentTimeStamp += textDuration
 		currentText = append(currentText, text.Content)
 
-		if currentTimeStamp >= chunkLengthInSeconds {
+		isLastText := i >= totalSourceTextCount
+
+		if currentChunkDurationInSeconds >= chunkLengthInSeconds || isLastText {
 			chunks = append(chunks, TChunk{
 				Size:    currentSize,
 				Start:   startStamp,
-				End:     currentTimeStamp,
+				End:     startStamp + text.Duration,
 				Content: currentText,
 			})
+			// fmt.Printf("Chunk Start stamp: %f, Chunk duration in seconds: %f, Chunk end stamp: %f\n", startStamp, currentChunkDurationInSeconds, currentTimeStamp)
+			// fmt.Printf("---- %d CHUNK FINISHED ----\n", currentChunkIndex)
 
 			currentSize = 0
-			currentTimeStamp = 0
+			currentChunkDurationInSeconds = 0
 			currentText = []string{}
-			startStamp = text.Start + text.Duration
+			startStamp = currentTimeStamp
+			currentChunkIndex += 1
+
+			// if !isLastText {
+			// 	fmt.Printf("---- %d CHUNK STARTED ----\n", currentChunkIndex)
+			// 	fmt.Printf("Chunk start stamp: %f, Current stamp: %f\n", startStamp, currentTimeStamp)
+			// }
 		}
 	}
+
+	// fmt.Println(len(chunks))
 
 	return chunks
 }

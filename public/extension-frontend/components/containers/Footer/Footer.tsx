@@ -20,7 +20,7 @@ export const Footer = () => {
       <div className={styles.section}>
         {!open ? (
           <div className={styles.offer} onClick={handleToggle}>
-          Upgrade to <Tag intent={Intent.SUCCESS}>PRO</Tag> for as low as $3.99
+            Подписка <Tag intent={Intent.SUCCESS}>PRO</Tag> на моменты всего за 399р
           </div>
         ) : ""}
         <Collapse isOpen={open}>
@@ -28,15 +28,15 @@ export const Footer = () => {
             className={styles.banner}
             layout='horizontal'
             icon={<Icon icon="predictive-analysis" iconSize={40} className={styles.brain} />}
-            title="Unlimited insights"
+            title="Безлимитная подписка"
             description={(
               <>
                 <div style={{ margin: "0 0 10px 0" }}>
-                  Unlock unlimited insights and summaries 
-                  <br/>for your favourite Youtube videos 
-                  <br/>for as low as $3.99 per month
+                  Откройте для себя Youtube заново!
+                  <br/>Читайте Youtube видео как книгу
+                  <br/>всего за 399р в месяц
                 </div>
-                <Button intent={Intent.SUCCESS} large icon="credit-card">Pay $3.99</Button>
+                <Button intent={Intent.SUCCESS} large icon="credit-card">Подписаться</Button>
               </>
             )}
           />

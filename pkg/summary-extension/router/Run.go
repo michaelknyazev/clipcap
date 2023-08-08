@@ -1,12 +1,12 @@
 package router
 
 import (
-	"clipcap/pkg/shared/handlers/HAuthentication"
 	"clipcap/pkg/shared/handlers/HGoogle"
 	"clipcap/pkg/shared/handlers/HPassword"
 	"clipcap/pkg/shared/handlers/HTools"
 	"clipcap/pkg/shared/handlers/HTransaction"
 	"clipcap/pkg/shared/handlers/HUser"
+	"clipcap/pkg/summary-extension/handlers/HAuthentication"
 	"clipcap/pkg/summary-extension/handlers/HFacts"
 	"clipcap/pkg/summary-extension/handlers/HSummarize"
 	"clipcap/pkg/summary-extension/services/SStatic"

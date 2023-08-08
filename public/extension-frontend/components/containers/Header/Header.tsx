@@ -74,7 +74,7 @@ export const Header = () => {
       <div className={`${styles.section} ${styles['section-actions']}`}>
         <ControlGroup>
           <Tooltip
-            content={`${left} free summaries left`}
+            content={`Осталось ${left} бесплатных моментов`}
           >
             <Button loading={facts.loading} small minimal rightIcon="predictive-analysis">
               {left}
@@ -86,9 +86,9 @@ export const Header = () => {
             position={Position.BOTTOM_LEFT}
             content={(
               <Menu>
-                <MenuItem icon="dollar" text="My plan" />
+                <MenuItem icon="dollar" text="Подписка" />
                 <MenuDivider />
-                <MenuItem onClick={handleLogOut} intent={Intent.DANGER} icon="log-out" text='Log Out' />
+                <MenuItem onClick={handleLogOut} intent={Intent.DANGER} icon="log-out" text='Выйти' />
               </Menu>
             )}
           >
