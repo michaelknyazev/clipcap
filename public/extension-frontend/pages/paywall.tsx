@@ -21,18 +21,18 @@ const PaywallPage = () => {
           title="Free limit reached!"
           description={
             <>
-            You have reached your monthly free limit of 10 summaries. To continue saving time with our AI-summary extension, please upgrade to our
+            Вы достигли лимита в 5 видео в день. Купите подписку
             <Tag intent={Intent.SUCCESS} style={{ margin: "0 5px" }}>PRO</Tag>
-            subscription
+            для доступа к безлимитным видео.
             </>
           }
         />
       </PageLayout.Section>
       <PageLayout.Section>
-        <Button large intent={Intent.SUCCESS} fill icon="credit-card">Upgrade</Button>
+        <Button large intent={Intent.SUCCESS} fill icon="credit-card">Купить</Button>
       </PageLayout.Section>
       <PageLayout.Section>
-        <Button onClick={handleWait} large intent={Intent.NONE} fill icon="time">I'll wait to the next month</Button>
+        <Button onClick={handleWait} large intent={Intent.NONE} fill icon="time">5 видео для меня достаточно</Button>
       </PageLayout.Section>
     </PageLayout>
   )

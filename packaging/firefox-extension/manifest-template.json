@@ -4,9 +4,9 @@
       "id": "hello@clipcap.app"
     }
   },  
-  "name": "ClipCap - AI Generated Summaries",
+  "name": "ClipCap - Суммарайзер контента на базе GPT",
   "short_name": "ClipCap",
-  "description": "ClipCap - Your GPT-Powered Web Content Summarizer.",
+  "description": "Открой для себя интернет заново экономя время на просмотре видео и чтении статей. Получай краткие суммаризации контента на базе GPT.",
   "version": "{%version%}",
   "manifest_version": 3,
   "homepage_url": "https://clipcap.app",

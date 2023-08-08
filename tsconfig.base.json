@@ -17,11 +17,11 @@
     "paths": {
       "@clipcap/contexts": ["packages/contexts/src/index.ts"],
       "@clipcap/events": ["packages/events/src/index.ts"],
+      "@clipcap/extension-frontend/*": ["public/extension-frontend/*"],
       "@clipcap/helpers": ["packages/helpers/src/index.ts"],
       "@clipcap/instance/*": ["public/instance/*"],
       "@clipcap/services": ["packages/services/src/index.ts"],
-      "@clipcap/types": ["packages/types/src/index.ts"],
-      "@clipcap/extension-frontend/*": ["public/extension-frontend/*"]
+      "@clipcap/types": ["packages/types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,0 +1,50 @@
+{
+  "name": "image-maker",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "public/image-maker/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/public/image-maker",
+        "main": "public/image-maker/src/main.ts",
+        "tsConfig": "public/image-maker/tsconfig.app.json",
+        "assets": [],
+        "isolatedConfig": true,
+        "webpackConfig": "public/image-maker/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "image-maker:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "image-maker:build:development"
+        },
+        "production": {
+          "buildTarget": "image-maker:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["public/image-maker/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
