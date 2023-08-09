@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "golang.go",
+    "esbenp.prettier-vscode",
+    "wakatime.vscode-wakatime",
+    "github.copilot",
+    "eamodio.gitlens",
+    "dsznajder.es7-react-js-snippets"
+  ]
+}

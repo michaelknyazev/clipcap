@@ -2,14 +2,14 @@ import '@clipcap/extension-frontend/styles/globals.scss';
 import { useEffect, useRef } from 'react';
 
 import { GlobalLayout as DefaultGlobalLayout } from '../components/layouts/GlobalLayout';
-
-import { AuthenticationContextProvider } from '@clipcap/contexts';
+import { DefaultBootstrap } from '../components/bootstrap/DefaultBootstrap';
 
 import type { TApplication } from '@clipcap/types';
 
-
 const App = ({ Component, pageProps }: TApplication) => {
   const appRootRef = useRef<HTMLDivElement>()
+
+  const Bootstrap = Component.Bootstrap || DefaultBootstrap;
   const GlobalLayout = Component.GlobalLayout || DefaultGlobalLayout;
 
   useEffect(() => {
@@ -28,15 +28,17 @@ const App = ({ Component, pageProps }: TApplication) => {
     }
   },[]);
 
+  console.log(Bootstrap.name)
+
   return (
     <div ref={appRootRef}>
-      <AuthenticationContextProvider>
+      <Bootstrap>
         <GlobalLayout>
           <GlobalLayout.Section>
             <Component {...pageProps} />
           </GlobalLayout.Section>
         </GlobalLayout>
-      </AuthenticationContextProvider>
+      </Bootstrap>
     </div>
   );
 };

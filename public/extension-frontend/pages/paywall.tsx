@@ -1,8 +1,9 @@
 import { Button, Icon, Intent, NonIdealState, Tag } from "@blueprintjs/core";
 import { PageLayout } from "../components/layouts/PageLayout";
 import { useRouter } from "next/router";
+import { TFeature } from "@clipcap/types";
 
-const PaywallPage = () => {
+const PaywallPage: TFeature = () => {
   const router = useRouter();
 
   const handlePay = () => {

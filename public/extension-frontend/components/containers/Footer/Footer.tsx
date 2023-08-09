@@ -3,7 +3,7 @@ import styles from './Footer.module.scss';
 import { useState } from 'react';
 
 export const Footer = () => {
-  const [open, setOpen] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleToggle = () => {
     setOpen(!open);

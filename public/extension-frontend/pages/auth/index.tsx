@@ -4,8 +4,11 @@ import { useContext, useState } from 'react';
 import { AuthenticationContext } from '@clipcap/contexts';
 import { useRouter } from 'next/router';
 import { GoogleAuthButton } from '@clipcap/extension-frontend/components/containers/GoogleAuthButton';
+import { GlobalLayoutNoFooter } from '@clipcap/extension-frontend/components/layouts/GlobalLayoutNoFooter/GlobalLayoutNoFooter';
 
-const AuthPage = () => {
+import type { TFeature } from '@clipcap/types';
+
+const AuthPage: TFeature = () => {
   const router = useRouter();
   const Authentication = useContext(AuthenticationContext);
 
@@ -44,5 +47,7 @@ const AuthPage = () => {
     </PageLayout>
   );
 };
+
+AuthPage.GlobalLayout = GlobalLayoutNoFooter
 
 export default AuthPage;

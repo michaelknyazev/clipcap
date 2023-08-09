@@ -7,11 +7,12 @@ import { SummarizeService } from "@clipcap/services";
 import { PageLayout } from "../components/layouts/PageLayout";
 import { YoutubeContainer } from "../components/features/Youtube/YoutubeContainer";
 
-import type { TSummary } from "@clipcap/types";
 import { parseDate } from "@clipcap/helpers";
 import { Button, Intent } from "@blueprintjs/core";
 
-const HomePage = () => {
+import type { TFeature, TSummary } from "@clipcap/types";
+
+const HomePage: TFeature = () => {
   const router = useRouter();
   const { GetAccessToken } = useContext(AuthenticationContext);
   const { videoId } = router.query
