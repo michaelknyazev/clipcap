@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Transaction struct {
+type TTransaction struct {
 	ID        primitive.ObjectID `json:"_id" bson:"_id"`
 	Seed      string             `json:"seed" bson:"seed"`
 	Processed bool               `json:"processed" bson:"processed"`

@@ -7,9 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func Create(email string, password string, name string, active bool) (MUser.User, error) {
+func Create(email string, password string, name string, active bool) (MUser.TUser, error) {
 	ts := time.Now()
-	User := MUser.User{
+	User := MUser.TUser{
 		ID:       primitive.NewObjectID(),
 		Email:    email,
 		Password: password,
@@ -21,7 +21,7 @@ func Create(email string, password string, name string, active bool) (MUser.User
 
 	_, err := MUser.Create(User)
 	if err != nil {
-		return MUser.User{}, err
+		return MUser.TUser{}, err
 	}
 
 	return User, nil

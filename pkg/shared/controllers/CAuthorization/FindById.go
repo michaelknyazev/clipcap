@@ -6,10 +6,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func FindById(authorizationId primitive.ObjectID) (MAuthorization.Authorization, error) {
+func FindById(authorizationId primitive.ObjectID) (MAuthorization.TAuthorization, error) {
 	Authorization, err := MAuthorization.FindOneById(authorizationId)
 	if err != nil {
-		return MAuthorization.Authorization{}, err
+		return MAuthorization.TAuthorization{}, err
 	}
 
 	return Authorization, nil

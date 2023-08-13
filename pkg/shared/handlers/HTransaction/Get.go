@@ -9,6 +9,7 @@ import (
 )
 
 func Get(c *gin.Context) {
+	// Logger := SLog.Init()
 	transactionId := c.Param("transactionId")
 	if transactionId == "" {
 		c.JSON(404, types.TResponse{false, "QUERY_PARAM_EMPTY", nil})

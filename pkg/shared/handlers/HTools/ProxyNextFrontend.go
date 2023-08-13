@@ -9,6 +9,7 @@ import (
 )
 
 func ProxyNextFrontend(c *gin.Context) {
+	//Logger := SLog.Init()
 	remote, _ := url.Parse("http://localhost:3000")
 
 	proxy := httputil.NewSingleHostReverseProxy(remote)

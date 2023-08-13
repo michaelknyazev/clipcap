@@ -1,17 +1,15 @@
-package CGPT
+package CChunk
 
 import (
+	"clipcap/pkg/summary-extension/models/MChunk"
 	"clipcap/pkg/summary-extension/models/MText"
+	"strings"
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type TChunk struct {
-	Size    int
-	Start   float64
-	End     float64
-	Content []string
-}
-
-func PrepareTextFromSource(SourceContent []MText.Text) []TChunk {
+func ConvertSource(language string, sourceID primitive.ObjectID, SourceContent []MText.TText) []MChunk.TChunk {
 	var Content []string
 
 	var totalLengthInSeconds float64
@@ -26,8 +24,6 @@ func PrepareTextFromSource(SourceContent []MText.Text) []TChunk {
 	var ChunksCount float64 = 6
 
 	for _, item := range SourceContent {
-		// fmt.Printf("Current length: %f, Added duration: %f, Source Content: %s\n", totalLengthInSeconds, item.Duration, item.Content)
-
 		totalSize += len(item.Content)
 		itemDuration := item.Duration / 2
 		totalLengthInSeconds += itemDuration
@@ -52,20 +48,13 @@ func PrepareTextFromSource(SourceContent []MText.Text) []TChunk {
 		ChunksCount = totalLengthInSeconds / chunkLengthInSeconds
 	}
 
-	var chunks []TChunk
-
-	// fmt.Println("Chunk length:", chunkLengthInSeconds)
-	// fmt.Println("Chunk count:", ChunksCount)
-	// fmt.Println("Total length in seconds", totalLengthInSeconds)
-
-	// fmt.Printf("---- 0 CHUNK STARTED ----\n")
+	var chunks []MChunk.TChunk
 
 	totalSourceTextCount := len(SourceContent) - 1
+	ts := time.Now()
 
 	for i, text := range SourceContent {
 		textDuration := text.Duration / 2
-
-		// fmt.Printf("#%d Current size: %d, Current Timestamp: %f, Added Duration: %f\n", i, currentSize, currentTimeStamp, textDuration)
 
 		currentSize += len(text.Content)
 		currentChunkDurationInSeconds += textDuration
@@ -75,29 +64,25 @@ func PrepareTextFromSource(SourceContent []MText.Text) []TChunk {
 		isLastText := i >= totalSourceTextCount
 
 		if currentChunkDurationInSeconds >= chunkLengthInSeconds || isLastText {
-			chunks = append(chunks, TChunk{
-				Size:    currentSize,
-				Start:   startStamp,
-				End:     startStamp + text.Duration,
-				Content: currentText,
+			chunks = append(chunks, MChunk.TChunk{
+				ID:              primitive.NewObjectID(),
+				Size:            currentSize,
+				Start:           startStamp,
+				End:             startStamp + text.Duration,
+				OriginalContent: strings.Join(currentText, " "),
+				Language:        language,
+				SourceID:        sourceID,
+				Created:         ts.Unix(),
+				Updated:         ts.Unix(),
 			})
-			// fmt.Printf("Chunk Start stamp: %f, Chunk duration in seconds: %f, Chunk end stamp: %f\n", startStamp, currentChunkDurationInSeconds, currentTimeStamp)
-			// fmt.Printf("---- %d CHUNK FINISHED ----\n", currentChunkIndex)
 
 			currentSize = 0
 			currentChunkDurationInSeconds = 0
 			currentText = []string{}
 			startStamp = currentTimeStamp
 			currentChunkIndex += 1
-
-			// if !isLastText {
-			// 	fmt.Printf("---- %d CHUNK STARTED ----\n", currentChunkIndex)
-			// 	fmt.Printf("Chunk start stamp: %f, Current stamp: %f\n", startStamp, currentTimeStamp)
-			// }
 		}
 	}
-
-	// fmt.Println(len(chunks))
 
 	return chunks
 }

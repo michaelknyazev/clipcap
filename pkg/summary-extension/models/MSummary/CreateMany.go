@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func CreateMany(sourceId string, data []Summary) ([]Summary, error) {
+func CreateMany(data []TSummary) ([]TSummary, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

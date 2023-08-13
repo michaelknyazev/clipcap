@@ -3,19 +3,21 @@ package setup
 import (
 	"clipcap/pkg/shared/controllers/CActivity"
 	"clipcap/pkg/shared/controllers/CConfiguration"
-	"clipcap/pkg/shared/controllers/CLog"
 	"clipcap/pkg/shared/controllers/CPassword"
 	"clipcap/pkg/shared/controllers/CUser"
+	"clipcap/pkg/shared/services/SLog"
 	"clipcap/pkg/summary-extension/services/SConfiguration"
+	"os"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func Do() {
-	CLog.Console("Checking if db is clear...")
+	Logger := SLog.Init()
+	Logger.Log("Checking if db is clear...")
 
 	if !CConfiguration.IsNewInstance() {
-		CLog.Console("Preparing db...")
+		Logger.Log("Preparing db...")
 		if err := CConfiguration.Initialize(); err != nil {
 			panic("Failed to Initialize")
 		}
@@ -24,21 +26,23 @@ func Do() {
 
 		DefaultUser := SConfiguration.Configuration.Authentication.DefaultUser
 
-		CLog.Console("Creating default user " + DefaultUser.Email)
+		Logger.Log("Creating default user " + DefaultUser.Email)
 		password, err := CPassword.Hash(DefaultUser.Password)
 		if err != nil {
-			CLog.Exit(err)
+			Logger.Log("Error while hashing password. Error: %s", err.Error())
+			os.Exit(1)
 		}
 		User, err := CUser.Create(DefaultUser.Email, password, "Default User", true)
 		if err != nil {
-			CLog.Exit(err)
+			Logger.Log("Error while creating user. Error: %s", err.Error())
+			os.Exit(1)
 		}
-		CLog.Console("User " + User.Email + " created.")
+		Logger.Log("User with %s created.", User.Email)
 
 		CActivity.Create([]interface{}{User.ID}, User.ID, "is registered", "")
 
 		return
 	}
 
-	CLog.Console("Reading database...")
+	Logger.Log("Reading database...")
 }

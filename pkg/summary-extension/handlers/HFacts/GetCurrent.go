@@ -2,7 +2,7 @@ package HFacts
 
 import (
 	"clipcap/pkg/shared/controllers/CAccessToken"
-	"clipcap/pkg/shared/controllers/CLog"
+	"clipcap/pkg/shared/services/SLog"
 	"clipcap/pkg/shared/types"
 	"clipcap/pkg/summary-extension/controllers/CFact"
 
@@ -10,21 +10,22 @@ import (
 )
 
 func GetCurrent(c *gin.Context) {
+	Logger := SLog.Init()
 	access_token := c.Request.Header.Get("Authorization")
-	CLog.Log("Received access token, verifying the authorization")
+	Logger.Log("Received access token, verifying the authorization")
 
 	AccessToken, err := CAccessToken.Verify(access_token)
 	if err != nil {
-		CLog.Log("Invalid access token!", err.Error())
+		Logger.Log("Invalid access token! Error: %s", err.Error())
 		c.JSON(401, types.TResponse{false, "ACCESS_TOKEN_INVALID", nil})
 		c.Abort()
 		return
 	}
-	CLog.Log(AccessToken.UserID, "Received Valid access token.")
+	Logger.Log("[%s] Received Valid access token.", AccessToken.UserID)
 
-	Facts, err := CFact.GetUserFactsForCurrentMonth(AccessToken.UserID)
+	Facts, err := CFact.GetUserFactsForCurrentDay(AccessToken.UserID)
 	if err != nil {
-		CLog.Log("Invalid access token!", err.Error())
+		Logger.Log("[%s] Can't Get User Facts from DB. Error: %s", AccessToken.UserID, err.Error())
 		c.JSON(500, types.TResponse{false, "FACTS_FIND_FAILED", nil})
 		c.Abort()
 		return

@@ -7,9 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Text struct {
+type TText struct {
 	ID           primitive.ObjectID `json:"_id" bson:"_id"`
-	SourceID     string             `json:"sourceId" bson:"sourceId"`
+	SourceID     primitive.ObjectID `json:"sourceId" bson:"sourceId"`
 	Content      string             `json:"content" bson:"content"`
 	LanguageCode string             `json:"languageCode" bson:"languageCode"`
 	Start        float64            `json:"start" bson:"start"`

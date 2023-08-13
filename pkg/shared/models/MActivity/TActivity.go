@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Activity struct {
+type TActivity struct {
 	ID      primitive.ObjectID `json:"_id" bson:"_id"`
 	Tags    []interface{}      `json:"tags" bson:"tags"`
 	UserId  primitive.ObjectID `json:"userId" bson:"userId" lungo:"users:_id:user"`
@@ -17,14 +17,14 @@ type Activity struct {
 	Created int64              `json:"created" bson:"created"`
 }
 
-type ActivityWithUser struct {
+type TActivityWithUser struct {
 	ID      primitive.ObjectID `json:"_id" bson:"_id"`
 	Tags    []interface{}      `json:"tags" bson:"tags"`
 	UserId  primitive.ObjectID `json:"userId" bson:"userId" lungo:"users:_id:user"`
 	Event   string             `json:"event" bson:"event"`
 	Message string             `json:"message" bson:"message"`
 	Created int64              `json:"created" bson:"created"`
-	User    []MUser.User       `json:"user"`
+	User    []MUser.TUser      `json:"user"`
 }
 
 func GetCollection() *mongo.Collection {

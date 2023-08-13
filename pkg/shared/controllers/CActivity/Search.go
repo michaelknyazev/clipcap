@@ -4,10 +4,10 @@ import (
 	"clipcap/pkg/shared/models/MActivity"
 )
 
-func Search(tag string) ([]MActivity.ActivityWithUser, error) {
+func Search(tag string) ([]MActivity.TActivityWithUser, error) {
 	Activity, err := MActivity.SearchByTag(tag)
 	if err != nil {
-		return []MActivity.ActivityWithUser{}, err
+		return []MActivity.TActivityWithUser{}, err
 	}
 
 	return Activity, nil

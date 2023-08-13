@@ -7,7 +7,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func (config *Config) Verify(encoded string) ([]byte, error) {
+func (config *TConfig) Verify(encoded string) ([]byte, error) {
 	token, err := jwt.Parse(encoded, func(token *jwt.Token) (interface{}, error) {
 		if _, isValid := token.Method.(*jwt.SigningMethodHMAC); !isValid {
 			return nil, errors.New("invalid token")
@@ -25,7 +25,7 @@ func (config *Config) Verify(encoded string) ([]byte, error) {
 		return nil, err
 	}
 
-	var TokenData Token
+	var TokenData TToken
 	if err := json.Unmarshal(claims, &TokenData); err != nil {
 		return nil, err
 	}

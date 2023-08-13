@@ -47,6 +47,7 @@ dist
 
 # project
 __required
+__logs
 runapp
 clipcap
 clipcap-extension

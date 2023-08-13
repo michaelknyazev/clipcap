@@ -14,7 +14,7 @@ func Generate(Issuer string, Data types.TRefreshToken) (string, error) {
 		return "", err
 	}
 
-	Generator := &CToken.Config{
+	Generator := &CToken.TConfig{
 		Key:    refreshTokenKey,
 		Issuer: Issuer,
 		Data:   Data,

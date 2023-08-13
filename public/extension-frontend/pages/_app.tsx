@@ -28,8 +28,6 @@ const App = ({ Component, pageProps }: TApplication) => {
     }
   },[]);
 
-  console.log(Bootstrap.name)
-
   return (
     <div ref={appRootRef}>
       <Bootstrap>

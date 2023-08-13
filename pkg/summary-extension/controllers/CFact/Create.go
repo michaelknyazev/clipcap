@@ -7,9 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func Create(userId primitive.ObjectID, sourceId primitive.ObjectID) (MFact.Fact, error) {
+func Create(userId primitive.ObjectID, sourceId primitive.ObjectID) (MFact.TFact, error) {
 	ts := time.Now()
-	Fact := MFact.Fact{
+	Fact := MFact.TFact{
 		ID:       primitive.NewObjectID(),
 		SourceID: sourceId,
 		UserID:   userId,
@@ -19,7 +19,7 @@ func Create(userId primitive.ObjectID, sourceId primitive.ObjectID) (MFact.Fact,
 
 	_, err := MFact.Create(Fact)
 	if err != nil {
-		return MFact.Fact{}, err
+		return MFact.TFact{}, err
 	}
 
 	return Fact, nil

@@ -8,20 +8,20 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func FindActiveByUserId(userId primitive.ObjectID) (MSubscription.Subscription, error) {
+func FindActiveByUserId(userId primitive.ObjectID) (MSubscription.TSubscription, error) {
 	Subscriptions, err := MSubscription.FindByUserId(userId)
 	if err != nil {
-		return MSubscription.Subscription{}, err
+		return MSubscription.TSubscription{}, err
 	}
 
 	if len(Subscriptions) == 0 {
-		return MSubscription.Subscription{}, errors.New("no subscription for user")
+		return MSubscription.TSubscription{}, errors.New("no subscription for user")
 	}
 
 	ts := time.Now()
 	ActiveSubscriptionExists := false
 
-	var ActiveSubscription MSubscription.Subscription
+	var ActiveSubscription MSubscription.TSubscription
 
 	for _, sub := range Subscriptions {
 		if sub.Expires > ts.Unix() {
@@ -31,7 +31,7 @@ func FindActiveByUserId(userId primitive.ObjectID) (MSubscription.Subscription, 
 	}
 
 	if !ActiveSubscriptionExists {
-		return MSubscription.Subscription{}, errors.New("No active subscription")
+		return MSubscription.TSubscription{}, errors.New("No active subscription")
 	}
 
 	return ActiveSubscription, nil

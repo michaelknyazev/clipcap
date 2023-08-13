@@ -7,9 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func Create(seed string) (MTransaction.Transaction, error) {
+func Create(seed string) (MTransaction.TTransaction, error) {
 	ts := time.Now()
-	Transaction := MTransaction.Transaction{
+	Transaction := MTransaction.TTransaction{
 		ID:        primitive.NewObjectID(),
 		Seed:      seed,
 		Processed: false,
@@ -20,7 +20,7 @@ func Create(seed string) (MTransaction.Transaction, error) {
 
 	_, err := MTransaction.Create(Transaction)
 	if err != nil {
-		return MTransaction.Transaction{}, err
+		return MTransaction.TTransaction{}, err
 	}
 
 	return Transaction, nil

@@ -9,15 +9,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func CreateMany(sourceId string, texts []SGoogle.TCaptionTranscriptTextEntry, language string) ([]Text, error) {
+func CreateMany(sourceId primitive.ObjectID, texts []SGoogle.TCaptionTranscriptTextEntry, language string) ([]TText, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	// Prepare the documents to be inserted
-	var Data []Text
+	var Data []TText
 	for _, text := range texts {
 		ts := time.Now()
-		Data = append(Data, Text{
+		Data = append(Data, TText{
 			ID:           primitive.NewObjectID(),
 			SourceID:     sourceId,
 			Content:      text.Content,

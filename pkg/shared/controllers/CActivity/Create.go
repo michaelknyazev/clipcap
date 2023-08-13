@@ -7,10 +7,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func Create(tags []interface{}, userId primitive.ObjectID, event string, message string) (MActivity.Activity, error) {
+func Create(tags []interface{}, userId primitive.ObjectID, event string, message string) (MActivity.TActivity, error) {
 	ts := time.Now()
 
-	Activity := MActivity.Activity{
+	Activity := MActivity.TActivity{
 		ID:      primitive.NewObjectID(),
 		Tags:    tags,
 		UserId:  userId,
@@ -21,7 +21,7 @@ func Create(tags []interface{}, userId primitive.ObjectID, event string, message
 
 	_, err := MActivity.Create(Activity)
 	if err != nil {
-		return MActivity.Activity{}, err
+		return MActivity.TActivity{}, err
 	}
 
 	return Activity, nil

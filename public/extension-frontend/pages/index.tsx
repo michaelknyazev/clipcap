@@ -21,7 +21,7 @@ const HomePage: TFeature = () => {
   const [showCopyIcon, setShowCopyIcon] = useState<boolean>(false);
 
   const handleSummarize = async (targetVideoId: string) => {
-    console.log(`Summarizing ${targetVideoId}`);
+    // debug(`Summarizing ${targetVideoId}`);
 
     setLoading(true)
 
@@ -47,7 +47,7 @@ const HomePage: TFeature = () => {
 
       summary = result;
     } catch (err) {
-      console.log({err});
+      // debug({err});
     }
 
     setLoading(false);
@@ -68,7 +68,7 @@ const HomePage: TFeature = () => {
     try {
       document.execCommand('copy');
     } catch (err) {
-      console.error('Fallback: Oops, unable to copy', err);
+      // console.error('Fallback: Oops, unable to copy', err);
     }
 
     document.body.removeChild(textArea);

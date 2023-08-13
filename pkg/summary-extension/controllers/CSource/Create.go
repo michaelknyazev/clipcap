@@ -7,9 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func Create(sourceType string, sourceId string, sourceUrl string) (MSource.Source, error) {
+func Create(sourceType string, sourceId string, sourceUrl string) (MSource.TSource, error) {
 	ts := time.Now()
-	Source := MSource.Source{
+	Source := MSource.TSource{
 		ID:       primitive.NewObjectID(),
 		SourceID: sourceId,
 		Type:     sourceType,
@@ -20,7 +20,7 @@ func Create(sourceType string, sourceId string, sourceUrl string) (MSource.Sourc
 
 	_, err := MSource.Create(Source)
 	if err != nil {
-		return MSource.Source{}, err
+		return MSource.TSource{}, err
 	}
 
 	return Source, nil

@@ -7,7 +7,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
-func OAuthToken(Integration MIntegration.Integration) (*oauth2.Token, error) {
+func OAuthToken(Integration MIntegration.TIntegration) (*oauth2.Token, error) {
 	token := new(oauth2.Token)
 
 	token.AccessToken = Integration.AccessToken

@@ -6,10 +6,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func FindById(userId primitive.ObjectID) (MUser.User, error) {
+func FindById(userId primitive.ObjectID) (MUser.TUser, error) {
 	User, err := MUser.FindOneById(userId)
 	if err != nil {
-		return MUser.User{}, err
+		return MUser.TUser{}, err
 	}
 
 	return User, nil

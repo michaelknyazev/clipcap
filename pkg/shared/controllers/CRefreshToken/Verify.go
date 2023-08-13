@@ -15,7 +15,7 @@ func Verify(token string) (types.TRefreshToken, error) {
 		return types.TRefreshToken{}, err
 	}
 
-	Generator := &CToken.Config{
+	Generator := &CToken.TConfig{
 		Key: refreshTokenKey,
 	}
 	Data, err := Generator.Verify(token)

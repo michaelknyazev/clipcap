@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func GetByUserIdInTimeRange(userId primitive.ObjectID, startTs int64, endTs int64) ([]Fact, error) {
+func GetByUserIdInTimeRange(userId primitive.ObjectID, startTs int64, endTs int64) ([]TFact, error) {
 	filter := bson.M{
 		"userId": userId,
 		"created": bson.M{
@@ -24,7 +24,7 @@ func GetByUserIdInTimeRange(userId primitive.ObjectID, startTs int64, endTs int6
 	defer cur.Close(context.Background())
 
 	// Decode the results
-	var results []Fact
+	var results []TFact
 
 	err = cur.All(context.Background(), &results)
 	if err != nil {

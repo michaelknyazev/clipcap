@@ -1,4 +1,4 @@
-package MFact
+package MUser
 
 import (
 	"clipcap/pkg/shared/database"
@@ -7,14 +7,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Fact struct {
+type TUser struct {
 	ID       primitive.ObjectID `json:"_id" bson:"_id"`
-	SourceID primitive.ObjectID `json:"sourceId" bson:"sourceId"`
-	UserID   primitive.ObjectID `json:"userId" bson:"userId"`
+	Email    string             `json:"email" bson:"email"`
+	Password string             `json:"password" bson:"password"`
+	Name     string             `json:"name" bson:"name,omitempty"`
+	Active   bool               `json:"active" bson:"active"`
 	Created  int64              `json:"created" bson:"created"`
 	Updated  int64              `json:"updated" bson:"updated"`
 }
 
 func GetCollection() *mongo.Collection {
-	return database.GetCollection("facts")
+	return database.GetCollection("users")
 }

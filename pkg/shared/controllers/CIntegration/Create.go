@@ -7,10 +7,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func Create(integrationType string, refresh_token string, access_token string, expiry int64, userId primitive.ObjectID) (MIntegration.Integration, error) {
+func Create(integrationType string, refresh_token string, access_token string, expiry int64, userId primitive.ObjectID) (MIntegration.TIntegration, error) {
 	ts := time.Now()
 
-	Integration := MIntegration.Integration{
+	Integration := MIntegration.TIntegration{
 		ID:           primitive.NewObjectID(),
 		UserID:       userId,
 		RefreshToken: refresh_token,
@@ -23,7 +23,7 @@ func Create(integrationType string, refresh_token string, access_token string, e
 
 	_, err := MIntegration.Create(Integration)
 	if err != nil {
-		return MIntegration.Integration{}, err
+		return MIntegration.TIntegration{}, err
 	}
 
 	return Integration, nil

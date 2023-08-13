@@ -13,6 +13,7 @@ import (
 )
 
 func CheckEmail(c *gin.Context) {
+	//Logger := SLog.Init(uuid.New().String())
 	var credentials struct {
 		Email string `json:"email"`
 	}

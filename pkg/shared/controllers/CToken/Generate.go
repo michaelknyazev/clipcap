@@ -6,8 +6,8 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func (config *Config) Generate() (string, error) {
-	claims := &Token{
+func (config *TConfig) Generate() (string, error) {
+	claims := &TToken{
 		config.Data,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 48).Unix(),

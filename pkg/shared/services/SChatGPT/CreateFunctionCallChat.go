@@ -2,6 +2,7 @@ package SChatGPT
 
 import (
 	"bytes"
+	"clipcap/pkg/shared/services/SLog"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -9,27 +10,7 @@ import (
 	"net/url"
 )
 
-type TChatGPTFunctionParametersProperty struct {
-	Type        string   `json:"type"`
-	Description string   `json:"description"`
-	Enum        []string `json:"enum,omitempty"`
-}
-
-type TChatGPTFunctionParametersProperties map[string]TChatGPTFunctionParametersProperty
-
-type TChatGPTFunctionParameters struct {
-	Type       string                               `json:"type"`
-	Properties TChatGPTFunctionParametersProperties `json:"properties"`
-	Required   []string                             `json:"required"`
-}
-
-type TChatGPTFunction struct {
-	Name        string                     `json:"name"`
-	Description string                     `json:"description"`
-	Parameters  TChatGPTFunctionParameters `json:"parameters"`
-}
-
-func CreateFunctionCallChat(prompt string, language string, function TChatGPTFunction) (TGPTResponse, error) {
+func CreateFunctionCallChat(logger SLog.TLogger, model string, systemPrompts []string, prompts []string, function TChatGPTFunction) (TGPTResponse, error) {
 	var Response TGPTResponse
 
 	URL, err := url.Parse("https://api.openai.com/v1/chat/completions")
@@ -37,23 +18,32 @@ func CreateFunctionCallChat(prompt string, language string, function TChatGPTFun
 		return Response, err
 	}
 
-	NewMessage, err := json.Marshal(TChatGPTCreateChatReqBody{
-		Model:     "gpt-3.5-turbo-16k",
+	var messages []TChatGPTMessage
+
+	for _, msg := range systemPrompts {
+		messages = append(messages, TChatGPTMessage{
+			Role:    "system",
+			Content: msg,
+		})
+	}
+
+	for _, msg := range prompts {
+		messages = append(messages, TChatGPTMessage{
+			Role:    "user",
+			Content: msg,
+		})
+	}
+
+	NewMessage, err := json.Marshal(TChatGPTCreateChat{
+		Model:     model,
 		Functions: []TChatGPTFunction{function},
-		Messages: []TChatGPTMessage{
-			{
-				Role:    "system",
-				Content: language,
-			},
-			{
-				Role:    "user",
-				Content: prompt,
-			},
-		},
+		Messages:  messages,
 	})
 	if err != nil {
 		return Response, err
 	}
+
+	logger.Log("POST %s\n Body:\n```json\n%s\n```", URL.String(), string(NewMessage))
 
 	req, err := http.NewRequest("POST", URL.String(), bytes.NewBuffer(NewMessage))
 	if err != nil {
@@ -74,6 +64,8 @@ func CreateFunctionCallChat(prompt string, language string, function TChatGPTFun
 		fmt.Println(err)
 		return Response, err
 	}
+
+	logger.Log("POST %s\n Response:\n```json\n%s\n```", URL.String(), string(body))
 
 	if err := json.Unmarshal(body, &Response); err != nil {
 		fmt.Println(err)

@@ -7,9 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func Create(userID primitive.ObjectID) (MAuthorization.Authorization, error) {
+func Create(userID primitive.ObjectID) (MAuthorization.TAuthorization, error) {
 	ts := time.Now()
-	Authorization := MAuthorization.Authorization{
+	Authorization := MAuthorization.TAuthorization{
 		ID:      primitive.NewObjectID(),
 		UserId:  userID,
 		Created: ts.Unix(),
@@ -18,7 +18,7 @@ func Create(userID primitive.ObjectID) (MAuthorization.Authorization, error) {
 
 	_, err := MAuthorization.Create(Authorization)
 	if err != nil {
-		return MAuthorization.Authorization{}, err
+		return MAuthorization.TAuthorization{}, err
 	}
 
 	return Authorization, nil

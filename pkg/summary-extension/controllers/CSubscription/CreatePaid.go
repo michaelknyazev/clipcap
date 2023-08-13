@@ -7,11 +7,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func CreatePaid(userId primitive.ObjectID, subscriptionId string) (MSubscription.Subscription, error) {
+func CreatePaid(userId primitive.ObjectID, subscriptionId string) (MSubscription.TSubscription, error) {
 	ts := time.Now()
 	oneMonth := ts.AddDate(0, 1, 0)
 
-	Subscription := MSubscription.Subscription{
+	Subscription := MSubscription.TSubscription{
 		ID:             primitive.NewObjectID(),
 		SubscriptionID: subscriptionId,
 		UserID:         userId,
@@ -23,7 +23,7 @@ func CreatePaid(userId primitive.ObjectID, subscriptionId string) (MSubscription
 	}
 
 	if _, err := MSubscription.Create(Subscription); err != nil {
-		return MSubscription.Subscription{}, err
+		return MSubscription.TSubscription{}, err
 	}
 
 	return Subscription, nil

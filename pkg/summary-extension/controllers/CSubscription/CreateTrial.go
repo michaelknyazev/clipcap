@@ -7,11 +7,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func CreateTrial(userId primitive.ObjectID) (MSubscription.Subscription, error) {
+func CreateTrial(userId primitive.ObjectID) (MSubscription.TSubscription, error) {
 	ts := time.Now()
 	threeDays := ts.AddDate(0, 0, 3)
 
-	Subscription := MSubscription.Subscription{
+	Subscription := MSubscription.TSubscription{
 		ID:          primitive.NewObjectID(),
 		UserID:      userId,
 		IsCancelled: false,
@@ -22,7 +22,7 @@ func CreateTrial(userId primitive.ObjectID) (MSubscription.Subscription, error) 
 	}
 
 	if _, err := MSubscription.Create(Subscription); err != nil {
-		return MSubscription.Subscription{}, err
+		return MSubscription.TSubscription{}, err
 	}
 
 	return Subscription, nil

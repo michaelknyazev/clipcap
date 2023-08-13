@@ -4,10 +4,10 @@ import (
 	"clipcap/pkg/summary-extension/models/MSource"
 )
 
-func FindOneBySourceId(sourceId string) (MSource.Source, error) {
+func FindOneBySourceId(sourceId string) (MSource.TSource, error) {
 	Source, err := MSource.FindOneBySourceId(sourceId)
 	if err != nil {
-		return MSource.Source{}, err
+		return MSource.TSource{}, err
 	}
 
 	return Source, nil

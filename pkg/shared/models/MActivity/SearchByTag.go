@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func SearchByTag(tag string) ([]ActivityWithUser, error) {
+func SearchByTag(tag string) ([]TActivityWithUser, error) {
 	pipeline := bson.A{
 		bson.D{
 			bson.E{
@@ -84,7 +84,7 @@ func SearchByTag(tag string) ([]ActivityWithUser, error) {
 		return nil, err
 	}
 
-	var Data []ActivityWithUser
+	var Data []TActivityWithUser
 
 	if err := json.Unmarshal(data, &Data); err != nil {
 		return nil, err

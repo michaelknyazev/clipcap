@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Integration struct {
+type TIntegration struct {
 	ID           primitive.ObjectID `json:"_id" bson:"_id"`
 	UserID       primitive.ObjectID `json:"userId" bson:"userId"`
 	RefreshToken string             `json:"refresh_token" bson:"refresh_token"`

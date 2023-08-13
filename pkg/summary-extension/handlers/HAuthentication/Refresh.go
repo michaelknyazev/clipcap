@@ -16,6 +16,7 @@ import (
 )
 
 func Refresh(c *gin.Context) {
+	//Logger := SLog.Init(uuid.New().String())
 	refresh_token := c.Request.Header.Get("Refresh")
 	RefreshTokenOld, err := CRefreshToken.Verify(refresh_token)
 	if err != nil {

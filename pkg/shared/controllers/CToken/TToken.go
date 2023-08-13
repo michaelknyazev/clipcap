@@ -2,13 +2,13 @@ package CToken
 
 import "github.com/dgrijalva/jwt-go"
 
-type Config struct {
+type TConfig struct {
 	Key    string
 	Issuer string
 	Data   any `json:"data"`
 }
 
-type Token struct {
+type TToken struct {
 	Data any `json:"data"`
 	jwt.StandardClaims
 }

@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Subscription struct {
+type TSubscription struct {
 	ID             primitive.ObjectID `json:"_id" bson:"_id"`
 	SubscriptionID string             `json:"subscription_id" bson:"subscription_id"`
 	IsCancelled    bool               `json:"isCancelled" bson:"isCancelled"`

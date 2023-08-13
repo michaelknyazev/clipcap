@@ -24,6 +24,7 @@ import (
 )
 
 func Search(c *gin.Context) {
+	// Logger := SLog.Init()
 	access_token, err := c.Cookie("access_token")
 	if err != nil {
 		c.JSON(401, types.TResponse{false, "ACCESS_TOKEN_INVALID", nil})

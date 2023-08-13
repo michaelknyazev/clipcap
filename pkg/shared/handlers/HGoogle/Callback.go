@@ -18,6 +18,7 @@ import (
 )
 
 func Callback(c *gin.Context) {
+	//Logger := SLog.Init()
 	code := c.Query("code")
 	if code == "" {
 		c.JSON(422, types.TResponse{false, "QUERY_MISSING_DATA", nil})

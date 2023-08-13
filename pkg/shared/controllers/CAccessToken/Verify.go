@@ -15,7 +15,7 @@ func Verify(token string) (types.TAccessToken, error) {
 		return types.TAccessToken{}, err
 	}
 
-	Generator := &CToken.Config{
+	Generator := &CToken.TConfig{
 		Key: accessTokenKey,
 	}
 	Data, err := Generator.Verify(token)

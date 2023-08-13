@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Authorization struct {
+type TAuthorization struct {
 	ID      primitive.ObjectID `json:"_id" bson:"_id"`
 	UserId  primitive.ObjectID `json:"userId" bson:"userId"`
 	Created int64              `json:"created" bson:"created"`

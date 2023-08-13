@@ -5,6 +5,9 @@
     "wakatime.vscode-wakatime",
     "github.copilot",
     "eamodio.gitlens",
-    "dsznajder.es7-react-js-snippets"
+    "dsznajder.es7-react-js-snippets",
+    "github.copilot-chat",
+    "streetsidesoftware.code-spell-checker-russian",
+    "streetsidesoftware.code-spell-checker"
   ]
 }

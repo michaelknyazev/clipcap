@@ -1,4 +1,4 @@
-package MSummary
+package MSource
 
 import (
 	"clipcap/pkg/shared/database"
@@ -7,18 +7,15 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Summary struct {
+type TSource struct {
 	ID       primitive.ObjectID `json:"_id" bson:"_id"`
 	SourceID string             `json:"sourceId" bson:"sourceId"`
-	Start    float64            `json:"start" bson:"start"`
-	End      float64            `json:"end" bson:"end"`
-	Emoji    string             `json:"emoji" bson:"emoji"`
-	Title    string             `json:"title" bson:"title"`
-	Content  string             `json:"content" bson:"content"`
+	Type     string             `json:"_type" bson:"_type"`
+	URL      string             `json:"url" bson:"url"`
 	Created  int64              `json:"created" bson:"created"`
 	Updated  int64              `json:"updated" bson:"updated"`
 }
 
 func GetCollection() *mongo.Collection {
-	return database.GetCollection("summaries")
+	return database.GetCollection("sources")
 }

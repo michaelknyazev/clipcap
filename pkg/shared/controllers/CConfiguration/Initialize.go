@@ -7,7 +7,7 @@ import (
 )
 
 func Initialize() error {
-	config := MConfiguration.Configuration{
+	config := MConfiguration.TConfiguration{
 		ID:       primitive.NewObjectID(),
 		Variable: "initialized",
 		Value:    true,

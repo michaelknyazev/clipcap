@@ -8,20 +8,21 @@ import (
 	"clipcap/pkg/shared/controllers/CAccessToken"
 	"clipcap/pkg/shared/controllers/CActivity"
 	"clipcap/pkg/shared/controllers/CAuthorization"
-	"clipcap/pkg/shared/controllers/CLog"
 	"clipcap/pkg/shared/controllers/CRefreshToken"
+	"clipcap/pkg/shared/services/SLog"
 	"clipcap/pkg/shared/types"
 
 	"github.com/gin-gonic/gin"
 )
 
 func LogOut(c *gin.Context) {
+	Logger := SLog.Init()
 	refresh_token := c.Request.Header.Get("Refresh")
 	access_token := c.Request.Header.Get("Authorization")
 
 	RefreshToken, err := CRefreshToken.Verify(refresh_token)
 	if err != nil {
-		CLog.Console("Invalid refresh token")
+		Logger.Log("Invalid refresh token")
 		c.JSON(401, types.TResponse{false, "REFRESH_TOKEN_INVALID", nil})
 		c.Abort()
 		return
@@ -29,7 +30,7 @@ func LogOut(c *gin.Context) {
 
 	AccessToken, err := CAccessToken.Verify(access_token)
 	if err != nil {
-		CLog.Console("Invalid access token")
+		Logger.Log("Invalid access token")
 		c.JSON(401, types.TResponse{false, "ACCESS_TOKEN_INVALID", nil})
 		c.Abort()
 		return
@@ -37,14 +38,14 @@ func LogOut(c *gin.Context) {
 
 	Authorization, err := CAuthorization.FindById(RefreshToken.AuthorizationId)
 	if err != nil {
-		CLog.Console("Can't find Authorization in DB")
+		Logger.Log("Can't find Authorization in DB")
 		c.JSON(401, types.TResponse{false, "AUTHORIZATION_FIND_FAILED", nil})
 		c.Abort()
 		return
 	}
 
 	if Authorization.UserId != AccessToken.UserID {
-		CLog.Console("Authorization userId mismatch with token userId")
+		Logger.Log("Authorization userId mismatch with token userId")
 		c.JSON(401, types.TResponse{false, "AUTHORIZATION_USER_MISMATCH", nil})
 		c.Abort()
 		return

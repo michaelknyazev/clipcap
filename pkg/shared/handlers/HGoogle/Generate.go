@@ -10,6 +10,7 @@ import (
 )
 
 func Generate(c *gin.Context) {
+	//Logger := SLog.Init()
 	seed := uuid.New()
 	url, err := CGoogle.GenerateLink(seed.String())
 	if err != nil {

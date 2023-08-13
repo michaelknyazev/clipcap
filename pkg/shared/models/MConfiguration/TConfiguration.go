@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Configuration struct {
+type TConfiguration struct {
 	ID       primitive.ObjectID `json:"_id" bson:"_id"`
 	Variable string             `json:"variable" bson:"variable"`
 	Value    any                `json:"value" bson:"value"`

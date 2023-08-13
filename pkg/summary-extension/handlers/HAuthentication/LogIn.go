@@ -19,6 +19,7 @@ import (
 )
 
 func LogIn(c *gin.Context) {
+	//Logger := SLog.Init(uuid.New().String())
 	var credentials types.TCredentials
 
 	if err := c.ShouldBindJSON(&credentials); err != nil {

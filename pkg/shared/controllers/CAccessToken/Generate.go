@@ -14,7 +14,7 @@ func Generate(Issuer string, Data types.TAccessToken) (string, error) {
 		return "", err
 	}
 
-	Generator := &CToken.Config{
+	Generator := &CToken.TConfig{
 		Key:    accessTokenKey,
 		Issuer: Issuer,
 		Data:   Data,

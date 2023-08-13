@@ -6,10 +6,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func FindByUserIdAndType(userId primitive.ObjectID, integrationType string) (MIntegration.Integration, error) {
+func FindByUserIdAndType(userId primitive.ObjectID, integrationType string) (MIntegration.TIntegration, error) {
 	Integration, err := MIntegration.FindOneByUserIdAndType(userId, integrationType)
 	if err != nil {
-		return MIntegration.Integration{}, err
+		return MIntegration.TIntegration{}, err
 	}
 
 	return Integration, nil

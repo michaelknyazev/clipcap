@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func FindOneById(authorizationId primitive.ObjectID) (Authorization, error) {
+func FindOneById(authorizationId primitive.ObjectID) (TAuthorization, error) {
 	pipeline := bson.A{
 		bson.D{
 			bson.E{
@@ -30,28 +30,28 @@ func FindOneById(authorizationId primitive.ObjectID) (Authorization, error) {
 
 	cursor, err := GetCollection().Aggregate(ctx, pipeline)
 	if err != nil {
-		return Authorization{}, err
+		return TAuthorization{}, err
 	}
 
 	var result []map[string]interface{}
 
 	if err := cursor.All(ctx, &result); err != nil {
-		return Authorization{}, err
+		return TAuthorization{}, err
 	}
 
 	data, err := json.Marshal(result)
 	if err != nil {
-		return Authorization{}, err
+		return TAuthorization{}, err
 	}
 
-	var Data []Authorization
+	var Data []TAuthorization
 
 	if err := json.Unmarshal(data, &Data); err != nil {
-		return Authorization{}, err
+		return TAuthorization{}, err
 	}
 
 	if len(Data) == 0 {
-		return Authorization{}, errors.New("not found")
+		return TAuthorization{}, errors.New("not found")
 	}
 
 	return Data[0], nil

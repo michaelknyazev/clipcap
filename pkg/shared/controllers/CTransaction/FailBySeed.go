@@ -5,10 +5,10 @@ import (
 	"time"
 )
 
-func FailBySeed(seed string, data string) (MTransaction.Transaction, error) {
+func FailBySeed(seed string, data string) (MTransaction.TTransaction, error) {
 	Transaction, err := MTransaction.FindOneBySeed(seed)
 	if err != nil {
-		return MTransaction.Transaction{}, err
+		return MTransaction.TTransaction{}, err
 	}
 
 	ts := time.Now()
@@ -20,7 +20,7 @@ func FailBySeed(seed string, data string) (MTransaction.Transaction, error) {
 
 	Updated, err := MTransaction.ReplaceById(Transaction.ID, Transaction)
 	if err != nil {
-		return MTransaction.Transaction{}, err
+		return MTransaction.TTransaction{}, err
 	}
 
 	return Updated, nil
