@@ -41,12 +41,12 @@ Create a short title for the provided text, no longer than 10 words, following t
 Short title for the provided text no longer than 10 words in English:`
 const EN_SUMMARIZE_FUNCTION_EMOJI = `An emoji that describes provided text. eg. 💡. Emoji for provided text:`
 const EN_SUMMARIZE_FUNCTION_INSIGHT = `A short summary of given text.
-Generate a short summary for provided text, no longer then 10 words, following these rules:
+Generate a short summary for provided text, no longer then 15 words, following these rules:
 1. Don't change the meaning of provided text
 2. The text must be no longer then 10 words
 3. The text must be in English.
 
-Generated short summary from the text no longer then 10 words in English:`
+Generated short summary from the text no longer then 15 words in English:`
 const EN_SUMMARIZE_PROMPT = `Imagine that you work as a text creator for Internet sites.
 The result of your work must comply with the rules in each task given to you.
 The result of your work will always be checked in accordance with the rules given to you in each task.

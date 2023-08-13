@@ -7,7 +7,6 @@ import (
 	"clipcap/pkg/summary-extension/models/MChunk"
 	"clipcap/pkg/summary-extension/models/MSummary"
 	"clipcap/pkg/summary-extension/prompts"
-	"clipcap/pkg/summary-extension/services/SConfiguration"
 	"sync"
 	"time"
 
@@ -18,7 +17,6 @@ func GenerateFromChunks(logger SLog.TLogger, chunks []MChunk.TChunk, GPTFunction
 	var wg sync.WaitGroup
 
 	result := make([]MSummary.TSummary, len(chunks))
-	language := SConfiguration.Configuration.Language
 
 	var langPrompt string
 	var titlePrompt string
@@ -26,15 +24,11 @@ func GenerateFromChunks(logger SLog.TLogger, chunks []MChunk.TChunk, GPTFunction
 	var funcDescription string
 	var emojiPrompt string
 
-	switch language {
-	case "RU":
-		funcDescription = prompts.EN_SUMMARIZE_FUNCTION_DESCRIPTION
-		langPrompt = prompts.EN_SUMMARIZE_PROMPT
-		titlePrompt = prompts.EN_SUMMARIZE_FUNCTION_TITLE
-		emojiPrompt = prompts.EN_SUMMARIZE_FUNCTION_EMOJI
-		insightPrompt = prompts.EN_SUMMARIZE_FUNCTION_INSIGHT
-		break
-	}
+	funcDescription = prompts.EN_SUMMARIZE_FUNCTION_DESCRIPTION
+	langPrompt = prompts.EN_SUMMARIZE_PROMPT
+	titlePrompt = prompts.EN_SUMMARIZE_FUNCTION_TITLE
+	emojiPrompt = prompts.EN_SUMMARIZE_FUNCTION_EMOJI
+	insightPrompt = prompts.EN_SUMMARIZE_FUNCTION_INSIGHT
 
 	props := SChatGPT.TChatGPTFunctionParametersProperties{}
 
@@ -76,13 +70,14 @@ func GenerateFromChunks(logger SLog.TLogger, chunks []MChunk.TChunk, GPTFunction
 			var currentAttemptNumber int64
 
 			for !_done {
+				var attemptModifier string
 				var Insights struct {
 					Emoji   string `json:"emoji"`
 					Title   string `json:"title"`
 					Insight string `json:"insight"`
 				}
 
-				if err := GPTFunctionCall(logger, []string{langPrompt}, []string{item.RewritedContent}, function, &Insights); err != nil {
+				if err := GPTFunctionCall(logger, []string{langPrompt}, []string{item.RewritedContent, attemptModifier}, function, &Insights); err != nil {
 					logger.Log("#Summary %d: Error while getting an openapi response, continue in %d seconds. Error: %s", i, retryInSeconds, err.Error())
 
 					time.Sleep(time.Duration(retryInSeconds) * time.Second)
@@ -93,6 +88,7 @@ func GenerateFromChunks(logger SLog.TLogger, chunks []MChunk.TChunk, GPTFunction
 					} else {
 						retryInSeconds += retryInSeconds
 						currentAttemptNumber += 1
+						attemptModifier += "_"
 					}
 				} else {
 					logger.Log("#Summary %d: Chunk summarized!", i)

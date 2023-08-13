@@ -6,7 +6,6 @@ import (
 	"clipcap/pkg/summary-extension/models/MChunk"
 	"clipcap/pkg/summary-extension/models/MSummary"
 	"clipcap/pkg/summary-extension/prompts"
-	"clipcap/pkg/summary-extension/services/SConfiguration"
 	"fmt"
 	"sync"
 	"time"
@@ -18,21 +17,16 @@ func GenerateFromChunksWithCC(logger SLog.TLogger, chunks []MChunk.TChunk, GPTCr
 	var wg sync.WaitGroup
 
 	result := make([]MSummary.TSummary, len(chunks))
-	language := SConfiguration.Configuration.Language
 
 	var langPrompt string
 	var titlePrompt string
 	var insightPrompt string
 	var emojiPrompt string
 
-	switch language {
-	case "EN":
-		langPrompt = prompts.RU_SUMMARIZE_PROMPT
-		titlePrompt = prompts.RU_SUMMARIZE_FUNCTION_TITLE
-		emojiPrompt = prompts.RU_SUMMARIZE_FUNCTION_EMOJI
-		insightPrompt = prompts.RU_SUMMARIZE_FUNCTION_INSIGHT
-		break
-	}
+	langPrompt = prompts.EN_SUMMARIZE_PROMPT
+	titlePrompt = prompts.EN_SUMMARIZE_FUNCTION_TITLE
+	emojiPrompt = prompts.EN_SUMMARIZE_FUNCTION_EMOJI
+	insightPrompt = prompts.EN_SUMMARIZE_FUNCTION_INSIGHT
 
 	for i, chunk := range chunks {
 		wg.Add(1)
