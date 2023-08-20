@@ -1,0 +1,15 @@
+@import "@blueprintjs/core/lib/scss/variables";
+@import "@clipcap/ui/styles/tools/toRem.scss";
+
+.container {
+  position: relative;
+}
+
+.section {
+  &.section-header {
+    padding: toRem(15px) 0 toRem(55px) 0;
+  }
+  &.section-footer {
+    padding: 0 0 toRem(60px) 0;
+  }
+}

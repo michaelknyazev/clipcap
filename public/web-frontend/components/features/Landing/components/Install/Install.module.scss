@@ -1,0 +1,49 @@
+@import "@clipcap/web-frontend/styles/mixins/container.scss";
+@import "@clipcap/ui/styles/tools/toRem.scss";
+
+.wrapper {
+
+  @include container();
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+}
+
+.section {
+  position: relative;
+  z-index: 1;
+
+  text-align: center;
+
+  &.section-title {
+    padding-bottom: toRem(60px);
+  }
+
+  &.section-install {
+    min-width: toRem(621px);
+  }
+
+  &.section-ellipse {
+    position: absolute;
+    z-index: 0;
+
+    &.section-ellipse--blue {
+      right:0;
+      top: toRem(50px);
+      width: toRem(379px);
+    }
+
+    &.section-ellipse--green {
+      left:0;
+      top:0;
+
+      width: toRem(320px);
+    }
+  }
+}

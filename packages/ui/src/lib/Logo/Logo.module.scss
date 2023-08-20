@@ -1,0 +1,27 @@
+@import "@blueprintjs/core/lib/scss/variables";
+
+.logo {
+  display: block;
+  width: 100%;
+
+  &.logo--green {
+    .hat {
+      fill: $green3;
+    }
+    .play {
+      fill: $white;
+    }
+  }  
+}
+
+.hat {
+  fill: $blue3
+}
+
+.play {
+  fill: $green3;
+}
+
+.text {
+  fill: $dark-gray1;
+}

@@ -21,7 +21,10 @@
       "@clipcap/helpers": ["packages/helpers/src/index.ts"],
       "@clipcap/instance/*": ["public/instance/*"],
       "@clipcap/services": ["packages/services/src/index.ts"],
-      "@clipcap/types": ["packages/types/src/index.ts"]
+      "@clipcap/types": ["packages/types/src/index.ts"],
+      "@clipcap/web-frontend/*": ["public/web-frontend/*"],
+      "@clipcap/ui": ["packages/ui/src/index.ts"],
+      "@clipcap/ui/*": ["packages/ui/src/*"],
     }
   },
   "exclude": ["node_modules", "tmp"]

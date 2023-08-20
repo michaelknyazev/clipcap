@@ -1,0 +1,27 @@
+@import "@clipcap/ui/styles/tools/toRem.scss";
+@import "@blueprintjs/core/lib/scss/variables";
+
+
+.container {
+  display: flex;
+  align-items: center;
+
+  background-color: $white;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.section {
+  &.section-logo {
+    width: toRem(104px);
+  }
+  &.section-text {
+    width: calc(100% - toRem(104px));
+
+    padding: 0 0 0 toRem(20px);
+
+    color: $gray1;
+  }
+}

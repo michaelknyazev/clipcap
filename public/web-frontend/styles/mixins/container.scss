@@ -1,0 +1,9 @@
+@import "@clipcap/ui/styles/tools/toRem";
+
+@mixin container() {
+  position: relative;
+
+  padding: 0 toRem(165px);
+  margin: 0 auto;
+  max-width: 1440px;
+}

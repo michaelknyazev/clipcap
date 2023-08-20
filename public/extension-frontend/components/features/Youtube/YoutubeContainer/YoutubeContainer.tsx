@@ -11,10 +11,11 @@ import {
   Tabs,
 } from '@blueprintjs/core';
 
-import type { TYoutubeContainer } from './types';
 import { Summary } from '@clipcap/extension-frontend/components/containers/Summary';
 import { TSummary } from '@clipcap/types';
 import { useState } from 'react';
+
+import type { TYoutubeContainer } from './types';
 
 export const YoutubeContainer = ({
   summary,

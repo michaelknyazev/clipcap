@@ -1,0 +1,157 @@
+@import "@clipcap/web-frontend/styles/mixins/container.scss";
+@import "@clipcap/ui/styles/tools/toRem.scss";
+@import "@blueprintjs/core/lib/scss/variables";
+
+.wrapper {
+  @include container();
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+
+  &.container--odd {
+    align-items: flex-end;
+
+    .section {
+      &.section-summary {
+        left: 0;
+      }
+    }
+  }
+
+  &.container--even {
+    .section {
+      &.section-summary {
+        right: 0;
+      }
+    }
+  }
+}
+
+.section {
+  width: 100%;
+  text-align: left;
+
+  &.section-title {
+    padding-bottom: toRem(8px);
+    width: toRem(692px);
+  }
+  &.section-description {
+    min-height: toRem(114px);
+    width: toRem(692px);
+  }
+  &.section-video {
+    width: toRem(764px);
+    position: relative;
+  }
+
+  &.section-summary {
+    position: absolute;
+    top:0;
+
+    width: toRem(392px);
+
+    background-color: $white;
+  }
+
+  &.section-ellipse {
+    position: absolute;
+    top:0;
+    right:0;
+    
+    width: toRem(479px);
+  }
+}
+
+.summary {
+  border-radius: toRem(5px);
+
+  overflow: hidden;
+
+  box-shadow: 0px 32px 48px 0px rgba(0, 0, 0, 0.08);
+  box-shadow: 0px 16px 24px 0px rgba(0, 0, 0, 0.08);
+
+
+  .summary__section {
+    &.summary__section-header {
+      padding-bottom: 10px;
+    }
+  }
+
+  .summary__header {
+    background-color: $light-gray3;
+    padding: toRem(10px);
+
+    .summary__header__section{
+      position: relative;
+
+      &.summary__header__section-logo {
+        width: toRem(100px);
+      }
+    }
+  }
+}
+
+.thumbnail {
+  position: relative;
+
+  .thumbnail__src {
+    display: block;
+  }
+
+  .thumbnail__overlay {
+    user-select: none;
+
+    position: absolute;
+    top:0;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+
+    cursor: pointer;
+
+    line-height: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .thumbnail__icon {
+      width: toRem(85px);
+      height: toRem(50px);
+
+      padding-left: toRem(5px);
+
+      border-radius: toRem(10px);
+
+      color: $gray3;
+
+      background-color: rgba(0,0,0, .5);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &:hover {
+      .thumbnail__icon {
+        background-color: #FF0000;
+
+        color:$white;
+      }
+    }
+  }
+}
+
+.frame {
+  width: 100%;
+  height: 100%;
+  min-height: toRem(446px);
+
+  border-radius: toRem(10px);
+  overflow: hidden;
+}

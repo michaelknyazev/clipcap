@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
 import styles from './app.module.scss'
-import { NonIdealState, Spinner } from '@blueprintjs/core';
+
+import { useEffect, useState } from 'react';
 
 export const App = () => {
   const [height, setHeight] = useState<number | null>(null)
@@ -22,22 +22,9 @@ export const App = () => {
 
   }, []);
 
-  /*
-  console.log(height)
-
-  if (!height) {
-    return (
-      <NonIdealState
-        title="Loading"
-        icon={<Spinner />}
-        description={`Loading the extension... ${height}`}
-      />
-    )
-  }*/
-
   return (
     <div className={styles.container} style={{ height: `${height}px` }}>
-      <iframe src="https://localhost:3000/profile" className={styles.frame} />
+      <iframe title="ClipCap Profile" src="https://localhost:3000/profile" className={styles.frame} />
     </div>
   );
 }

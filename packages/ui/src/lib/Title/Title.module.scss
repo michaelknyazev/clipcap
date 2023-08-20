@@ -1,0 +1,37 @@
+@import "../../styles/tools/toRem.scss";
+
+.title {
+  margin-top:0;
+  margin-bottom:0;
+  margin-left:0;
+  margin-right:0;
+
+  &.title--regular {
+    font-weight: 400;
+  }
+  &.title--medium {
+    font-weight: 500;
+  }
+  &.title--semibold {
+    font-weight: 600;
+  }
+  &.title--bold {
+    font-weight: 700;
+  }
+  
+  &.title-60 {
+    font-size: toRem(60px);
+  }
+
+  &.title-30 {
+    font-size: toRem(30px);
+  }
+
+  &.title-16 {
+    font-size: toRem(16px);
+  }
+
+  &.title-14 {
+    font-size: toRem(14px);
+  }
+}

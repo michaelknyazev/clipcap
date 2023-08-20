@@ -17,8 +17,9 @@ prepare: clear install
 backend:
 	MODE=development go run pkg/bin/summary-extension/main.go serve --config config/development.config.yaml
 frontend: 
-	npx nx serve extension-frontend & \
-	npx local-ssl-proxy --key ./scripts/localhost-key.pem --cert ./scripts/localhost.pem --source 3000 --target 3001
+	npx nx run-many --target=serve -p extension-frontend -p web-frontend & \
+	npx local-ssl-proxy -k./scripts/localhost-key.pem -c ./scripts/localhost.pem -s 3000 -t 3010 & \
+	npx local-ssl-proxy -k./scripts/localhost-key.pem -c ./scripts/localhost.pem -s 3001 -t 3011 
 firefox_extension:
 	rm -rf ./dist/public/firefox-extension
 	npx nx build extension-wrapper
@@ -30,7 +31,7 @@ extension:
 	./packaging/chrome-extension/bundle.sh
 	./packaging/firefox-extension/bundle.sh
 test_launch:
-	npx local-ssl-proxy --key ./scripts/localhost-key.pem --cert ./scripts/localhost.pem --source 3000 --target 8080
+	npx local-ssl-proxy --config=./scripts/local-ssl-proxy.config.json --key=./scripts/localhost-key.pem --cert=./scripts/localhost.pem
 
 # Build Commands
 build_extension_frontend: clear install

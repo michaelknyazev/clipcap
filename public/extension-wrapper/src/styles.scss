@@ -1,8 +1,12 @@
-@import "@blueprintjs/icons/lib/css/blueprint-icons.css";
-@import "@blueprintjs/core/lib/css/blueprint.css";
-@import "@blueprintjs/core/lib/scss/variables";
+/* You can add global styles to this file, and also import other style files */
+.extension-container {
+  width: 402px;
+  max-height: 250px;
 
-* {
+  position: relative;
+}
+
+.extension-container * {
   border:0;
   outline:0;
 
@@ -18,12 +22,4 @@
   box-sizing: border-box;
 
   line-height: 0;
-}
-
-/* You can add global styles to this file, and also import other style files */
-.extension-container {
-  width: 402px;
-  max-height: 250px;
-
-  position: relative;
 }

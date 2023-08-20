@@ -27,7 +27,7 @@
       "options": {
         "buildTarget": "extension-frontend:build",
         "dev": true,
-        "port": 3001
+        "port": 3010
       },
       "configurations": {
         "development": {

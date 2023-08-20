@@ -1,0 +1,95 @@
+@import "@clipcap/web-frontend/styles/mixins/container.scss";
+@import "@clipcap/ui/styles/tools/toRem.scss";
+@import "@blueprintjs/core/lib/scss/variables";
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  @include container();
+}
+
+.section {
+  width: toRem(800px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  z-index: 1;
+
+  &.section-title {
+    width: 100%;
+
+    text-align: center;
+  }
+
+  &.section-field {
+    padding-top: toRem(40px);
+    padding-bottom: toRem(20px);
+  }
+
+  &.section-action {
+    padding-top: toRem(40px);
+  }
+
+  &.section-ellipse {
+    position: absolute;
+    z-index: 0;
+    width: toRem(678px);
+
+    &.section-ellipse--blue {
+      left:0;
+      top: toRem(200px);
+    }
+
+    &.section-ellipse--green {
+      right:0;
+      top:0;
+    }
+  }
+
+}
+
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  .examples__section {
+    width: 100%;
+
+    text-align: center;
+
+    position: relative;
+
+    &.examples__section-title {
+      padding: 0 0 toRem(16px) 0;
+
+      color: $gray2;
+    }
+    
+    &.examples__section-item {
+      width: 25%;
+
+      padding: 0 toRem(5px);
+    }
+  }
+}
+
+.thumbnail {
+  position: relative;
+
+  .thumbnail__image {
+    .thumbnail__image__src {
+      display: block;
+
+      width: 100%;
+    }
+  }
+}

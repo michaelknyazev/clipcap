@@ -1,0 +1,12 @@
+@import "@clipcap/ui/styles/tools/toRem.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.section {  
+  &:not(:last-child) {
+    padding: 0 0 toRem(120px) 0;
+  }
+}

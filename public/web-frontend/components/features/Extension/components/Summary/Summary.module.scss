@@ -1,0 +1,53 @@
+@import "@blueprintjs/core/lib/scss/variables";
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+
+  &.container-moment {
+    align-items: center;
+  }
+
+  transition: background-color .5s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $light-gray3;
+  }
+
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.section {
+  &.section-graphic {
+    width: 50px;
+  }
+  &.section-content {
+    width: calc(100% - 50px);
+  }
+}
+
+.emoji {
+  font-size: 30px;
+}
+
+.content {
+  .content__section {
+    padding-bottom: 0;
+  }
+}
+.graphic {
+  .graphic__section {
+    padding-bottom: 5px;
+  }
+}
+
+.highlight {
+  color: $forest3;
+
+  font-weight: 400;
+
+  padding: 0 5px 0 0;
+}

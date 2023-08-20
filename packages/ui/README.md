@@ -1,0 +1,1 @@
+# ClipCap UI Component

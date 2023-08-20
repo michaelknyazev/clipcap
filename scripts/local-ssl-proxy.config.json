@@ -1,0 +1,10 @@
+{
+  "extension-frontend": {
+    "source": 3001,
+    "target": 3010
+  },
+  "web-frontend": {
+    "source": 3002,
+    "target": 3011
+  }
+}

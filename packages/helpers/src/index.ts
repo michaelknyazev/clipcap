@@ -1,5 +1,6 @@
 export * from './lib/debug'
 export * from './lib/delay';
+export * from './lib/detectUserAgent'
 export * from './lib/parseDate'
 export * from './lib/sleep';
 export * from './lib/storage';

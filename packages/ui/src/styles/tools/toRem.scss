@@ -1,0 +1,11 @@
+@use 'sass:math';
+
+@function toRem($_PixelsInSketch) {
+  @if unit($_PixelsInSketch) == rem {
+    @return $_PixelsInSketch;
+  }
+  
+  $result: #{math.div($_PixelsInSketch, 14.4px) + "rem"};
+  // @debug "Resulting: #{$result}";
+  @return $result;
+}

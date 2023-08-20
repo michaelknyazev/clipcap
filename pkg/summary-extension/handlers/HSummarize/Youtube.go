@@ -165,7 +165,7 @@ func Youtube(c *gin.Context) {
 		PreparedChunks := CChunk.ConvertSource(SConfiguration.Configuration.Language, Source.ID, SourceContent)
 		Logger.Log("[VideoID: %s] [UserID: %s] Converted source content into chunks Chunks count: %d", videoId, AccessToken.UserID, len(PreparedChunks))
 
-		RewritedChunks, err := CChunk.RewriteContent(Logger, PreparedChunks, CGPT.CreateChatCompletion_GPT_3_5_4K)
+		RewritedChunks, err := CChunk.RewriteContent(Logger, PreparedChunks, CGPT.CreateChatCompletion_GPT_3_5_16K)
 		if err != nil {
 			Logger.Log("[VideoID: %s] [UserID: %s] Can't rewrite chunks. Error: %s", videoId, AccessToken.UserID, err.Error())
 			c.JSON(500, types.TResponse{false, "CHUNKS_REWRITE_FAILED", nil})

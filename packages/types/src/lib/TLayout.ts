@@ -1,4 +1,4 @@
-import { ComponentType, ReactElement, ReactNode } from "react"
+import { ComponentType, Children, ReactElement, ReactNode } from "react"
 /**
  * @typedef {Object} TSection
  * @property {React.ReactNode} [children] - The content to be rendered inside the Section component.
@@ -12,7 +12,7 @@ export type TSection = {
  * @property {ReactElement<SectionType> | ReactElement<SectionType>[]} [children] - The content to be rendered inside the Layout component.
  */
 export type TLayout<SectionType = TSection> = {
-  children?: ReactElement<SectionType> | ReactElement<SectionType>[]
+  children?: (ReactElement<SectionType> | ReactElement<SectionType>[])[]
 }
 /**
  * @typedef {Object} TLayoutComponentType
