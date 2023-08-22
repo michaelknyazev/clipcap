@@ -68,7 +68,7 @@ const Footer = () => {
         },
         {
           id: 'firefox',
-          name: 'firefox',
+          name: 'Firefox',
         },
         {
           id: 'yandex-browser',
