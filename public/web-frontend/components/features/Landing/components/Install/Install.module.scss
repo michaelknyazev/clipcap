@@ -1,8 +1,8 @@
 @import "@clipcap/web-frontend/styles/mixins/container.scss";
+@import "@clipcap/ui/styles/breakpoints";
 @import "@clipcap/ui/styles/tools/toRem.scss";
 
 .wrapper {
-
   @include container();
 }
 
@@ -27,6 +27,11 @@
 
   &.section-install {
     min-width: toRem(621px);
+
+    @media screen and (max-width: $_bp-mobile) {
+      min-width: auto;
+      width: 100%;
+    }
   }
 
   &.section-ellipse {
@@ -37,6 +42,10 @@
       right:0;
       top: toRem(50px);
       width: toRem(379px);
+
+      @media screen and (max-width: $_bp-mobile) {
+        width: 37.9px;
+      }
     }
 
     &.section-ellipse--green {
@@ -44,6 +53,10 @@
       top:0;
 
       width: toRem(320px);
+
+      @media screen and (max-width: $_bp-mobile) {
+        width: 32px;
+      }
     }
   }
 }

@@ -1,4 +1,5 @@
 @import "../../styles/tools/toRem.scss";
+@import "../../styles/breakpoints.scss";
 
 .title {
   margin-top:0;
@@ -21,6 +22,10 @@
   
   &.title-60 {
     font-size: toRem(60px);
+
+    @media screen and (max-width: $_bp-mobile) {
+      font-size: toRem(30px);
+    }
   }
 
   &.title-30 {

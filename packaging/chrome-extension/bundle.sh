@@ -17,16 +17,11 @@ bg_js_file=$(echo $bg_js_file | sed 's/\//\\\//g')
 
 # Get version number, increment the patch version, save it back in the file
 version=$(cat ./packaging/chrome-extension/version-number)
-IFS='.' read -ra version_parts <<< "$version"
-patch_version=${version_parts[2]}
-patch_version=$((patch_version + 1))
-new_version="${version_parts[0]}.${version_parts[1]}.$patch_version"
-echo $new_version > ./packaging/chrome-extension/version-number
 
 # Replace the placeholders with filenames and version number
 sed -i "s/{%js%}/$js_files/g" ./dist/public/chrome-extension/manifest.json
 sed -i "s/{%css%}/$css_files/g" ./dist/public/chrome-extension/manifest.json
-sed -i "s/{%version%}/$new_version/g" ./dist/public/chrome-extension/manifest.json
+sed -i "s/{%version%}/$version/g" ./dist/public/chrome-extension/manifest.json
 sed -i "s/{%bg_js%}/$bg_js_file/g" ./dist/public/chrome-extension/manifest.json
 
-zip -r ./dist/public/chrome-extension/bundle-$new_version.zip ./dist/public/chrome-extension/*
+zip -r ./dist/public/chrome-extension/bundle-$version.zip ./dist/public/chrome-extension/*

@@ -1,2 +1,2 @@
-export * from './GlobalLayout'
+export * from './GlobalLayoutNoFooter'
 export * from './types'

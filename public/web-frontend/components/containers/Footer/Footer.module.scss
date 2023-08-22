@@ -1,8 +1,241 @@
 @import "@clipcap/web-frontend/styles/mixins/container.scss";
+@import "@clipcap/ui/styles/breakpoints";
 @import "@clipcap/ui/styles/tools/toRem.scss";
+@import "@blueprintjs/core/lib/scss/variables";
 
 .container {
   display: flex;
+  flex-direction: column;
+}
+
+.section {
+  position: relative;
+
+  &.section-about {
+    width: 100%;
+
+    padding: toRem(14.4px) 0;
+
+    border-bottom: toRem(1px) solid $light-gray3;
+    border-top: toRem(1px) solid $light-gray3;
+    
+    background-image: linear-gradient(to right, #2D72D2, #29A634);
+  }
+
+  &.section-sitemap {
+    width: 100%;
+
+    padding-top: toRem(28.8px);
+  }
+
+  &.section-legal {
+    padding-top: toRem(28.8px);
+  }
+}
+
+.about {
+  @include container();
+
+  display: flex;
+  align-items: center;
+
+  @media screen and (max-width: $_bp-mobile) {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .about__section {
+    &.about__section-logo {
+      width: toRem(150px);
+
+      @media screen and (max-width: $_bp-mobile) {
+        display: none;
+      }
+    }
+    &.about__section-text {
+      padding-left: toRem(7.5px);
+
+      color:$white;
+
+      width: calc(100% - toRem(500px));
+
+      @media screen and (max-width: $_bp-mobile) {
+        display: none;
+      }
+    }
+    &.about__section-social {
+      width: toRem(350px);
+
+      @media screen and (max-width: $_bp-mobile) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.sitemap {
+  position: relative;
+
+  display: flex;
+  align-items: flex-start;
+
+  @media screen and (max-width: $_bp-mobile) {
+    flex-direction: column;
+  }
 
   @include container();
+
+  .sitemap__section {
+    width: 25%;
+
+    @media screen and (max-width: $_bp-mobile) {
+      width: 100%;
+
+      padding-bottom: toRem(20px);
+    }
+  }
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+
+  &.navigation-right {
+    text-align: left;
+  }
+
+  .navigation__item {
+    font-size: toRem(20px);
+
+    color:$gray4;
+
+    cursor: pointer;
+
+    transition: color .5s;
+
+    &.navigation__item-title {
+      padding-bottom: toRem(11.1px);
+
+      font-size: toRem(22.2px);
+
+      color:$gray1;
+    }
+
+    &:not(.navigation__item-title):hover {
+      color:$gray1;
+    }
+  }
+}
+
+.legal {
+  @include container();
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  @media screen and (max-width: $_bp-mobile) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  font-size: toRem(12px);
+
+
+  position: relative;
+
+  .legal__section {
+    width: 25%;
+
+    @media screen and (max-width: $_bp-mobile) {
+      width: 100%;
+
+      padding-bottom: toRem(10px);
+    }
+
+    &.legal__section-company {
+      width: 50%;
+
+      @media screen and (max-width: $_bp-mobile) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.link {
+  display: block;
+
+  color:$gray3;
+  
+  cursor: pointer;
+
+  transition: color .5s;
+
+  &:hover {
+    color:$green3;
+  }
+
+  &.link--email {
+    color:$green3;
+
+    &:hover {
+      color:$gray1;
+    }
+  }
+}
+
+.crib {
+  color:$gray3;
+
+  font-size: toRem(12px);
+}
+
+$_color-social-discord-default: 	#7289da;
+$_color-social-facebook-default: #4267B2;
+$_color-social-instagram-default: #E1306C;
+$_color-social-telegram-default: #0088cc;
+
+.social {
+  display: flex;
+  justify-content: flex-end;
+
+  @media screen and (max-width: $_bp-mobile) {
+    align-items:center;
+    justify-content: center;
+  }
+
+  width: 100%;
+
+  .social__item {
+    width: toRem(30px);
+
+    color:$white;
+
+    margin: toRem(5px) toRem(15px);
+
+    transition: color .5s;
+    cursor: pointer;
+
+    &.social__item-discord {
+      &:hover {
+        color: $_color-social-discord-default
+      }
+    }
+    &.social__item-facebook {
+      &:hover {
+        color: $_color-social-facebook-default
+      }
+    }
+    &.social__item-instagram {
+      &:hover {
+        color: $_color-social-instagram-default
+      }
+    }
+    &.social__item-telegram {
+      &:hover {
+        color: $_color-social-telegram-default
+      }
+    }
+  }
 }

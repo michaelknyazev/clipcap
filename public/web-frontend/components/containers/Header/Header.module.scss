@@ -1,4 +1,5 @@
 @import "@clipcap/web-frontend/styles/mixins/container.scss";
+@import "@clipcap/ui/styles/breakpoints.scss";
 @import "@clipcap/ui/styles/tools/toRem.scss";
 
 .container {
@@ -7,6 +8,10 @@
   align-items: center;
 
   @include container();
+
+  @media screen and (max-width: $_bp-mobile) {
+    flex-direction: column;
+  }
 }
 
 .section {
@@ -15,6 +20,9 @@
   }
 
   &.section-actions {
-    
+    @media screen and (max-width: $_bp-mobile) {
+      display: none;
+    }
   }
 }
+

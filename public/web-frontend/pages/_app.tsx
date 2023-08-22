@@ -10,7 +10,7 @@ const App = ({ Component, pageProps }: TApplication) => {
   const GlobalLayout = Component.GlobalLayout || DefaultGlobalLayout;
 
   return (
-    <Bootstrap>
+    <Bootstrap ssrProps={pageProps}>
       <GlobalLayout>
         <GlobalLayout.Section>
           <Component {...pageProps} />

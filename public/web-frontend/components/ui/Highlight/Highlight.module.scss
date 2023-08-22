@@ -2,4 +2,8 @@
 
 .highlight {
   color: $blue3;
+
+  &.highlight--red {
+    color: $red1;
+  }
 }

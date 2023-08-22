@@ -1,0 +1,100 @@
+name: Summary Extension Release
+run-name: Summary Extension Release
+on:
+  push:
+    branches:
+      - 'releases/summary-extension/**'
+jobs:
+  build_extension_wrapper:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set version number
+        run: |
+          read -r NEW_VERSION < ./packaging/extension/version-number.txt
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npx nx build extension-wrapper
+      - name: Store wrapper
+        uses: actions/upload-artifact@v3
+        with:
+          name: extension-source-${{ env.NEW_VERSION }}
+          path: ./dist/public/extension-wrapper
+  build_extension_archives:
+    runs-on: ubuntu-latest
+    needs: build_extension_wrapper
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set version number
+        run: |
+          read -r NEW_VERSION < ./packaging/extension/version-number.txt
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+      - name: Get wrapper
+        uses: actions/download-artifact@v3
+        with:
+          name: extension-source-${{ env.NEW_VERSION }}
+          path: ./dist/public/extension-wrapper
+      - name: Build Archives
+        shell: bash
+        run: |
+          chmod +x ./packaging/chrome-extension/bundle.sh 
+          ./packaging/chrome-extension/bundle.sh
+          chmod +x ./packaging/firefox-extension/bundle.sh
+          ./packaging/firefox-extension/bundle.sh
+      - name: Store Chrome Extension archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: extension-chrome-${{ env.NEW_VERSION }}
+          path: ./dist/public/chrome-extension/bundle-${{ env.NEW_VERSION }}.zip
+      - name: Store Firefox Extension archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: extension-firefox-${{ env.NEW_VERSION }}
+          path: ./dist/public/firefox-extension/bundle-${{ env.NEW_VERSION }}.xpi
+  build_extension_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set version number
+        run: |
+          read -r NEW_VERSION < ./packaging/extension/version-number.txt
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npx nx export extension-frontend
+      - name: Store exported frontend
+        uses: actions/upload-artifact@v3
+        with:
+          name: clipcap-summary-v${{ env.NEW_VERSION }}-frontend-source
+          path: ./pkg/bin/summary-extension/dist
+  build_extension_binary:
+    runs-on: ubuntu-latest
+    needs: build_extension_frontend
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set version number
+        run: |
+          read -r NEW_VERSION < ./packaging/extension/version-number.txt
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+      - name: Get exported frontend for extension
+        uses: actions/download-artifact@v3
+        with:
+          name: clipcap-summary-v${{ env.NEW_VERSION }}-frontend-source
+          path: ./pkg/bin/summary-extension/dist
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+      - name: Build Linux Amd64 Executable
+        run: CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o clipcap-summary-v${{ env.NEW_VERSION }}-linux-amd64 pkg/bin/summary-extension/main.go
+      - name: Summary Extension Executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: clipcap-summary-v${{ env.NEW_VERSION }}-linux-amd64
+          path: ./clipcap-summary-v${{ env.NEW_VERSION }}-linux-amd64

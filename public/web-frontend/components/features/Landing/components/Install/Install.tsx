@@ -10,17 +10,13 @@ import { SafariLogo } from '../../../../ui/SafariLogo';
 import { FirefoxLogo } from '../../../../ui/FirefoxLogo';
 
 import type { TInstall } from './types';
-import { detectUserAgent } from '@clipcap/helpers';
 
-// UA is a User Agent Header string
-const Install = ({ ua }: TInstall) => {
+const Install = ({ browser }: TInstall) => {
   let BrowserIcon;
   let storeName;
   let link;
 
-  const _userAgent = detectUserAgent(ua);
-
-  switch (_userAgent) {
+  switch (browser) {
     case 'Firefox':
       BrowserIcon = FirefoxLogo;
       storeName = "Firefox Browser Add-ons"

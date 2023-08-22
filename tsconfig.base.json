@@ -25,6 +25,7 @@
       "@clipcap/web-frontend/*": ["public/web-frontend/*"],
       "@clipcap/ui": ["packages/ui/src/index.ts"],
       "@clipcap/ui/*": ["packages/ui/src/*"],
+      "@clipcap/icons": ["packages/icons/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

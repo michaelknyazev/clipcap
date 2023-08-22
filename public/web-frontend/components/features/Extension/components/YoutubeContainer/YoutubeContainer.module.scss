@@ -1,23 +1,26 @@
+@import "@clipcap/ui/styles/breakpoints";
+@import "@clipcap/ui/styles/tools/toRem.scss";
+
 .container {
   .section {
     &.section-title {
-      padding: 0 0 15px 0;
+      padding: 0 0 toRem(15px) 0;
     }
     &.section-button {
-      padding: 15px 0 0 0;
+      padding: toRem(15px) 0 0 0;
     }
     &.section-empty {
       padding: 0;
     }
     &.section-summary {
-      padding: 0 0 10px 0;
+      padding: 0 0 toRem(10px) 0;
 
-      max-height: 522px;
+      max-height: toRem(522px);
 
       overflow-y: scroll;
     }
     &.section-setting {
-      padding: 0 0 20px 0;
+      padding: 0 0 toRem(20px) 0;
     }
   }
 }

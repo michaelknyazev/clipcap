@@ -1,3 +1,6 @@
 export type TLogo = {
-  green?: boolean
+  green?: boolean,
+  gray?: boolean,
+  text?: boolean,
+  white?: boolean
 }

@@ -1,3 +1,3 @@
 export type TInstall = {
-  ua: string | null
+  browser: string | null
 }

@@ -1,4 +1,6 @@
 @import "@blueprintjs/core/lib/scss/variables";
+@import "@clipcap/ui/styles/breakpoints";
+@import "@clipcap/ui/styles/tools/toRem.scss";
 
 .container {
   display: flex;
@@ -16,21 +18,21 @@
     background-color: $light-gray3;
   }
 
-  padding: 10px;
-  border-radius: 5px;
+  padding: toRem(10px);
+  border-radius: toRem(5px);
 }
 
 .section {
   &.section-graphic {
-    width: 50px;
+    width: toRem(50px);
   }
   &.section-content {
-    width: calc(100% - 50px);
+    width: calc(100% - toRem(50px));
   }
 }
 
 .emoji {
-  font-size: 30px;
+  font-size: toRem(30px);
 }
 
 .content {
@@ -40,7 +42,7 @@
 }
 .graphic {
   .graphic__section {
-    padding-bottom: 5px;
+    padding-bottom: toRem(5px);
   }
 }
 
@@ -49,5 +51,5 @@
 
   font-weight: 400;
 
-  padding: 0 5px 0 0;
+  padding: 0 toRem(5px) 0 0;
 }

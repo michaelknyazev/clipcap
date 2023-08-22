@@ -16,20 +16,15 @@ css_files=$(echo $css_files | sed 's/\//\\\//g')
 bg_js_file=$(echo $bg_js_file | sed 's/\//\\\//g')
 
 # Get version number, increment the patch version, save it back in the file
-version=$(cat ./packaging/firefox-extension/version-number)
-IFS='.' read -ra version_parts <<< "$version"
-patch_version=${version_parts[2]}
-patch_version=$((patch_version + 1))
-new_version="${version_parts[0]}.${version_parts[1]}.$patch_version"
-echo $new_version > ./packaging/firefox-extension/version-number
+version=$(cat ./packaging/extension/version-number)
 
 # Replace the placeholders with filenames and version number
 sed -i "s/{%js%}/$js_files/g" ./dist/public/firefox-extension/manifest.json
 sed -i "s/{%css%}/$css_files/g" ./dist/public/firefox-extension/manifest.json
-sed -i "s/{%version%}/$new_version/g" ./dist/public/firefox-extension/manifest.json
+sed -i "s/{%version%}/$version/g" ./dist/public/firefox-extension/manifest.json
 sed -i "s/{%bg_js%}/$bg_js_file/g" ./dist/public/firefox-extension/manifest.json
 
 cd ./dist/public/firefox-extension
-zip -r ./bundle-$new_version.zip ./*
+zip -r ./bundle-$version.zip ./*
 cd ../../../
-mv ./dist/public/firefox-extension/bundle-$new_version.zip ./dist/public/firefox-extension/bundle-$new_version.xpi
+mv ./dist/public/firefox-extension/bundle-$version.zip ./dist/public/firefox-extension/bundle-$version.xpi

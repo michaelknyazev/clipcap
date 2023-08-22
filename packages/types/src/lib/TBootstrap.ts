@@ -1,5 +1,8 @@
 export type TBootstrap = {
-  children: React.ReactNode
+  children: React.ReactNode,
+  ssrProps: {
+    [key: string]: any
+  }
 }
 
 export type TBootstrapComponentType = {

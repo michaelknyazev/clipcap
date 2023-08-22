@@ -1,9 +1,16 @@
 @import "@clipcap/web-frontend/styles/mixins/container.scss";
+@import "@clipcap/ui/styles/breakpoints";
 @import "@clipcap/ui/styles/tools/toRem.scss";
 @import "@blueprintjs/core/lib/scss/variables";
 
 .wrapper {
   @include container();
+
+  padding-bottom: toRem(100px);
+
+  @media screen and (max-width: $_bp-mobile) {
+    padding-bottom: toRem(20px);
+  }
 }
 
 .container {
@@ -11,6 +18,11 @@
   flex-direction: column;
 
   position: relative;
+
+  @media screen and (max-width: $_bp-mobile) {
+   flex-direction: row;
+   flex-wrap: wrap;
+  }
 
   &.container--odd {
     align-items: flex-end;
@@ -38,14 +50,32 @@
   &.section-title {
     padding-bottom: toRem(8px);
     width: toRem(692px);
+
+    @media screen and (max-width: $_bp-mobile) {
+      width: 100%;
+    }
   }
   &.section-description {
     min-height: toRem(114px);
     width: toRem(692px);
+
+    @media screen and (max-width: $_bp-mobile) {
+      width: 100%;
+
+      min-height: auto;
+      
+      padding-bottom: toRem(20px);
+    }
   }
   &.section-video {
     width: toRem(764px);
     position: relative;
+
+    @media screen and (max-width: $_bp-mobile) {
+      width: 100%;
+
+      padding-bottom: toRem(20px);
+    }
   }
 
   &.section-summary {
@@ -55,6 +85,12 @@
     width: toRem(392px);
 
     background-color: $white;
+
+    @media screen and (max-width: $_bp-mobile) {
+      position: relative;
+
+      width: 100%;
+    }
   }
 
   &.section-ellipse {
@@ -63,6 +99,10 @@
     right:0;
     
     width: toRem(479px);
+
+    @media screen and (max-width: $_bp-mobile) {
+      width: toRem(47.9px);
+    }
   }
 }
 
@@ -73,7 +113,6 @@
 
   box-shadow: 0px 32px 48px 0px rgba(0, 0, 0, 0.08);
   box-shadow: 0px 16px 24px 0px rgba(0, 0, 0, 0.08);
-
 
   .summary__section {
     &.summary__section-header {
@@ -100,6 +139,10 @@
 
   .thumbnail__src {
     display: block;
+
+    @media screen and (max-width: $_bp-mobile) {
+      width: 100%;
+    }
   }
 
   .thumbnail__overlay {
@@ -154,4 +197,8 @@
 
   border-radius: toRem(10px);
   overflow: hidden;
+
+  @media screen and (max-width: $_bp-mobile) {
+    min-height: 223px;
+  }
 }

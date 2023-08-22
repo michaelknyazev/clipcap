@@ -1,4 +1,5 @@
 @import "@clipcap/ui/styles/tools/toRem.scss";
+@import "@clipcap/ui/styles/breakpoints.scss";
 
 .container {
   display: flex;
@@ -6,7 +7,9 @@
 }
 
 .section {  
-  &:not(:last-child) {
-    padding: 0 0 toRem(120px) 0;
+  padding: 0 0 toRem(120px) 0;
+
+  @media screen and (max-width: $_bp-mobile) {
+    padding: 0 0 toRem(60px) 0;
   }
 }

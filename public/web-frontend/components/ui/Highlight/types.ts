@@ -1,3 +1,4 @@
 export type THighlight = {
-  children: string
+  children: string,
+  red?: boolean
 }

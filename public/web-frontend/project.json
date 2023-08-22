@@ -9,6 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
+        "root": "public/web-frontend",
         "outputPath": "dist/public/web-frontend"
       },
       "configurations": {

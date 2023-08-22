@@ -12,6 +12,27 @@
       fill: $white;
     }
   }  
+
+  &.logo--gray {
+    .hat {
+      fill: $gray5;
+    }
+    .play {
+      fill: $green3;
+    }
+  }
+
+  &.logo--white {
+    .hat {
+      fill: $white;
+    }
+    .play {
+      fill: $green3;
+    }
+    .text {
+      fill: $white;
+    }
+  }
 }
 
 .hat {

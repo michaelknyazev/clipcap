@@ -81,7 +81,7 @@ export const Point = ({
                 <div
                   className={`${styles['summary__header__section']} ${styles['summary__header__section-logo']}`}
                 >
-                  <Logo green/>
+                  <Logo text green/>
                 </div>
               </div>
             </div>

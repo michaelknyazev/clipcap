@@ -11,5 +11,5 @@ export type TFeature<PropTypes = null> = NextPage<PropTypes> & {
 }
 
 export type TApplication = AppProps & {
-  Component: TFeature
+  Component: any
 }

@@ -42,11 +42,11 @@ build_extension_backend: build_extension_frontend
 # Cloud Run deploy
 
 deploy_extension: build_extension_frontend build_extension_backend
-	docker build -t clipcap_extension -f ./packaging/docker/Dockerfile.extension .
+	docker build -t clipcap_extension -f ./packaging/extension/Dockerfile .
 	docker tag clipcap_extension:latest europe-west2-docker.pkg.dev/clipcap/clipcap/extension
 	docker push europe-west2-docker.pkg.dev/clipcap/clipcap/extension
 
 deploy_static:
-	docker build -t clipcap_static -f ./packaging/docker/Dockerfile.static .
+	docker build -t clipcap_static -f ./packaging/static/Dockerfile .
 	docker tag clipcap_static:latest europe-west2-docker.pkg.dev/clipcap/clipcap/static
 	docker push europe-west2-docker.pkg.dev/clipcap/clipcap/static
