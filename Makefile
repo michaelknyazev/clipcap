@@ -36,6 +36,8 @@ test_launch:
 # Build Commands
 build_extension_frontend: clear install
 	npx nx export extension-frontend
+build_web_frontend: clear install
+	npx nx build web-frontend
 build_extension_backend: build_extension_frontend
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o clipcap-extension pkg/bin/summary-extension/main.go
 
@@ -45,6 +47,11 @@ deploy_extension: build_extension_frontend build_extension_backend
 	docker build -t clipcap_extension -f ./packaging/extension/Dockerfile .
 	docker tag clipcap_extension:latest europe-west2-docker.pkg.dev/clipcap/clipcap/extension
 	docker push europe-west2-docker.pkg.dev/clipcap/clipcap/extension
+
+deploy_web: build_web_frontend
+	docker build -t clipcap_web -f ./packaging/web/Dockerfile .
+	docker tag clipcap_web:latest europe-west2-docker.pkg.dev/clipcap/clipcap/web
+	docker push europe-west2-docker.pkg.dev/clipcap/clipcap/web
 
 deploy_static:
 	docker build -t clipcap_static -f ./packaging/static/Dockerfile .

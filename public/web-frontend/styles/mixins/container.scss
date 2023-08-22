@@ -8,10 +8,13 @@
   margin: 0 auto;
   max-width: 1440px;
 
-  @media screen and (max-width: $_bp-mobile) {
+  @media screen and (max-width: $_bp-tablet) {
     width: 100%;
 
     padding: 0 toRem(20px);
-    margin: 0 auto;
+  }
+
+  @media screen and (max-width: $_bp-foldable) {
+    padding: 0 toRem(5px)
   }
 }

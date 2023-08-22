@@ -112,7 +112,7 @@ const Footer = () => {
           <div
             className={`${styles['about__section']} ${styles['about__section-text']}`}
           >
-            <Text size={25}>- краткий пересказ контента на базе GPT</Text>
+            <Text size={25}>— краткий пересказ контента на базе GPT</Text>
           </div>
           <div
             className={`${styles['about__section']} ${styles['about__section-social']}`}
